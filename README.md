@@ -1,8 +1,8 @@
 # TOY PROJECT
 
-1.ElasticSearch 엔진을 활용한 검색 서비스 구축(뉴스데이터: E-Sports)
-[크롤링 사이트: (https://game.naver.com/esports/news/lol?date=[date]) → ex: 2022-06-29]
-2. E-sports 데이터를 활용한 인공지능 분석 서비스 구축
+- ElasticSearch 엔진을 활용한 검색 서비스 구축(뉴스데이터: E-Sports)
+- [ ] [크롤링 사이트: (https://game.naver.com/esports/news/lol?date=[date]) → ex: 2022-06-29]
+- E-sports 데이터를 활용한 인공지능 분석 서비스 구축
 
 ## Tools 
 - 모델 파이프라인 구축을 위한 툴로 kubeflow 를 활용한다.
