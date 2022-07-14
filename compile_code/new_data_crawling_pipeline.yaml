@@ -1,0 +1,94 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: news-data-crawling-pipeline-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.9, pipelines.kubeflow.org/pipeline_compilation_time: '2022-07-14T13:29:46.103785',
+    pipelines.kubeflow.org/pipeline_spec: '{"inputs": [{"name": "datetime", "type":
+      "String"}], "name": "news_data_crawling_pipeline"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.9}
+spec:
+  entrypoint: news-data-crawling-pipeline
+  templates:
+  - name: crawling-data
+    container:
+      args: [--datetime, '{{inputs.parameters.datetime}}', --data, /tmp/outputs/data/data]
+      command:
+      - sh
+      - -c
+      - (PIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet --no-warn-script-location
+        'beautifulsoup4' 'requests' 'fake_useragent' 'pandas' || PIP_DISABLE_PIP_VERSION_CHECK=1
+        python3 -m pip install --quiet --no-warn-script-location 'beautifulsoup4'
+        'requests' 'fake_useragent' 'pandas' --user) && "$0" "$@"
+      - sh
+      - -ec
+      - |
+        program_path=$(mktemp)
+        printf "%s" "$0" > "$program_path"
+        python3 -u "$program_path" "$@"
+      - "def _make_parent_dirs_and_return_path(file_path: str):\n    import os\n \
+        \   os.makedirs(os.path.dirname(file_path), exist_ok=True)\n    return file_path\n\
+        \ndef crawling_data(\n    datetime,\n    data_path,\n):  \n    import os\n\
+        \    import sys\n    sys.path.append('/module')\n    from data_crawler import\
+        \ NaverNewsCrawler\n\n    cralwer = NaverNewsCrawler(date=datetime)\n    data\
+        \ = cralwer.get_news_data()\n    cralwer.create_news_data(data_path , data)\n\
+        \nimport argparse\n_parser = argparse.ArgumentParser(prog='Crawling data',\
+        \ description='')\n_parser.add_argument(\"--datetime\", dest=\"datetime\"\
+        , type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"\
+        --data\", dest=\"data_path\", type=_make_parent_dirs_and_return_path, required=True,\
+        \ default=argparse.SUPPRESS)\n_parsed_args = vars(_parser.parse_args())\n\n\
+        _outputs = crawling_data(**_parsed_args)\n"
+      image: python:3.7
+      volumeMounts:
+      - mountPath: /module
+        name: module
+    volumes:
+    - name: module
+      persistentVolumeClaim:
+        claimName: workspace
+    inputs:
+      parameters:
+      - {name: datetime}
+    outputs:
+      artifacts:
+      - {name: crawling-data-data, path: /tmp/outputs/data/data}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.9
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+      annotations: {pipelines.kubeflow.org/component_spec: '{"implementation": {"container":
+          {"args": ["--datetime", {"inputValue": "datetime"}, "--data", {"outputPath":
+          "data"}], "command": ["sh", "-c", "(PIP_DISABLE_PIP_VERSION_CHECK=1 python3
+          -m pip install --quiet --no-warn-script-location ''beautifulsoup4'' ''requests''
+          ''fake_useragent'' ''pandas'' || PIP_DISABLE_PIP_VERSION_CHECK=1 python3
+          -m pip install --quiet --no-warn-script-location ''beautifulsoup4'' ''requests''
+          ''fake_useragent'' ''pandas'' --user) && \"$0\" \"$@\"", "sh", "-ec", "program_path=$(mktemp)\nprintf
+          \"%s\" \"$0\" > \"$program_path\"\npython3 -u \"$program_path\" \"$@\"\n",
+          "def _make_parent_dirs_and_return_path(file_path: str):\n    import os\n    os.makedirs(os.path.dirname(file_path),
+          exist_ok=True)\n    return file_path\n\ndef crawling_data(\n    datetime,\n    data_path,\n):  \n    import
+          os\n    import sys\n    sys.path.append(''/module'')\n    from data_crawler
+          import NaverNewsCrawler\n\n    cralwer = NaverNewsCrawler(date=datetime)\n    data
+          = cralwer.get_news_data()\n    cralwer.create_news_data(data_path , data)\n\nimport
+          argparse\n_parser = argparse.ArgumentParser(prog=''Crawling data'', description='''')\n_parser.add_argument(\"--datetime\",
+          dest=\"datetime\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--data\",
+          dest=\"data_path\", type=_make_parent_dirs_and_return_path, required=True,
+          default=argparse.SUPPRESS)\n_parsed_args = vars(_parser.parse_args())\n\n_outputs
+          = crawling_data(**_parsed_args)\n"], "image": "python:3.7"}}, "inputs":
+          [{"name": "datetime", "type": "String"}], "name": "Crawling data", "outputs":
+          [{"name": "data", "type": "csv"}]}', pipelines.kubeflow.org/component_ref: '{}',
+        pipelines.kubeflow.org/arguments.parameters: '{"datetime": "{{inputs.parameters.datetime}}"}'}
+  - name: news-data-crawling-pipeline
+    inputs:
+      parameters:
+      - {name: datetime}
+    dag:
+      tasks:
+      - name: crawling-data
+        template: crawling-data
+        arguments:
+          parameters:
+          - {name: datetime, value: '{{inputs.parameters.datetime}}'}
+  arguments:
+    parameters:
+    - {name: datetime}
+  serviceAccountName: pipeline-runner
