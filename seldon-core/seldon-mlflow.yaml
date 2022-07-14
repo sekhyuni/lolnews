@@ -1,0 +1,58 @@
+apiVersion: machinelearning.seldon.io/v1
+kind: SeldonDeployment
+metadata:
+  name: sklearn
+  namespace: seldon-deploy
+spec:
+  name: model
+  predictors:
+  - name: model
+
+    componentSpecs:
+    - spec:
+        volumes:
+        - name: model-provision-location
+          emptyDir: {}
+
+        initContainers:
+        - name: model-initializer
+          image: kfserving/storage-initializer:v0.4.0
+          args:
+            - "s3://mlflow/mlflow/artifacts/0/4607722258b546c397299f37e03d5519/artifacts/svc"
+            - "/mnt/models"
+          volumeMounts:
+          - mountPath: /mnt/models
+            name: model-provision-location
+          env:
+          - name: AWS_ACCESS_KEY_ID
+            value: minio
+          - name: AWS_SECRET_ACCESS_KEY
+            value: minio123
+          - name: AWS_ENDPOINT_URL
+            value: http://minio-service.kubeflow.svc:9000
+          - name: USE_SSL
+            value: "false"
+
+        containers:
+        - name: model
+          image: ghcr.io/mlops-for-all/mlflowserver
+          volumeMounts:
+          - mountPath: /mnt/models
+            name: model-provision-location
+            readOnly: true
+          securityContext:
+            privileged: true
+            runAsUser: 0
+            runAsGroup: 0
+
+    graph:
+      name: model
+      type: MODEL
+      parameters:
+      - name: model_uri
+        type: STRING
+        value: "/mnt/models"
+      - name: xtype
+        type: STRING
+        value: "dataframe"
+      children: []
