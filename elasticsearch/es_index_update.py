@@ -82,9 +82,3 @@ if __name__=="__main__":
     es_up.es_index_create()
     json_data = "sample.json"
     es_up.es_data_insert(json_data)
-
-    
-
-    
-
-    
