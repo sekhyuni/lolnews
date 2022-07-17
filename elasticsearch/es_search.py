@@ -12,9 +12,8 @@ app = FastAPI()
 es = Elasticsearch(es_config.es_address, verify_certs=False) 
 
 @app.get("/")
-def es_info():
-    global es
-    return es.info()
+def es_search_test():
+    return "검색 엔진 테스트 입니다."
 
 @app.get("/search/keyword")
 def search_keyword(q:Optional[str]=None):
