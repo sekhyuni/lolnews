@@ -8,7 +8,7 @@ from datetime import datetime
 
 
 class NaverNewsCrawler:
-    today = datetime.now().strftime("%Y-%M-%d")
+    today = datetime.now().strftime("%Y-%m-%d")
     def __init__(self, date=today):
         self.date = date
 
