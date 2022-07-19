@@ -1,5 +1,9 @@
 html,
 body {
+  background-image: url('./assets/wallpaperbette.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;
   height: 100%;
 }
 
