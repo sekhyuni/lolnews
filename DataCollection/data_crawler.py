@@ -9,12 +9,12 @@ from datetime import datetime
 
 class NaverNewsCrawler:
     today = datetime.now().strftime("%Y-%m-%d")
-    def __init__(self, date=today):
-        self.date = date
+    def __init__(self):
+        pass
 
-    def get_news_data(self):
+    def get_news_data(self, date=today):
         
-        news_info = self._get_news_info()
+        news_info = self._get_news_info(date)
         if not news_info:
             print("No data")
         else:
@@ -40,7 +40,7 @@ class NaverNewsCrawler:
             writer.writerows(data)
 
 
-    def _get_news_info(self):
+    def _get_news_info(self, date):
         ua = UserAgent()
         headers = {
             'authority': 'apis.naver.com',
@@ -53,7 +53,7 @@ class NaverNewsCrawler:
         params = {
             'newsType': 'lol',
             'sort': 'latest',
-            'day': self.date,
+            'day': date,
         }
 
         response = requests.get('https://apis.naver.com/nng_main/esports/v1/news/list', params=params, headers=headers)
@@ -74,8 +74,8 @@ class NaverNewsCrawler:
 if __name__ == "__main__":
     # test
     date = input("날짜를 입력하세요(예: 2022-07-13): ")
-    cralwer = NaverNewsCrawler(date=date)
-    data = cralwer.get_news_data()
+    cralwer = NaverNewsCrawler()
+    data = cralwer.get_news_data(date)
     datapath = f"/root/toyproject/DataCollection/crawling_data/{date}.csv"
     cralwer.create_news_data(datapath, data)
     print(f'>>> Done create {date} data')
