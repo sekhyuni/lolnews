@@ -1,4 +1,7 @@
-html,
+html {
+  height: 100%;
+}
+
 body {
   background-image: url('./assets/wallpaperbette.jpg');
   background-repeat: no-repeat;
