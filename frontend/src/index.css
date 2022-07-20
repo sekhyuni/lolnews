@@ -1,13 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+
 html {
   height: 100%;
 }
 
 body {
+  height: 100%;
+  margin: 0 0 0 0;
   background-image: url('./assets/wallpaperbette.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: scroll;
-  height: 100%;
 }
 
 #root {

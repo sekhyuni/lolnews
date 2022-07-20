@@ -22,8 +22,8 @@ input{
     font-family: 'IBM Plex Sans KR', sans-serif;
 }
 .search {
-    position: absolute;  /*relative가 되는 부모 div .icon요소를 기준으로 */
-    top: 12px;            /*위에서 12px 왼쪽에서20px*/
+    position: absolute; 
+    top: 12px;         
     left: 20px;
     color: #AAAAAA;
 }
