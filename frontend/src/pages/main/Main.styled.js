@@ -70,6 +70,7 @@ export const IconOfMic = styled(FontAwesomeIcon)`
 `;
 
 export const Button = styled.button`
+    width: 100px;
     border: none;   
     padding: 13px;
     margin: 15px 3px 10px 3px;
@@ -80,12 +81,12 @@ export const Button = styled.button`
 `;
 
 export const P = styled.p`
-
+    font-size: 20px;
 `;
 
 export const Link = styled(Link_)`
     text-decoration: none;
-    font-size: small;
+    font-size: inherit;
     font-family: 'IBM Plex Sans KR', sans-serif;
     color: #f2fa09fa;
 `;

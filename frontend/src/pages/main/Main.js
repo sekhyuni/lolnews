@@ -1,7 +1,13 @@
+import { useState } from 'react';
+import doAxiosRequest from '../../functions/doAxiosRequest';
 import * as S from './Main.styled'
 import { faKeyboard, faMicrophone, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from 'react-router-dom';
 
-const Home = () => {
+const Main = ({ setValue }) => {
+    const navigate = useNavigate();
+    const [keyword, setKeyword] = useState('');
+
     return (
         <>
             <S.Header>
@@ -12,7 +18,18 @@ const Home = () => {
                 <S.Section>
                     <S.Image alt="LOLNEWS" src={require('../../assets/logo.png')}></S.Image>
                     <S.Div>
-                        <S.Input type="text" placeholder="검색어 입력" />
+                        <S.Input type="text" placeholder="검색어 입력" onKeyUp={event => {
+                            if (event.key !== 'Enter') {
+                                setKeyword(event.target.value);
+                            } else { // 엔터 입력 시, keyword에 대한 결과 data 요청
+                                alert(keyword);
+
+                                doAxiosRequest('GET', '/search/keyword', { q: keyword }).then(result => {
+                                    setValue(result);
+                                    navigate('/search');
+                                });
+                            }
+                        }} />
                         <S.IconOfSearch icon={faSearch} />
                         <S.IconOfKeyboard icon={faKeyboard} />
                         <S.IconOfMic icon={faMicrophone} />
@@ -31,4 +48,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Main;
