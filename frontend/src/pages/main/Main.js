@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const Main = ({ setValue }) => {
     const navigate = useNavigate();
     const [keyword, setKeyword] = useState('');
+    const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     return (
         <>
@@ -24,7 +25,7 @@ const Main = ({ setValue }) => {
                             } else { // 엔터 입력 시, keyword에 대한 결과 data 요청
                                 alert(keyword);
 
-                                doAxiosRequest('GET', '/search/keyword', { q: keyword }).then(result => {
+                                doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { q: keyword }).then(result => {
                                     setValue(result);
                                     navigate('/search');
                                     console.log(result);
