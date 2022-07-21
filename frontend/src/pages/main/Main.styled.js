@@ -3,9 +3,21 @@ import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Main = styled.main`
+    height: 100%;
+`;
+
+export const Section = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
+`;
+
+export const Div = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
 `;
 
 export const Header = styled.header`
@@ -16,23 +28,11 @@ export const Nav = styled.nav`
 
 `;
 
-export const Section = styled.section`
-
-`;
-
 export const Footer = styled.footer`
-
-`;
-
-export const Div = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+    height: 100px;
 `;
 
 export const ButtonWrapperOfSearch = styled.div`
-
 `;
 
 export const Image = styled.img`
@@ -70,7 +70,7 @@ export const IconOfMic = styled(FontAwesomeIcon)`
 `;
 
 export const Button = styled.button`
-    width: 100px;
+    width: 150px;
     border: none;   
     padding: 13px;
     margin: 15px 3px 10px 3px;

@@ -27,6 +27,7 @@ const Main = ({ setValue }) => {
                                 doAxiosRequest('GET', '/search/keyword', { q: keyword }).then(result => {
                                     setValue(result);
                                     navigate('/search');
+                                    console.log(result);
                                 });
                             }
                         }} />
