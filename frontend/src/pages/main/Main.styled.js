@@ -78,5 +78,5 @@ export const Link = styled(Link_)`
     text-decoration: none;
     font-size: inherit;
     font-family: 'IBM Plex Sans KR', sans-serif;
-    color: #f2fa09fa;
+    color: #f2fa09;
 `;
