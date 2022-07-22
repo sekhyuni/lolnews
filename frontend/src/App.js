@@ -5,13 +5,14 @@ import Search from './pages/search/Search';
 import NotFound from './pages/notfound/Notfound';
 
 const App = () => {
-  const [data, setData] = useState('');
+  const [keyword, setKeyword] = useState('');
+  const [result, setResult] = useState('');
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Main setValue={setData} />}></Route>
-        <Route path="/search" element={<Search value={data} setValue={setData} />}></Route>
+        <Route path="/" element={<Main keyword={keyword} setKeyword={setKeyword} setResult={setResult} />}></Route>
+        <Route path="/search" element={<Search keyword={keyword} setKeyword={setKeyword} result={result} setResult={setResult} />}></Route>
         <Route path="/*" element={<NotFound />}></Route>
       </Routes>
     </Router>

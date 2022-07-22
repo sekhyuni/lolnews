@@ -1,7 +1,7 @@
 import Input from '../../components/input/Input';
 import * as S from './Main.styled'
 
-const Main = ({ setValue }) => {
+const Main = ({ keyword, setKeyword, setResult }) => {
     return (
         <S.Layout>
             <S.Header>
@@ -12,7 +12,7 @@ const Main = ({ setValue }) => {
                 <S.Section>
                     <S.Image alt="LOLNEWS" src={require('../../assets/logo.png')}></S.Image>
                     <S.Div>
-                        <Input layoutName="main" setValue={setValue} />
+                        <Input layoutName="main" keyword={keyword} setKeyword={setKeyword} setResult={setResult} />
                         <S.ButtonWrapperOfSearch>
                             <S.Button onClick={() => { alert('서비스 준비중입니다.'); }}>선수별 검색</S.Button>
                             <S.Button onClick={() => { alert('서비스 준비중입니다.'); }}>챔피언별 검색</S.Button>

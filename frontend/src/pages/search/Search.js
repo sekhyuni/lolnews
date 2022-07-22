@@ -9,13 +9,22 @@ const typeMenus = [
     { id: 4, link: '/search/video', value: '동영상', svg: <Svg.Video /> },
 ];
 
-const Search = ({ value, setValue }) => {
-    const elementsOfESDocument = value.data.map((document, idx) =>
+const Search = ({ keyword, setKeyword, result, setResult }) => {
+    // 운영 코드
+    const elementsOfESDocument = result.data.map((document, idx) =>
         <div key={document._id}>
             <h1>Title {idx + 1} : {document._source.title}</h1>
             <div>Content {idx + 1} : {document._source.content}</div>
         </div>
     ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
+
+    // 임시 개발 코드
+    // const elementsOfESDocument = result.map((document, idx) =>
+    //     <div key={document._id}>
+    //         <h1>Title {idx + 1} : {document._source.title}</h1>
+    //         <div>Content {idx + 1} : {document._source.content}</div>
+    //     </div>
+    // ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
     const elementsOfTypeMenu = typeMenus.map(typeMenu =>
         <S.TypeMenuWrapper key={typeMenu.id} >
@@ -38,7 +47,7 @@ const Search = ({ value, setValue }) => {
                         <S.Image alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkForLogo>
                     <S.Div>
-                        <Input layoutName="search" setValue={setValue} />
+                        <Input layoutName="search" keyword={keyword} setKeyword={setKeyword} setResult={setResult} />
                     </S.Div>
                     <S.Nav>
                     </S.Nav>
