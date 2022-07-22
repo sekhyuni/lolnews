@@ -10,7 +10,7 @@ const Main = ({ setValue }) => {
     const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     return (
-        <>
+        <S.Layout>
             <S.Header>
                 <S.Nav>
                 </S.Nav>
@@ -23,7 +23,7 @@ const Main = ({ setValue }) => {
                             if (event.key !== 'Enter') {
                                 setKeyword(event.target.value);
                             } else { // 엔터 입력 시, keyword에 대한 결과 data 요청
-                                alert(keyword);
+                                console.log(keyword);
 
                                 doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { q: keyword }).then(result => {
                                     setValue(result);
@@ -46,7 +46,7 @@ const Main = ({ setValue }) => {
             </S.Main>
             <S.Footer>
             </S.Footer>
-        </>
+        </S.Layout>
     );
 };
 

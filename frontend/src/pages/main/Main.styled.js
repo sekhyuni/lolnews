@@ -2,15 +2,22 @@ import { Link as Link_ } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+export const Layout = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: inherit;
+`;
+
 export const Main = styled.main`
-    height: 100%;
+    height: inherit;
 `;
 
 export const Section = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
+    height: inherit;
 `;
 
 export const Div = styled.div`
@@ -21,7 +28,7 @@ export const Div = styled.div`
 `;
 
 export const Header = styled.header`
-
+    height: 100px;
 `;
 
 export const Nav = styled.nav`

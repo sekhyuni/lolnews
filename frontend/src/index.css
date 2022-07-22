@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  height: 100%;
+  height: inherit;
   margin: 0 0 0 0;
   background-image: url('./assets/wallpaperbette.jpg');
   background-repeat: no-repeat;
@@ -16,6 +16,6 @@ body {
 }
 
 #root {
-  height: 100%;
+  height: inherit;
   z-index: 0;
 }
