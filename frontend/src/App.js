@@ -11,7 +11,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Main setValue={setData} />}></Route>
-        <Route path="/search" element={<Search value={data} />}></Route>
+        <Route path="/search" element={<Search value={data} setValue={setData} />}></Route>
         <Route path="/*" element={<NotFound />}></Route>
       </Routes>
     </Router>
