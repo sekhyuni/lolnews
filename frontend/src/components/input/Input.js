@@ -10,10 +10,8 @@ const Input = ({ setValue, layoutName }) => {
 
     return (
         <>
-            <S.InputForSearch layoutName={layoutName} type="text" placeholder="검색어 입력" onKeyUp={event => {
-                if (event.key !== 'Enter') {
-                    setKeyword(event.target.value);
-                } else { // 엔터 입력 시, keyword에 대한 결과 data 요청
+            <S.InputForSearch layoutName={layoutName} type="text" value={keyword} placeholder="검색어 입력" onKeyUp={event => {
+                if (event.key === 'Enter') {
                     console.log(keyword);
 
                     doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { q: keyword }).then(result => {
@@ -24,6 +22,8 @@ const Input = ({ setValue, layoutName }) => {
                         }
                     });
                 }
+            }} onChange={event => {
+                setKeyword(event.target.value);
             }} />
             <S.IconOfSearch />
             <S.IconOfKeyboard />
