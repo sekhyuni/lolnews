@@ -82,12 +82,15 @@ export const LinkForMenu = styled(Link_)`
     flex-direction: row;
     align-items: center;
     height: inherit;
+    padding: 0 0 3px 0;
     text-decoration: none;
     font-weight: bold;
     color: #000;
     ${({ active, index }) => {
         if (active[index]) {
             return css`
+                border-bottom: 3px solid #1a73e8;
+                padding: 0 0 0 0;
                 color: #1a73e8;
             `;
         }
