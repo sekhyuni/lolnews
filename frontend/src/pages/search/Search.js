@@ -58,7 +58,7 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
         <S.Layout>
             <S.Header>
                 <S.TopOfHeader>
-                    <S.LinkForLogo to="/">
+                    <S.LinkForLogo to="/" onClick={() => { setKeyword(''); }}>
                         <S.Image alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkForLogo>
                     <S.Div>
