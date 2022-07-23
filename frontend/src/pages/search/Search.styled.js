@@ -92,4 +92,5 @@ export const Span = styled.span`
     width: 25px;
     height: 25px;
     margin: 0 5px 0 0;
+    pointer-events: none;
 `;

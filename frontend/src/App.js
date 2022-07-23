@@ -11,9 +11,9 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Main keyword={keyword} setKeyword={setKeyword} setResult={setResult} />}></Route>
-        <Route path="/search" element={<Search keyword={keyword} setKeyword={setKeyword} result={result} setResult={setResult} />}></Route>
-        <Route path="/*" element={<NotFound />}></Route>
+        <Route path="/" element={<Main keyword={keyword} setKeyword={setKeyword} setResult={setResult} />} />
+        <Route path="/search" element={<Search keyword={keyword} setKeyword={setKeyword} result={result} setResult={setResult} />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </Router>
   );

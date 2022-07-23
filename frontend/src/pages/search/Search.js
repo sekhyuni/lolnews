@@ -1,15 +1,27 @@
+import { useState } from 'react';
 import Input from '../../components/input/Input';
 import * as S from './Search.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const typeMenus = [
-    { id: 1, link: '/search', value: '전체', svg: <Svg.All /> },
-    { id: 2, link: '/search/documnet', value: '문서', svg: <Svg.Document /> },
-    { id: 3, link: '/search/image', value: '이미지', svg: <Svg.Image /> },
-    { id: 4, link: '/search/video', value: '동영상', svg: <Svg.Video /> },
-];
-
 const Search = ({ keyword, setKeyword, result, setResult }) => {
+    const [active, setActive] = useState([true, false, false, false]);
+
+    // 운영 코드
+    const typeMenus = [
+        { id: 1, link: '/search', value: '전체', svg: <Svg.All isActive={active[0]} /> },
+        { id: 2, link: '/search/document', value: '문서', svg: <Svg.Document isActive={active[1]} /> },
+        { id: 3, link: '/search/image', value: '이미지', svg: <Svg.Image isActive={active[2]} /> },
+        { id: 4, link: '/search/video', value: '동영상', svg: <Svg.Video isActive={active[3]} /> },
+    ];
+
+    // 임시 개발 코드
+    // const typeMenus = [
+    //     { id: 1, link: '/search', value: '전체', svg: <Svg.All isActive={active[0]} /> },
+    //     { id: 2, link: '/search', value: '문서', svg: <Svg.Document isActive={active[1]} /> },
+    //     { id: 3, link: '/search', value: '이미지', svg: <Svg.Image isActive={active[2]} /> },
+    //     { id: 4, link: '/search', value: '동영상', svg: <Svg.Video isActive={active[3]} /> },
+    // ];
+
     // 운영 코드
     const elementsOfESDocument = result.data.map((document, idx) =>
         <div key={document._id}>
@@ -26,10 +38,13 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
     //     </div>
     // ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
-    const elementsOfTypeMenu = typeMenus.map(typeMenu =>
+    const elementsOfTypeMenu = typeMenus.map((typeMenu, idx) =>
         <S.TypeMenuWrapper key={typeMenu.id} >
-            <S.LinkForMenu to={typeMenu.link} onClick={event => {
-                event.preventDefault();
+            <S.LinkForMenu to={typeMenu.link} onClick={() => {
+                const newActive = [false, false, false, false];
+                newActive[idx] = true;
+
+                setActive(newActive);
             }}>
                 <S.Span>
                     {typeMenu.svg}

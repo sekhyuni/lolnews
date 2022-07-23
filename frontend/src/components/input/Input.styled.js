@@ -2,6 +2,10 @@ import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faKeyboard, faMicrophone } from '@fortawesome/free-solid-svg-icons';
 
+export const Form = styled.form`
+
+`;
+
 export const InputForSearch = styled.input`
     width: ${props => props.layoutName === 'main' ? 'min(50vw, 900px)' : '1000px'};
     height: 40px;
