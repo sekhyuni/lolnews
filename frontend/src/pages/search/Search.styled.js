@@ -20,7 +20,7 @@ export const Layout = styled.div`
 
 export const Main = styled.main`
     height: inherit;
-    margin: 0 0 0 270px;
+    margin: 0 0 0 242px;
 `;
 
 export const Section = styled.section`
@@ -34,7 +34,7 @@ export const Div = styled.div`
 
 export const Header = styled.header`
     ${Vertical}
-    height: 150px;
+    height: 130px;
     border-bottom: 0.5px solid #e1e1e1;
 `;
 
@@ -42,14 +42,14 @@ export const TopOfHeader = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 100px;
+    height: 90px;
 `;
 
 export const BottomOfHeader = styled.div`
     display: flex;
     flex-direction: row;
-    height: 50px;
-    margin: 0 0 0 270px;
+    height: 40px;
+    margin: 0 0 0 242px;
 `;
 
 export const ResultDataTypeMenuWrapper = styled.div`

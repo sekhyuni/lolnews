@@ -7,7 +7,7 @@ export const Form = styled.form`
 `;
 
 export const InputForSearch = styled.input`
-    width: ${props => props.layoutName === 'main' ? 'min(70vw, 850px)' : '800px'};
+    width: ${({ layoutName }) => layoutName === 'main' ? 'min(70vw, 850px)' : '800px'};
     height: 40px;
     border: 1.5px solid #ededed;
     border-radius: 30px;
@@ -15,6 +15,16 @@ export const InputForSearch = styled.input`
     font-size: 1.1rem;
     font-weight: 500;
     font-family: 'IBM Plex Sans KR', sans-serif;
+    ${({ layoutName }) => {
+        if (layoutName === 'search') {
+            return css`
+                box-shadow: 0 2px 5px 1px rgba(64,60,67,.16);
+            `;
+        }
+    }}
+    :focus {
+        outline: 0;
+    }
 `;
 
 const StyledIconOfSearch = styled(FontAwesomeIcon)`
