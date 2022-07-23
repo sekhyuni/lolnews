@@ -11,22 +11,18 @@ const Input = ({ keyword, setKeyword, setResult, layoutName }) => {
             event.preventDefault();
 
             // 운영 코드
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { q: keyword }).then(result => {
-                setResult(result);
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { q: keyword }).then(resultData => {
+                setResult(resultData);
 
-                if (layoutName === 'main') {
-                    navigate('/search');
-                }
+                navigate(`/search/?q=${keyword}`);
             });
 
             // 임시 개발 코드
-            // const result = require(`../../../test/${keyword}.json`);
+            // const resultData = require(`../../../test/${keyword}.json`);
 
-            // setResult(result);
+            // setResult(resultData);
 
-            // if (layoutName === 'main') {
-            //     navigate('/search');
-            // }
+            // navigate(`/search/?q=${keyword}`);
         }}>
             <S.InputForSearch layoutName={layoutName} type="text" value={keyword} placeholder="검색어 입력" onChange={event => {
                 setKeyword(event.target.value);

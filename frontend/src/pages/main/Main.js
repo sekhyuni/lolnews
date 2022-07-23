@@ -10,7 +10,7 @@ const Main = ({ keyword, setKeyword, setResult }) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <S.Image alt="LOLNEWS" src={require('../../assets/logo.png')}></S.Image>
+                    <S.Image alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     <S.Div>
                         <Input layoutName="main" keyword={keyword} setKeyword={setKeyword} setResult={setResult} />
                         <S.ButtonWrapperOfSearch>

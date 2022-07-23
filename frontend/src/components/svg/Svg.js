@@ -1,9 +1,9 @@
 import * as S from './Svg.styled';
 
-export const All = ({ isActive }) => {
+export const All = ({ active }) => {
     return (
         <S.Svg focusable="false" viewBox="0 0 24 24">
-            {isActive ?
+            {active ?
                 <>
                     <path fill="#34a853" d="M10 2v2a6 6 0 0 1 6 6h2a8 8 0 0 0-8-8" />
                     <path fill="#ea4335" d="M10 4V2a8 8 0 0 0-8 8h2c0-3.3 2.7-6 6-6" />
@@ -20,10 +20,10 @@ export const All = ({ isActive }) => {
     );
 };
 
-export const Document = ({ isActive }) => {
+export const Document = ({ active }) => {
     return (
         <S.Svg>
-            {isActive ?
+            {active ?
                 <>
                     <path fill="#34a853" d="M22 12h-2v6.22c-.07.48-.51.82-1 .78h-7v2h7c1.59.05 2.92-1.17 3-2.76V12" />
                     <path fill="#4285f4" d="M19 3h-7v2h7c.49-.04.92.3 1 .78V12h2V5.76A2.93 2.93 0 0 0 19 3" />
@@ -38,10 +38,10 @@ export const Document = ({ isActive }) => {
     );
 };
 
-export const Image = ({ isActive }) => {
+export const Image = ({ active }) => {
     return (
         <S.Svg>
-            {isActive ?
+            {active ?
                 <>
                     <path fill="none" clipRule="evenodd" d="M0 0h24v24H0z" />
                     <path fill="#4285f4" clipRule="evenodd" fillRule="evenodd" d="M19 22h-7v-2h7c.55 0 1-.46 1-1V5a1 1 0 0 0-1-.99L12 4V2h7c1.66 0 3 1.36 3 3v14c0 1.65-1.35 3-3 3" />
@@ -56,10 +56,10 @@ export const Image = ({ isActive }) => {
     );
 };
 
-export const Video = ({ isActive }) => {
+export const Video = ({ active }) => {
     return (
         <S.Svg>
-            {isActive ?
+            {active ?
                 <>
                     <path fill="#4285f4" d="M10 16.5l6-4.5-6-4.5" />
                     <path fill="#ea4335" d="M20 12h2v7.5a2.5 2.5 0 0 1-2.5 2.5H12v-2h7a1 1 0 0 0 1-1v-7" />

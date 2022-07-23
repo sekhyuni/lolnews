@@ -30,7 +30,6 @@ export const Section = styled.section`
 `;
 
 export const Div = styled.div`
-    position: relative;
 `;
 
 export const Header = styled.header`
@@ -53,10 +52,9 @@ export const BottomOfHeader = styled.div`
     margin: 0 0 0 270px;
 `;
 
-export const TypeMenuWrapper = styled.div`
+export const ResultDataTypeMenuWrapper = styled.div`
     height: inherit;
     margin : 0 0 0 22px;
-    
     :first-child {
         margin: 0 0 0 0;
     }
@@ -78,6 +76,7 @@ export const Image = styled.img`
 export const LinkForLogo = styled(Link_)`
     height: inherit;
 `;
+
 export const LinkForMenu = styled(Link_)`
     display: flex;
     flex-direction: row;
@@ -86,6 +85,19 @@ export const LinkForMenu = styled(Link_)`
     text-decoration: none;
     font-weight: bold;
     color: #000;
+    ${({ active, index }) => {
+        if (active[index]) {
+            return css`
+                color: #1a73e8;
+            `;
+        }
+    }}
+    :hover {
+        color: #1a73e8;
+    }
+    :hover svg {
+        fill: #1a73e8;
+    }
 `;
 
 export const Span = styled.span`
