@@ -73,6 +73,9 @@ export const Ul = styled.ul`
 export const Li = styled.li`
     padding: 18px 0 18px 0;
     border-bottom: 1.5px solid #f5f6f7;
+    :last-child {
+        border-bottom: 0;
+    }
 `;
 
 export const Nav = styled.nav`
