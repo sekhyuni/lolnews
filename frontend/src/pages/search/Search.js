@@ -26,18 +26,18 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
 
     // 운영 코드
     const elementsOfESDocument = result.data.map((document, idx) =>
-        <div key={document._id}>
-            <h1>Title {idx + 1} : {document._source.title}</h1>
-            <div>Content {idx + 1} : {document._source.content}</div>
-        </div>
+        <S.Li key={document._id}>
+            <S.Title>{document._source.title}</S.Title>
+            <S.Content>{document._source.content.substr(0, 100)}</S.Content>
+        </S.Li>
     ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
     // 임시 개발 코드
     // const elementsOfESDocument = result.map((document, idx) =>
-    //     <div key={document._id}>
-    //         <h1>Title {idx + 1} : {document._source.title}</h1>
-    //         <div>Content {idx + 1} : {document._source.content}</div>
-    //     </div>
+    //     <S.Li key={document._id}>
+    //         <S.Title>{document._source.title}</S.Title>
+    //         <S.Content>{document._source.content.substr(0, 100)}</S.Content>
+    //     </S.Li>
     // ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
     const elementsOfResultDataTypeMenu = resultDataTypeMenus.map((resultDataTypeMenu, idx) =>
