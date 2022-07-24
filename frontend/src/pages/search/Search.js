@@ -41,14 +41,16 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
             }}>{document._source.title}</S.DivOfTitle>
             <S.DivOfContent>{document._source.content.substr(0, 100)}</S.DivOfContent>
             <ReactModal isOpen={modalIsOpen[idx]}>
-                <h1>{document._source.title}</h1>
-                <p>{document._source.content}</p>
-                <button onClick={() => {
-                    const newModalIsOpen = [...modalIsOpen];
-                    newModalIsOpen[idx] = false;
+                <S.DivOfModalWrapper>
+                    <S.DivOfModalTitle>{document._source.title}</S.DivOfModalTitle>
+                    <S.DivOfModalContent>{document._source.content}</S.DivOfModalContent>
+                    <S.ButtonOfModalClose onClick={() => {
+                        const newModalIsOpen = [...modalIsOpen];
+                        newModalIsOpen[idx] = false;
 
-                    setModalIsOpen(newModalIsOpen);
-                }}>닫기</button>
+                        setModalIsOpen(newModalIsOpen);
+                    }}>닫기</S.ButtonOfModalClose>
+                </S.DivOfModalWrapper>
             </ReactModal>
         </S.Li>
     ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
@@ -64,14 +66,16 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
     //         }}>{document._source.title}</S.DivOfTitle>
     //         <S.DivOfContent>{document._source.content.substr(0, 100)}</S.DivOfContent>
     //         <ReactModal isOpen={modalIsOpen[idx]}>
-    //             <h1>{document._source.title}</h1>
-    //             <p>{document._source.content}</p>
-    //             <button onClick={() => {
-    //                 const newModalIsOpen = [...modalIsOpen];
-    //                 newModalIsOpen[idx] = false;
+    //             <S.DivOfModalWrapper>
+    //                 <S.DivOfModalTitle>{document._source.title}</S.DivOfModalTitle>
+    //                 <S.DivOfModalContent>{document._source.content}</S.DivOfModalContent>
+    //                 <S.ButtonOfModalClose onClick={() => {
+    //                     const newModalIsOpen = [...modalIsOpen];
+    //                     newModalIsOpen[idx] = false;
 
-    //                 setModalIsOpen(newModalIsOpen);
-    //             }}>닫기</button>
+    //                     setModalIsOpen(newModalIsOpen);
+    //                 }}>닫기</S.ButtonOfModalClose>
+    //             </S.DivOfModalWrapper>
     //         </ReactModal>
     //     </S.Li>
     // ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);

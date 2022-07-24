@@ -188,3 +188,20 @@ export const DivOfContent = styled.div`
     font-size: 15px;
     color: #666;
 `;
+
+export const DivOfModalWrapper = styled.div`
+    ${Vertical}
+    align-items: center;
+`;
+
+export const DivOfModalTitle = styled.div`
+    font-size: 25px;
+    font-weight: bold;
+`;
+
+export const DivOfModalContent = styled.div`
+    margin: 20px 0 0 0;
+`;
+
+export const ButtonOfModalClose = styled.button`
+`;
