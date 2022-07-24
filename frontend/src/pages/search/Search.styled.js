@@ -62,7 +62,7 @@ export const DivOfRelatedSearchTermWrapper = styled.div`
 export const LinkOfRelatedSearchTerm = styled(Link_)`
     display: flex;
     flex-direction: row;
-    ${Center}
+    align-items: center;
     height: 30px;
     border: 1px solid #eaeced;
     border-radius: 3px;
