@@ -10,7 +10,7 @@ const Vertical = css`
 const Center = css`
     justify-content: center;
     align-items: center;
-`
+`;
 
 // layout
 export const LayoutWrapper = styled.div`
@@ -25,7 +25,7 @@ export const LayoutWrapper = styled.div`
 export const Main = styled.main`
     display: flex;
     flex-direction: row;
-    ${Center}
+    justify-content: center;
     height: calc(100vh - 230px);
 `;
 
@@ -47,10 +47,6 @@ export const Header = styled.header`
 export const Nav = styled.nav`
 `;
 
-export const Footer = styled.footer`
-    height: 100px;
-`;
-
 // component
 export const ButtonWrapperOfSearch = styled.div`
 `;
@@ -64,19 +60,9 @@ export const Button = styled.button`
     font-family: 'IBM Plex Sans KR', sans-serif;
     color: #6e6a6a;
     background-color: #f4f4f4;
+    cursor: pointer;
 `;
 
 export const Image = styled.img`
     width: min(70vw, 600px);
-`;
-
-export const P = styled.p`
-    font-size: 20px;
-`;
-
-export const Link = styled(Link_)`
-    text-decoration: none;
-    font-size: inherit;
-    font-family: 'IBM Plex Sans KR', sans-serif;
-    color: #f2fa09;
 `;

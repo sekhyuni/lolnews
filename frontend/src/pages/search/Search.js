@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import * as S from './Search.styled';
 import * as Svg from '../../components/svg/Svg';
@@ -79,8 +80,7 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
                     </S.Ul>
                 </S.Section>
             </S.Main>
-            <S.Footer>
-            </S.Footer>
+            <Footer layoutName="search" />
         </S.LayoutWrapper>
     );
 };

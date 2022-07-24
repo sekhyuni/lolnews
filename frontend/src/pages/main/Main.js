@@ -1,5 +1,6 @@
+import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
-import * as S from './Main.styled'
+import * as S from './Main.styled';
 
 const Main = ({ keyword, setKeyword, setResult }) => {
     return (
@@ -18,12 +19,10 @@ const Main = ({ keyword, setKeyword, setResult }) => {
                             <S.Button onClick={() => { alert('서비스 준비중입니다.'); }}>챔피언별 검색</S.Button>
                             <S.Button onClick={() => { alert('서비스 준비중입니다.'); }}>팀별 검색</S.Button>
                         </S.ButtonWrapperOfSearch>
-                        <S.P>Toyproject <S.Link to="/about/developers">AI SERVICE</S.Link></S.P>
                     </S.Div>
                 </S.Section>
             </S.Main>
-            <S.Footer>
-            </S.Footer>
+            <Footer layoutName="main" />
         </S.LayoutWrapper>
     );
 };

@@ -78,10 +78,6 @@ export const Li = styled.li`
 export const Nav = styled.nav`
 `;
 
-export const Footer = styled.footer`
-    height: 100px;
-`;
-
 // component
 export const Image = styled.img`
     height: inherit;
