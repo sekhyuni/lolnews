@@ -21,14 +21,14 @@ export const Footer = styled.footer`
     padding: 0 16px 0 16px;
 `;
 
-export const FooterTopElementWrapper = styled.div`
+export const FooterOfTopElementWrapper = styled.div`
     display: flex;
     flex-direction: row;
     font-size: 16px;
     color: ${({ layoutName }) => layoutName === 'main' ? '#000' : '#666'};
 `;
 
-export const FooterBottomElementWrapper = styled.div`
+export const FooterOfBottomElementWrapper = styled.div`
     display: flex;
     flex-direction: row;
     margin: 12px 0 12px 0;
@@ -36,7 +36,7 @@ export const FooterBottomElementWrapper = styled.div`
     color: ${({ layoutName }) => layoutName === 'main' ? '#000' : '#666'};
 `;
 
-export const FooterTopElement = styled.div`
+export const FooterOfTopElement = styled.div`
     border-left: ${({ layoutName }) => layoutName === 'main' ? '1.2px solid #000' : '1.2px solid #666'};
     :first-child {
         border-left: 0;
@@ -47,7 +47,7 @@ export const FooterTopElement = styled.div`
     }
 `;
 
-export const FooterBottomElement = styled.div`
+export const FooterOfBottomElement = styled.div`
     margin: 0 3px 0 3px;
 `
 
@@ -58,13 +58,11 @@ export const P = styled.p`
 
 export const A = styled.a`  
     text-decoration: none;
-    font-family: 'IBM Plex Sans KR', sans-serif;
     color: inherit;
 `;
 
 export const Link = styled(Link_)`
     text-decoration: none;
-    font-family: 'IBM Plex Sans KR', sans-serif;
     color: inherit;
 `;
 
@@ -73,7 +71,6 @@ export const AOfCorps = styled.a`
     :hover {
         text-decoration: underline;
     }
-    font-family: 'IBM Plex Sans KR', sans-serif;
     font-weight: bold;
     color: ${({ layoutName }) => layoutName === 'main' ? '#f2fa09' : 'inherit'};
 `;

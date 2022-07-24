@@ -12,7 +12,7 @@ const Center = css`
 `;
 
 // layout
-export const LayoutWrapper = styled.div`
+export const DivOfLayoutWrapper = styled.div`
     ${Vertical}
 `;
 
@@ -37,16 +37,15 @@ export const Section = styled.section`
 export const Aside = styled.aside`
     ${Vertical}
     width: 350px;
+    margin: 24px 0 0 30px;
 `;
 
-export const ContentOfAside = styled.div`
+export const AsideOfContent = styled.div`
     ${Vertical}
-    width: inherit;
     min-height: 100px;
     /* height: ${({ type }) => type === 1 ? '100px' : '200px'}; */
     border-radius: 10px;
     padding: 18px 30px 18px 30px;
-    margin: 24px 0 0 30px;
     background-color: #fff;
 `;
 
@@ -54,13 +53,13 @@ export const Strong = styled.strong`
     font-size: 16px;
 `;
 
-export const RelatedSearchTerms = styled.div`
+export const DivOfRelatedSearchTermWrapper = styled.div`
     display: flex;
     flex-direction: row;
     margin: 18px 0 0 0;
 `;
 
-export const RelatedSearchTerm = styled(Link_)`
+export const LinkOfRelatedSearchTerm = styled(Link_)`
     display: flex;
     flex-direction: row;
     ${Center}
@@ -87,21 +86,21 @@ export const Header = styled.header`
     border-bottom: 0.5px solid #e1e1e1;
 `;
 
-export const TopOfHeader = styled.div`
+export const HeaderOfTop = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
     height: 90px;
 `;
 
-export const BottomOfHeader = styled.div`
+export const HeaderOfBottom = styled.div`
     display: flex;
     flex-direction: row;
     height: 40px;
     margin: 0 0 0 200px;
 `;
 
-export const ResultDataTypeMenuWrapper = styled.div`
+export const DivOfResultDataTypeMenuWrapper = styled.div`
     height: inherit;
     margin : 0 0 0 22px;
     :first-child {
@@ -127,16 +126,16 @@ export const Nav = styled.nav`
 `;
 
 // component
-export const Image = styled.img`
+export const Img = styled.img`
     height: inherit;
     padding: 10px 0 0 0;
 `;
 
-export const LinkForLogo = styled(Link_)`
+export const LinkOfLogo = styled(Link_)`
     height: inherit;
 `;
 
-export const LinkForMenu = styled(Link_)`
+export const LinkOfResultDataTypeMenu = styled(Link_)`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -169,7 +168,7 @@ export const Span = styled.span`
     pointer-events: none;
 `;
 
-export const Title = styled.div`
+export const DivOfTitle = styled.div`
     margin: 0 0 8px 0;
     cursor: pointer;
     :hover {
@@ -179,7 +178,7 @@ export const Title = styled.div`
     font-weight: bold;
 `;
 
-export const Content = styled.div`
+export const DivOfContent = styled.div`
     /* display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical; */

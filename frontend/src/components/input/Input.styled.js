@@ -14,7 +14,6 @@ export const InputForSearch = styled.input`
     padding: 20px 45px;
     font-size: 1.1rem;
     font-weight: 500;
-    font-family: 'IBM Plex Sans KR', sans-serif;
     ${({ layoutName }) => {
         if (layoutName === 'search') {
             return css`

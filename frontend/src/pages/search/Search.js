@@ -9,40 +9,40 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
     const [active, setActive] = useState([true, false, false, false]);
 
     // 운영 코드
-    const resultDataTypeMenus = [
-        { id: 1, link: '/search', value: '전체', svg: <Svg.All active={active[0]} /> },
-        { id: 2, link: '/search/document', value: '문서', svg: <Svg.Document active={active[1]} /> },
-        { id: 3, link: '/search/image', value: '이미지', svg: <Svg.Image active={active[2]} /> },
-        { id: 4, link: '/search/video', value: '동영상', svg: <Svg.Video active={active[3]} /> },
-    ];
-
-    // 임시 개발 코드
     // const resultDataTypeMenus = [
     //     { id: 1, link: '/search', value: '전체', svg: <Svg.All active={active[0]} /> },
-    //     { id: 2, link: '/search', value: '문서', svg: <Svg.Document active={active[1]} /> },
-    //     { id: 3, link: '/search', value: '이미지', svg: <Svg.Image active={active[2]} /> },
-    //     { id: 4, link: '/search', value: '동영상', svg: <Svg.Video active={active[3]} /> },
+    //     { id: 2, link: '/search/document', value: '문서', svg: <Svg.Document active={active[1]} /> },
+    //     { id: 3, link: '/search/image', value: '포토', svg: <Svg.Image active={active[2]} /> },
+    //     { id: 4, link: '/search/video', value: '영상', svg: <Svg.Video active={active[3]} /> },
     // ];
 
-    // 운영 코드
-    const elementsOfESDocument = result.data.map((document, idx) =>
-        <S.Li key={document._id}>
-            <S.Title>{document._source.title}</S.Title>
-            <S.Content>{document._source.content.substr(0, 100)}</S.Content>
-        </S.Li>
-    ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
-
     // 임시 개발 코드
-    // const elementsOfESDocument = result.map((document, idx) =>
+    const resultDataTypeMenus = [
+        { id: 1, link: '/search', value: '전체', svg: <Svg.All active={active[0]} /> },
+        { id: 2, link: '/search', value: '문서', svg: <Svg.Document active={active[1]} /> },
+        { id: 3, link: '/search', value: '포토', svg: <Svg.Image active={active[2]} /> },
+        { id: 4, link: '/search', value: '영상', svg: <Svg.Video active={active[3]} /> },
+    ];
+
+    // 운영 코드
+    // const elementsOfESDocument = result.data.map((document, idx) =>
     //     <S.Li key={document._id}>
-    //         <S.Title>{document._source.title}</S.Title>
-    //         <S.Content>{document._source.content.substr(0, 100)}</S.Content>
+    //         <S.DivOfTitle>{document._source.title}</S.DivOfTitle>
+    //         <S.DivOfContent>{document._source.content.substr(0, 100)}</S.DivOfContent>
     //     </S.Li>
     // ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
+    // 임시 개발 코드
+    const elementsOfESDocument = result.map((document, idx) =>
+        <S.Li key={document._id}>
+            <S.DivOfTitle>{document._source.title}</S.DivOfTitle>
+            <S.DivOfContent>{document._source.content.substr(0, 100)}</S.DivOfContent>
+        </S.Li>
+    ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
+
     const elementsOfResultDataTypeMenu = resultDataTypeMenus.map((resultDataTypeMenu, idx) =>
-        <S.ResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
-            <S.LinkForMenu to={resultDataTypeMenu.link} active={active} index={idx} onClick={() => {
+        <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
+            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} active={active} index={idx} onClick={() => {
                 const newActive = [false, false, false, false];
                 newActive[idx] = true;
 
@@ -52,26 +52,26 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
                     {resultDataTypeMenu.svg}
                 </S.Span>
                 {resultDataTypeMenu.value}
-            </S.LinkForMenu>
-        </S.ResultDataTypeMenuWrapper>
+            </S.LinkOfResultDataTypeMenu>
+        </S.DivOfResultDataTypeMenuWrapper>
     ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
     return (
-        <S.LayoutWrapper>
+        <S.DivOfLayoutWrapper>
             <S.Header>
-                <S.TopOfHeader>
-                    <S.LinkForLogo to="/" onClick={() => { setKeyword(''); }}>
-                        <S.Image alt="LOLNEWS" src={require('../../assets/logo.png')} />
-                    </S.LinkForLogo>
+                <S.HeaderOfTop>
+                    <S.LinkOfLogo to="/" onClick={() => { setKeyword(''); }}>
+                        <S.Img alt="LOLNEWS" src={require('../../assets/logo.png')} />
+                    </S.LinkOfLogo>
                     <S.Div>
                         <Input layoutName="search" keyword={keyword} setKeyword={setKeyword} setResult={setResult} />
                     </S.Div>
                     <S.Nav>
                     </S.Nav>
-                </S.TopOfHeader>
-                <S.BottomOfHeader>
+                </S.HeaderOfTop>
+                <S.HeaderOfBottom>
                     {elementsOfResultDataTypeMenu}
-                </S.BottomOfHeader>
+                </S.HeaderOfBottom>
             </S.Header>
             <S.Main>
                 <S.Section>
@@ -80,31 +80,31 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
                     </S.Ul>
                 </S.Section>
                 <S.Aside>
-                    <S.ContentOfAside type={1}>
+                    <S.AsideOfContent type={1}>
                         <S.Strong>
                             연관 검색어
                         </S.Strong>
-                        <S.RelatedSearchTerms>
-                            <S.RelatedSearchTerm to="/search/?q=페이커">
+                        <S.DivOfRelatedSearchTermWrapper>
+                            <S.LinkOfRelatedSearchTerm to="/search/?q=페이커">
                                 페이커
-                            </S.RelatedSearchTerm>
-                            <S.RelatedSearchTerm to="/search/?q=롤">
+                            </S.LinkOfRelatedSearchTerm>
+                            <S.LinkOfRelatedSearchTerm to="/search/?q=롤">
                                 롤
-                            </S.RelatedSearchTerm>
-                            <S.RelatedSearchTerm to="/search/?q=LOL">
+                            </S.LinkOfRelatedSearchTerm>
+                            <S.LinkOfRelatedSearchTerm to="/search/?q=LOL">
                                 LOL
-                            </S.RelatedSearchTerm>
-                        </S.RelatedSearchTerms>
-                    </S.ContentOfAside>
-                    {/* <S.ContentOfAside type={2}>
+                            </S.LinkOfRelatedSearchTerm>
+                        </S.DivOfRelatedSearchTermWrapper>
+                    </S.AsideOfContent>
+                    {/* <S.AsideOfContent type={2}>
                         <strong>
                             포토
                         </strong>
-                    </S.ContentOfAside> */}
+                    </S.AsideOfContent> */}
                 </S.Aside>
             </S.Main>
             <Footer layoutName="search" />
-        </S.LayoutWrapper>
+        </S.DivOfLayoutWrapper>
     );
 };
 

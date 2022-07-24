@@ -13,7 +13,7 @@ const Center = css`
 `;
 
 // layout
-export const LayoutWrapper = styled.div`
+export const DivOfLayoutWrapper = styled.div`
     ${Vertical}
     height: 100vh;
     background-image: url(${urlOfWallpaperbette});
@@ -48,21 +48,21 @@ export const Nav = styled.nav`
 `;
 
 // component
-export const ButtonWrapperOfSearch = styled.div`
+export const ButtonOfSearchTypeWrapper = styled.div`
 `;
 
 export const Button = styled.button`
     width: 150px;
-    border: none;   
+    border: none;
+    border-radius: 3px;
     padding: 13px;
     margin: 15px 3px 10px 3px;
     font-weight: 500;
-    font-family: 'IBM Plex Sans KR', sans-serif;
     color: #6e6a6a;
     background-color: #f4f4f4;
     cursor: pointer;
 `;
 
-export const Image = styled.img`
+export const Img = styled.img`
     width: min(70vw, 600px);
 `;
