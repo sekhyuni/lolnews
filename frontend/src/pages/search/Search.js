@@ -79,6 +79,29 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
                         {elementsOfESDocument}
                     </S.Ul>
                 </S.Section>
+                <S.Aside>
+                    <S.ContentOfAside type={1}>
+                        <S.Strong>
+                            연관 검색어
+                        </S.Strong>
+                        <S.RelatedSearchTerms>
+                            <S.RelatedSearchTerm to="/search/?q=페이커">
+                                페이커
+                            </S.RelatedSearchTerm>
+                            <S.RelatedSearchTerm to="/search/?q=롤">
+                                롤
+                            </S.RelatedSearchTerm>
+                            <S.RelatedSearchTerm to="/search/?q=LOL">
+                                LOL
+                            </S.RelatedSearchTerm>
+                        </S.RelatedSearchTerms>
+                    </S.ContentOfAside>
+                    {/* <S.ContentOfAside type={2}>
+                        <strong>
+                            포토
+                        </strong>
+                    </S.ContentOfAside> */}
+                </S.Aside>
             </S.Main>
             <Footer layoutName="search" />
         </S.LayoutWrapper>

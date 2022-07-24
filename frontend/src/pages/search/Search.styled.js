@@ -13,23 +13,68 @@ const Center = css`
 
 // layout
 export const LayoutWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
+    ${Vertical}
 `;
 
 export const Main = styled.main`
+    display: flex;
+    flex-direction: row;
+    min-width: calc(200px + 600px + 30px + 350px + 30px);
     min-height: calc(100vh - 230px);
     padding: 0 0 0 200px;
     background-color: #f2f4f7;
 `;
 
 export const Section = styled.section`
-    display: flex;
-    flex-direction: column;
+    ${Vertical}
     width: 600px;
     border-radius: 10px;
     padding: 0 30px 0 30px;
     margin: 24px 0 24px 0;
+    background-color: #fff;
+`;
+
+export const Aside = styled.aside`
+    ${Vertical}
+    width: 350px;
+`;
+
+export const ContentOfAside = styled.div`
+    ${Vertical}
+    width: inherit;
+    min-height: 100px;
+    /* height: ${({ type }) => type === 1 ? '100px' : '200px'}; */
+    border-radius: 10px;
+    padding: 18px 30px 18px 30px;
+    margin: 24px 0 0 30px;
+    background-color: #fff;
+`;
+
+export const Strong = styled.strong`
+    font-size: 16px;
+`;
+
+export const RelatedSearchTerms = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin: 18px 0 0 0;
+`;
+
+export const RelatedSearchTerm = styled(Link_)`
+    display: flex;
+    flex-direction: row;
+    ${Center}
+    height: 30px;
+    border: 1px solid #eaeced;
+    border-radius: 3px;
+    padding: 0 12px 0 12px;
+    margin: 0 0 0 10px;
+    :first-child {
+        margin: 0 0 0 0;
+    }
+    font-size: 14px;
+    text-decoration: none;
+    color: inherit;
     background-color: #fff;
 `;
 

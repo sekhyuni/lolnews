@@ -11,6 +11,13 @@ export const Footer = styled.footer`
     justify-content: center;
     align-items: center;
     height: 100px;
+    ${({ layoutName }) => {
+        if (layoutName === 'search') {
+            return css`
+                border-top: 0.5px solid #e1e1e1;
+            `;
+        }
+    }}
     padding: 0 16px 0 16px;
 `;
 

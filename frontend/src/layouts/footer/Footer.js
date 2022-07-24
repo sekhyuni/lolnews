@@ -16,7 +16,7 @@ const Footer = ({ layoutName }) => {
         .reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
     return (
-        <S.Footer>
+        <S.Footer layoutName={layoutName}>
             <S.FooterTopElementWrapper layoutName={layoutName}>
                 {elementsOfFooterMenu}
             </S.FooterTopElementWrapper>
