@@ -56,13 +56,19 @@ export const P = styled.p`
     font-weight: bold;
 `;
 
+export const A = styled.a`  
+    text-decoration: none;
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    color: inherit;
+`;
+
 export const Link = styled(Link_)`
     text-decoration: none;
     font-family: 'IBM Plex Sans KR', sans-serif;
     color: inherit;
 `;
 
-export const LinkOfCorps = styled(Link_)`
+export const AOfCorps = styled.a`
     text-decoration: none;
     :hover {
         text-decoration: underline;
