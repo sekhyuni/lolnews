@@ -3,7 +3,7 @@ import * as S from './Main.styled'
 
 const Main = ({ keyword, setKeyword, setResult }) => {
     return (
-        <S.Layout>
+        <S.LayoutWrapper>
             <S.Header>
                 <S.Nav>
                 </S.Nav>
@@ -24,7 +24,7 @@ const Main = ({ keyword, setKeyword, setResult }) => {
             </S.Main>
             <S.Footer>
             </S.Footer>
-        </S.Layout>
+        </S.LayoutWrapper>
     );
 };
 

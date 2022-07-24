@@ -56,7 +56,7 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
     ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
     return (
-        <S.Layout>
+        <S.LayoutWrapper>
             <S.Header>
                 <S.TopOfHeader>
                     <S.LinkForLogo to="/" onClick={() => { setKeyword(''); }}>
@@ -74,12 +74,14 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    {elementsOfESDocument}
+                    <S.Ul>
+                        {elementsOfESDocument}
+                    </S.Ul>
                 </S.Section>
             </S.Main>
             <S.Footer>
             </S.Footer>
-        </S.Layout>
+        </S.LayoutWrapper>
     );
 };
 

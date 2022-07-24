@@ -29,7 +29,7 @@ export const InputForSearch = styled.input`
 
 const StyledIconOfSearch = styled(FontAwesomeIcon)`
     position: absolute; 
-    top: 14px;
+    top: 13px;
     left: 20px; 
     color: #aaa;
 `;

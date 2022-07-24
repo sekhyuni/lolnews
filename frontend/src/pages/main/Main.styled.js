@@ -13,9 +13,9 @@ const Center = css`
 `
 
 // layout
-export const Layout = styled.div`
+export const LayoutWrapper = styled.div`
     ${Vertical}
-    height: inherit;
+    height: 100vh;
     background-image: url(${urlOfWallpaperbette});
     background-repeat: no-repeat;
     background-size: cover;
@@ -26,7 +26,7 @@ export const Main = styled.main`
     display: flex;
     flex-direction: row;
     ${Center}
-    height: inherit;
+    height: calc(100vh - 230px);
 `;
 
 export const Section = styled.section`
@@ -41,7 +41,7 @@ export const Div = styled.div`
 `;
 
 export const Header = styled.header`
-    height: 100px;
+    height: 130px;
 `;
 
 export const Nav = styled.nav`
@@ -67,7 +67,7 @@ export const Button = styled.button`
 `;
 
 export const Image = styled.img`
-    width: min(50vw, 600px);
+    width: min(70vw, 600px);
 `;
 
 export const P = styled.p`
