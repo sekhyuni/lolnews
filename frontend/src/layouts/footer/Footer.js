@@ -2,7 +2,6 @@ import * as S from './Footer.styled';
 
 const Footer = ({ layoutName }) => {
     const footerMenus = [
-        // { id: 1, link: '/about', value: '팀 소개', },
         { id: 1, link: 'https://gitlab.com/5622kmj/toyproject/-/blob/main/README.md', value: '팀 소개', },
         { id: 2, link: 'https://www.notion.so/t3qlab/ecaf979804b943b7a65e7b07c362238f?v=47cdfe752f4f4bf1bcc85e0beb522d36', value: '블로그', },
         { id: 3, link: '/help', value: '도움말', },

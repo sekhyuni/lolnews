@@ -28,10 +28,14 @@ export const Main = styled.main`
 export const Section = styled.section`
     ${Vertical}
     width: 600px;
-    border-radius: 10px;
-    padding: 0 30px 0 30px;
-    margin: 24px 0 24px 0;
-    background-color: #fff;
+    margin: 30px 0 0 0;
+`;
+
+export const DivOfLnb = styled.div`
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #828691;
+    margin: 0 0 30px 0;
 `;
 
 export const Aside = styled.aside`
@@ -109,14 +113,16 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
 `;
 
 export const Ul = styled.ul`
-    padding: 0 0 0 0;
+    border-radius: 10px;
+    padding: 0 30px 0 30px;
     margin: 0 0 0 0;
-    list-style: none;
+    list-style: none;    
+    background-color: #fff;
 `;
 
 export const Li = styled.li`
     padding: 18px 0 18px 0;
-    border-bottom: 1.5px solid #f5f6f7;
+    border-bottom: 1px solid #e5e5e5;
     :last-child {
         border-bottom: 0;
     }

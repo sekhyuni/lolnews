@@ -25,7 +25,7 @@ export const FooterOfTopElementWrapper = styled.div`
     display: flex;
     flex-direction: row;
     font-size: 16px;
-    color: ${({ layoutName }) => layoutName === 'main' ? '#000' : '#666'};
+    color: ${({ layoutName }) => layoutName === 'main' ? '#000' : '#7e7e7e'};
 `;
 
 export const FooterOfBottomElementWrapper = styled.div`
@@ -33,11 +33,11 @@ export const FooterOfBottomElementWrapper = styled.div`
     flex-direction: row;
     margin: 12px 0 12px 0;
     font-size: 16px;
-    color: ${({ layoutName }) => layoutName === 'main' ? '#000' : '#666'};
+    color: ${({ layoutName }) => layoutName === 'main' ? '#000' : '#7e7e7e'};
 `;
 
 export const FooterOfTopElement = styled.div`
-    border-left: ${({ layoutName }) => layoutName === 'main' ? '1.2px solid #000' : '1.2px solid #666'};
+    border-left: ${({ layoutName }) => layoutName === 'main' ? '1.2px solid #000' : '1.2px solid #7e7e7e'};
     :first-child {
         border-left: 0;
     }

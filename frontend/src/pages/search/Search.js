@@ -96,6 +96,10 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
         </S.DivOfResultDataTypeMenuWrapper>
     ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
+    const day = ['일', '월', '화', '수', '목', '금', '토'];
+    const today = new Date();
+    const date = `${today.getMonth() + 1}.${today.getDate()}(${day[today.getDay()]})`;
+
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
@@ -115,6 +119,9 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
             </S.Header>
             <S.Main>
                 <S.Section>
+                    <S.DivOfLnb>
+                        {date}
+                    </S.DivOfLnb>
                     <S.Ul>
                         {elementsOfESDocument}
                     </S.Ul>
