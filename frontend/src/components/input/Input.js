@@ -18,7 +18,7 @@ const Input = ({ keyword, setKeyword, setResult, layoutName }) => {
             });
 
             // 임시 개발 코드
-            // const resultData = require(`../../../test/${keyword}.json`);
+            // const resultData = { data: require(`../../../test/${keyword}.json`) };
 
             // setResult(resultData);
 

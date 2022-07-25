@@ -210,6 +210,20 @@ export const DivOfContent = styled.div`
 export const DivOfModalWrapper = styled.div`
     ${vertical}
     align-items: center;
+    width: 100%;
+`;
+
+export const DivOfSpanModalCloseWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    width: inherit;
+`;
+
+export const SpanOfModalClose = styled.div`
+    font-size: 40px;
+    font-weight: 100;
+    cursor: pointer;
 `;
 
 export const DivOfModalTitle = styled.div`
@@ -233,4 +247,7 @@ export const ButtonOfSort = styled.button`
     font-size: 18px;
     background-color: #f2f4f7;
     cursor: pointer;
+    :hover {
+        text-decoration: underline;
+    }
 `;

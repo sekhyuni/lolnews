@@ -8,11 +8,22 @@ import * as Svg from '../../components/svg/Svg';
 
 const Search = ({ keyword, setKeyword, result, setResult }) => {
     const [active, setActive] = useState([true, false, false, false]);
-    // 운영 코드
+
     const [modalIsOpen, setModalIsOpen] = useState(result.data.map(() => false));
 
-    // 임시 개발 코드
-    // const [modalIsOpen, setModalIsOpen] = useState(result.map(() => false));
+    const openModal = idx => {
+        const newModalIsOpen = [...modalIsOpen];
+        newModalIsOpen[idx] = true;
+
+        setModalIsOpen(newModalIsOpen);
+    };
+
+    const closeModal = idx => {
+        const newModalIsOpen = [...modalIsOpen];
+        newModalIsOpen[idx] = false;
+
+        setModalIsOpen(newModalIsOpen);
+    };
 
     // 운영 코드
     const resultDataTypeMenus = [
@@ -30,55 +41,22 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
     //     { id: 4, link: '/search', value: '영상', svg: <Svg.Video active={active[3]} /> },
     // ];
 
-    // 운영 코드
     const elementsOfESDocument = result.data.map((document, idx) =>
         <S.Li key={document._id}>
-            <S.DivOfTitle onClick={() => {
-                const newModalIsOpen = [...modalIsOpen];
-                newModalIsOpen[idx] = true;
-
-                setModalIsOpen(newModalIsOpen);
-            }}>{document._source.title}</S.DivOfTitle>
+            <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title}</S.DivOfTitle>
             <S.DivOfContent>{document._source.content.substr(0, 100)}</S.DivOfContent>
             <ReactModal isOpen={modalIsOpen[idx]}>
                 <S.DivOfModalWrapper>
+                    <S.DivOfSpanModalCloseWrapper>
+                        <S.SpanOfModalClose onClick={() => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                    </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title}</S.DivOfModalTitle>
                     <S.DivOfModalContent>{document._source.content}</S.DivOfModalContent>
-                    <S.ButtonOfModalClose onClick={() => {
-                        const newModalIsOpen = [...modalIsOpen];
-                        newModalIsOpen[idx] = false;
-
-                        setModalIsOpen(newModalIsOpen);
-                    }}>닫기</S.ButtonOfModalClose>
+                    <S.ButtonOfModalClose onClick={() => { closeModal(idx); }}>닫기</S.ButtonOfModalClose>
                 </S.DivOfModalWrapper>
             </ReactModal>
         </S.Li>
     ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
-
-    // 임시 개발 코드
-    // const elementsOfESDocument = result.map((document, idx) =>
-    //     <S.Li key={document._id}>
-    //         <S.DivOfTitle onClick={() => {
-    //             const newModalIsOpen = [...modalIsOpen];
-    //             newModalIsOpen[idx] = true;
-
-    //             setModalIsOpen(newModalIsOpen);
-    //         }}>{document._source.title}</S.DivOfTitle>
-    //         <S.DivOfContent>{document._source.content.substr(0, 100)}</S.DivOfContent>
-    //         <ReactModal isOpen={modalIsOpen[idx]}>
-    //             <S.DivOfModalWrapper>
-    //                 <S.DivOfModalTitle>{document._source.title}</S.DivOfModalTitle>
-    //                 <S.DivOfModalContent>{document._source.content}</S.DivOfModalContent>
-    //                 <S.ButtonOfModalClose onClick={() => {
-    //                     const newModalIsOpen = [...modalIsOpen];
-    //                     newModalIsOpen[idx] = false;
-
-    //                     setModalIsOpen(newModalIsOpen);
-    //                 }}>닫기</S.ButtonOfModalClose>
-    //             </S.DivOfModalWrapper>
-    //         </ReactModal>
-    //     </S.Li>
-    // ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
     const elementsOfResultDataTypeMenu = resultDataTypeMenus.map((resultDataTypeMenu, idx) =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
