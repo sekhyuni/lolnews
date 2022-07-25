@@ -15,14 +15,24 @@ export const InputForSearch = styled.input`
     font-size: 1.1rem;
     font-weight: 500;
     ${({ layoutName }) => {
-        if (layoutName === 'search') {
+        if (layoutName === 'main') {
+            return css`
+                box-shadow: 0 2px 5px 1px rgba(0, 113, 233, 0.7);
+                :hover {
+                    box-shadow: 0 4px 10px 2px rgba(0, 113, 233, 0.7);
+                }
+            `;
+        } else {
             return css`
                 box-shadow: 0 2px 5px 1px rgba(64,60,67,.16);
+                :hover {
+                    box-shadow: 0 4px 10px 2px rgba(64,60,67,.16);
+                }
             `;
         }
     }}
     :focus {
-        outline: 0;
+        outline: none;
     }
 `;
 
