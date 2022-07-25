@@ -1,13 +1,19 @@
 import { Link as Link_ } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
-const Vertical = css`
+const vertical = css`
     display: flex;
     flex-direction: column;
 `;
 
+const mainLeftDistance = '200px';
+
+const sectionWidth = '600px';
+
+const asideWidth = '350px';
+
 export const Footer = styled.footer`
-    ${Vertical}
+    ${vertical}
     justify-content: center;
     align-items: center;
     height: 100px;
@@ -15,6 +21,7 @@ export const Footer = styled.footer`
         if (layoutName === 'search') {
             return css`
                 border-top: 0.5px solid #e1e1e1;
+                min-width: calc(${mainLeftDistance} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
             `;
         }
     }}

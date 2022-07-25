@@ -2,19 +2,19 @@ import { Link as Link_ } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import urlOfWallpaperbette from '../../assets/wallpaperbette.jpg';
 
-const Vertical = css`
+const vertical = css`
     display: flex;
     flex-direction: column;
 `;
 
-const Center = css`
+const center = css`
     justify-content: center;
     align-items: center;
 `;
 
 // layout
 export const DivOfLayoutWrapper = styled.div`
-    ${Vertical}
+    ${vertical}
     height: 100vh;
     background-image: url(${urlOfWallpaperbette});
     background-repeat: no-repeat;
@@ -30,12 +30,12 @@ export const Main = styled.main`
 `;
 
 export const Section = styled.section`
-    ${Vertical}
+    ${vertical}
     align-items: center;
 `;
 
 export const Div = styled.div`
-    ${Vertical}
+    ${vertical}
     align-items: center;
     position: relative;
 `;

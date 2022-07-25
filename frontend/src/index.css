@@ -13,9 +13,6 @@ body {
 .ReactModal__Overlay {}
 
 .ReactModal__Content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%);

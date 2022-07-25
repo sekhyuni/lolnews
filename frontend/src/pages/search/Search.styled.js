@@ -1,55 +1,68 @@
 import { Link as Link_ } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
-const Vertical = css`
+const vertical = css`
     display: flex;
     flex-direction: column;
 `;
 
-const Center = css`
+const center = css`
     justify-content: center;
     align-items: center;
 `;
 
+const headerWidth = '130px';
+
+const mainLeftDistance = '200px';
+
+const sectionWidth = '600px';
+
+const asideWidth = '350px';
+
+const footerWidth = '100px';
+
 // layout
 export const DivOfLayoutWrapper = styled.div`
-    ${Vertical}
+    ${vertical}
 `;
 
 export const Main = styled.main`
     display: flex;
     flex-direction: row;
-    min-width: calc(200px + 600px + 30px + 350px + 30px);
-    min-height: calc(100vh - 230px);
-    padding: 0 0 0 200px;
+    min-width: calc(${mainLeftDistance} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
+    min-height: calc(100vh - (${headerWidth} + ${footerWidth}));
+    padding: 0 0 0 ${mainLeftDistance};
     background-color: #f2f4f7;
 `;
 
 export const Section = styled.section`
-    ${Vertical}
-    width: 600px;
-    margin: 30px 0 0 0;
+    ${vertical}
+    width: ${sectionWidth};
+    border-radius: 10px;
+    padding: 0 30px 0 30px;
+    margin: 20px 0 20px 0;
+    background-color: #fff;
 `;
 
 export const DivOfLnb = styled.div`
     display: flex;
     flex-direction: row;
-    border-bottom: 1px solid #828691;
-    margin: 0 0 30px 0;
+    justify-content: center;
+    margin: 20px 0 0 0;
 `;
 
 export const Aside = styled.aside`
-    ${Vertical}
-    width: 350px;
-    margin: 24px 0 0 30px;
+    ${vertical}
+    width: ${asideWidth};
+    margin: 20px 0 0 20px;
 `;
 
 export const AsideOfContent = styled.div`
-    ${Vertical}
+    ${vertical}
     min-height: 100px;
     /* height: ${({ type }) => type === 1 ? '100px' : '200px'}; */
     border-radius: 10px;
-    padding: 18px 30px 18px 30px;
+    padding: 20px 30px 20px 30px;
     background-color: #fff;
 `;
 
@@ -85,8 +98,9 @@ export const Div = styled.div`
 `;
 
 export const Header = styled.header`
-    ${Vertical}
-    height: 130px;
+    ${vertical}
+    min-width: calc(${mainLeftDistance} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
+    height: ${headerWidth};
     border-bottom: 0.5px solid #e1e1e1;
 `;
 
@@ -113,15 +127,13 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
 `;
 
 export const Ul = styled.ul`
-    border-radius: 10px;
-    padding: 0 30px 0 30px;
+    padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
-    background-color: #fff;
 `;
 
 export const Li = styled.li`
-    padding: 18px 0 18px 0;
+    padding: 20px 0 20px 0;
     border-bottom: 1px solid #e5e5e5;
     :last-child {
         border-bottom: 0;
@@ -196,7 +208,7 @@ export const DivOfContent = styled.div`
 `;
 
 export const DivOfModalWrapper = styled.div`
-    ${Vertical}
+    ${vertical}
     align-items: center;
 `;
 
@@ -210,4 +222,15 @@ export const DivOfModalContent = styled.div`
 `;
 
 export const ButtonOfModalClose = styled.button`
+`;
+
+export const ButtonOfSort = styled.button`
+    width: 150px;
+    height: 50px;
+    border: none;
+    border-radius: 30px;
+    margin: 0 10px 0 10px;
+    font-size: 18px;
+    background-color: #f2f4f7;
+    cursor: pointer;
 `;

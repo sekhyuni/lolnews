@@ -96,9 +96,9 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
         </S.DivOfResultDataTypeMenuWrapper>
     ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
-    const day = ['일', '월', '화', '수', '목', '금', '토'];
-    const today = new Date();
-    const date = `${today.getMonth() + 1}.${today.getDate()}(${day[today.getDay()]})`;
+    // const day = ['일', '월', '화', '수', '목', '금', '토'];
+    // const today = new Date();
+    // const date = `${today.getMonth() + 1}.${today.getDate()}(${day[today.getDay()]})`;
 
     return (
         <S.DivOfLayoutWrapper>
@@ -120,7 +120,9 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
             <S.Main>
                 <S.Section>
                     <S.DivOfLnb>
-                        {date}
+                        <S.ButtonOfSort>최신순</S.ButtonOfSort>
+                        <S.ButtonOfSort>과거순</S.ButtonOfSort>
+                        <S.ButtonOfSort>많이본순</S.ButtonOfSort>
                     </S.DivOfLnb>
                     <S.Ul>
                         {elementsOfESDocument}
