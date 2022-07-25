@@ -1,16 +1,31 @@
+from tracemalloc import start
 import requests
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent # User-urgent로 connection 막힌 것 해결 
 import json
 import csv
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class NaverNewsCrawler:
     today = datetime.now().strftime("%Y-%m-%d")
     def __init__(self):
-        pass
+        self.data_dir = "C:/Users/mzmj/Desktop/toyproject/DataCollection/crawling_data"
+
+    def get_news_date_range(self, start_date, end_date):
+        start_dt = datetime.strptime(start_date, '%Y-%m-%d')
+        end_dt = datetime.strptime(end_date, '%Y-%m-%d')
+
+        while True:
+            date = start_dt.strftime('%Y-%m-%d')
+            data = self.get_news_data(date=date)
+            datapath = f"{self.data_dir}/{date}.csv"
+            self.create_news_data(datapath, data)
+            print(f'>>> Done create {date} data')
+            start_dt = start_dt + timedelta(days=1)
+            if start_dt > end_dt:
+                break
 
     def get_news_data(self, date=today):
         
@@ -72,10 +87,16 @@ class NaverNewsCrawler:
 
         
 if __name__ == "__main__":
-    # test
-    date = input("날짜를 입력하세요(예: 2022-07-13): ")
+    # test1
+    # date = input("날짜를 입력하세요(예: 2022-07-13): ")
+    # cralwer = NaverNewsCrawler()
+    # data = cralwer.get_news_data(date)
+    # datapath = f"/root/toyproject/DataCollection/crawling_data/{date}.csv"
+    # cralwer.create_news_data(datapath, data)
+    # print(f'>>> Done create {date} data')
+    #----------------------
+    # test2
     cralwer = NaverNewsCrawler()
-    data = cralwer.get_news_data(date)
-    datapath = f"/root/toyproject/DataCollection/crawling_data/{date}.csv"
-    cralwer.create_news_data(datapath, data)
-    print(f'>>> Done create {date} data')
+    start_date = '2022-07-01'
+    end_date = "2022-07-26"
+    cralwer.get_news_date_range(start_date, end_date)
