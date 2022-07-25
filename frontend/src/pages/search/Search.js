@@ -45,14 +45,13 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
         <S.Li key={document._id}>
             <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title}</S.DivOfTitle>
             <S.DivOfContent>{document._source.content.substr(0, 100)}</S.DivOfContent>
-            <ReactModal isOpen={modalIsOpen[idx]}>
+            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={() => { closeModal(idx); }}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
                         <S.SpanOfModalClose onClick={() => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title}</S.DivOfModalTitle>
                     <S.DivOfModalContent>{document._source.content}</S.DivOfModalContent>
-                    <S.ButtonOfModalClose onClick={() => { closeModal(idx); }}>닫기</S.ButtonOfModalClose>
                 </S.DivOfModalWrapper>
             </ReactModal>
         </S.Li>

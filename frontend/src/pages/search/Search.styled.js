@@ -235,12 +235,9 @@ export const DivOfModalContent = styled.div`
     margin: 20px 0 0 0;
 `;
 
-export const ButtonOfModalClose = styled.button`
-`;
-
 export const ButtonOfSort = styled.button`
     width: 150px;
-    height: 50px;
+    height: 45px;
     border: none;
     border-radius: 30px;
     margin: 0 10px 0 10px;
