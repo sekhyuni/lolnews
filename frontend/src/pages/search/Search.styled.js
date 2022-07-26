@@ -209,30 +209,35 @@ export const DivOfContent = styled.div`
 
 export const DivOfModalWrapper = styled.div`
     ${vertical}
-    align-items: center;
-    width: 100%;
 `;
 
 export const DivOfSpanModalCloseWrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: end;
-    width: inherit;
 `;
 
-export const SpanOfModalClose = styled.div`
-    font-size: 40px;
+export const SpanOfModalClose = styled.span`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 40px;
+    font-size: 50px;
     font-weight: 100;
     cursor: pointer;
 `;
 
 export const DivOfModalTitle = styled.div`
-    font-size: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 40px 0 40px;
+    font-size: 20px;
     font-weight: bold;
 `;
 
 export const DivOfModalContent = styled.div`
-    margin: 20px 0 0 0;
+    margin: 20px 40px 0 40px;
 `;
 
 export const ButtonOfSort = styled.button`
