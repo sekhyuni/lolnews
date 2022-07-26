@@ -24,7 +24,7 @@ const Input = ({ keyword, setKeyword, setResult, layoutName }) => {
 
             // navigate(`/search/?q=${keyword}`);
         }}>
-            <S.InputForSearch layoutName={layoutName} type="text" value={keyword} placeholder="검색어 입력" onChange={event => {
+            <S.InputOfSearch layoutName={layoutName} type="text" value={keyword} placeholder="검색어 입력" onChange={event => {
                 setKeyword(event.target.value);
             }} />
             <S.IconOfSearch />

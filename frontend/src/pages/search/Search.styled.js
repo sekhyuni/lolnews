@@ -15,11 +15,13 @@ const headerWidth = '130px';
 
 const mainLeftDistance = '200px';
 
-const sectionWidth = '600px';
+const sectionWidth = '700px';
 
 const asideWidth = '350px';
 
 const footerWidth = '100px';
+
+const imageOfContentWidth = '120px';
 
 // layout
 export const DivOfLayoutWrapper = styled.div`
@@ -38,6 +40,7 @@ export const Main = styled.main`
 export const Section = styled.section`
     ${vertical}
     width: ${sectionWidth};
+    height: fit-content;
     border-radius: 10px;
     padding: 0 30px 0 30px;
     margin: 20px 0 20px 0;
@@ -133,6 +136,8 @@ export const Ul = styled.ul`
 `;
 
 export const Li = styled.li`
+    display: flex;
+    flex-direction: row;
     padding: 20px 0 20px 0;
     border-bottom: 1px solid #e5e5e5;
     :last-child {
@@ -144,7 +149,7 @@ export const Nav = styled.nav`
 `;
 
 // component
-export const Img = styled.img`
+export const ImgOfLogo = styled.img`
     height: inherit;
     padding: 10px 0 0 0;
 `;
@@ -186,6 +191,12 @@ export const Span = styled.span`
     pointer-events: none;
 `;
 
+export const DivOfTitleContentWrapper = styled.div`
+    ${vertical}
+    justify-content: center;
+    width: calc(100% - (${imageOfContentWidth} + 20px));
+`
+
 export const DivOfTitle = styled.div`
     margin: 0 0 8px 0;
     cursor: pointer;
@@ -205,6 +216,14 @@ export const DivOfContent = styled.div`
     white-space: nowrap;
     font-size: 15px;
     color: #666;
+`;
+
+export const ImgOfContent = styled.img`
+    width: ${imageOfContentWidth};
+    height: 80px;
+    border: 1px solid rgba(0,0,0,0.1);
+    margin: 0 20px 0 0;
+    cursor: pointer;
 `;
 
 export const DivOfModalWrapper = styled.div`
@@ -237,7 +256,11 @@ export const DivOfModalTitle = styled.div`
 `;
 
 export const DivOfModalContent = styled.div`
-    margin: 20px 40px 0 40px;
+    margin: 20px 40px 20px 40px;
+`;
+
+export const ImgOfModalContent = styled.img`
+    margin: 0 40px 0 40px;
 `;
 
 export const ButtonOfSort = styled.button`

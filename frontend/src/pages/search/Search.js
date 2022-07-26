@@ -43,8 +43,11 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
 
     const elementsOfESDocument = result.data.map((document, idx) =>
         <S.Li key={document._id}>
-            <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title}</S.DivOfTitle>
-            <S.DivOfContent>{document._source.content.substr(0, 100)}</S.DivOfContent>
+            <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
+            <S.DivOfTitleContentWrapper>
+                <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title}</S.DivOfTitle>
+                <S.DivOfContent>{document._source.content.substr(0, 100)}</S.DivOfContent>
+            </S.DivOfTitleContentWrapper>
             <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={() => { closeModal(idx); }}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
@@ -52,6 +55,7 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title}</S.DivOfModalTitle>
                     <S.DivOfModalContent>{document._source.content}</S.DivOfModalContent>
+                    <S.ImgOfModalContent src={document._source.thumbnail} />
                 </S.DivOfModalWrapper>
             </ReactModal>
         </S.Li>
@@ -82,7 +86,7 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
             <S.Header>
                 <S.HeaderOfTop>
                     <S.LinkOfLogo to="/" onClick={() => { setKeyword(''); }}>
-                        <S.Img alt="LOLNEWS" src={require('../../assets/logo.png')} />
+                        <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkOfLogo>
                     <S.Div>
                         <Input layoutName="search" keyword={keyword} setKeyword={setKeyword} setResult={setResult} />

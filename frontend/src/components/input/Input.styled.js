@@ -6,7 +6,7 @@ export const Form = styled.form`
     position: relative;
 `;
 
-export const InputForSearch = styled.input`
+export const InputOfSearch = styled.input`
     width: ${({ layoutName }) => layoutName === 'main' ? 'min(70vw, 850px)' : '800px'};
     height: 40px;
     border: 1.5px solid #ededed;
