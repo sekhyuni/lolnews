@@ -16,6 +16,8 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
         newModalIsOpen[idx] = true;
 
         setModalIsOpen(newModalIsOpen);
+
+        document.body.style.overflow = 'hidden';
     };
 
     const closeModal = idx => {
@@ -23,6 +25,8 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
         newModalIsOpen[idx] = false;
 
         setModalIsOpen(newModalIsOpen);
+
+        document.body.style.overflow = '';
     };
 
     // 운영 코드
