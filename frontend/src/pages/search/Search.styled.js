@@ -138,6 +138,7 @@ export const Ul = styled.ul`
 export const Li = styled.li`
     display: flex;
     flex-direction: row;
+    justify-content: center;
     padding: 20px 0 20px 0;
     border-bottom: 1px solid #e5e5e5;
     :last-child {

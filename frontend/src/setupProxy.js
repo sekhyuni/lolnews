@@ -5,7 +5,7 @@ const proxy = {
 
 module.exports = (app) => {
     app.use([
-        '/search',
+        '/search/keyword',
     ],
         createProxyMiddleware(proxy)
     );

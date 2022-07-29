@@ -12,8 +12,7 @@ const Footer = ({ layoutName }) => {
             <S.FooterOfTopElement key={footerMenu.id} layoutName={layoutName}>
                 {footerMenu.link.startsWith('http') ? <S.A href={footerMenu.link} target="_blank">{footerMenu.value}</S.A> : <S.Link to={footerMenu.link} onClick={event => { event.preventDefault(); }}>{footerMenu.value}</S.Link>}
             </S.FooterOfTopElement>
-        )
-        .reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
+        );
 
     return (
         <S.Footer layoutName={layoutName}>

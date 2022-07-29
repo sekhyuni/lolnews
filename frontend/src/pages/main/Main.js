@@ -2,7 +2,7 @@ import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import * as S from './Main.styled';
 
-const Main = ({ keyword, setKeyword, setResult }) => {
+const Main = ({ keyword, setKeyword }) => {
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
@@ -13,7 +13,7 @@ const Main = ({ keyword, setKeyword, setResult }) => {
                 <S.Section>
                     <S.Img alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     <S.Div>
-                        <Input layoutName="main" keyword={keyword} setKeyword={setKeyword} setResult={setResult} />
+                        <Input layoutName="main" keyword={keyword} setKeyword={setKeyword} />
                         <S.ButtonOfSearchTypeWrapper>
                             <S.Button onClick={() => { alert('서비스 준비중입니다.'); }}>선수별 검색</S.Button>
                             <S.Button onClick={() => { alert('서비스 준비중입니다.'); }}>챔피언별 검색</S.Button>

@@ -1,15 +1,40 @@
 import { useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactModal from 'react-modal';
+import doAxiosRequest from '../../functions/doAxiosRequest';
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import * as S from './Search.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const Search = ({ keyword, setKeyword, result, setResult }) => {
-    const [active, setActive] = useState([true, false, false, false]);
+const Search = ({ keyword, setKeyword }) => {
+    const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
-    const [modalIsOpen, setModalIsOpen] = useState(result.data.map(() => false));
+    const { search } = useLocation();
+    const [hash, setHash] = useState(search);
+    const [result, setResult] = useState([]);
+    const [active, setActive] = useState([true, false, false, false]);
+    const [modalIsOpen, setModalIsOpen] = useState([]);
+
+    if (hash !== search) {
+        setHash(search);
+    }
+
+    useEffect(() => {
+        const fetchData = () => {
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { q: decodeURI(search.split('=')[1]) }).then(resultData => {
+                setResult(resultData.data);
+                setModalIsOpen(resultData.data.map(() => false));
+            });
+
+            if (!keyword) {
+                setKeyword(decodeURI(search.split('=')[1]));
+            }
+        };
+
+        fetchData();
+    }, [hash]);
 
     const openModal = idx => {
         const newModalIsOpen = [...modalIsOpen];
@@ -45,14 +70,14 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
     //     { id: 4, link: '/search', value: '영상', svg: <Svg.Video active={active[3]} /> },
     // ];
 
-    const elementsOfESDocument = result.data.map((document, idx) =>
+    const elementsOfESDocument = result.length !== 0 ? result.map((document, idx) =>
         <S.Li key={document._id}>
             <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
                 <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title}</S.DivOfTitle>
                 <S.DivOfContent>{document._source.content.substr(0, 100)}</S.DivOfContent>
             </S.DivOfTitleContentWrapper>
-            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={() => { closeModal(idx); }}>
+            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={() => { closeModal(idx); }} preventScroll={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
                         <S.SpanOfModalClose onClick={() => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
@@ -62,8 +87,11 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
                     <S.ImgOfModalContent src={document._source.thumbnail} />
                 </S.DivOfModalWrapper>
             </ReactModal>
+        </S.Li>)
+        :
+        <S.Li>
+            <h3>검색된 결과가 없습니다.</h3>
         </S.Li>
-    ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
 
     const elementsOfResultDataTypeMenu = resultDataTypeMenus.map((resultDataTypeMenu, idx) =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
@@ -78,12 +106,7 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
                 </S.Span>
                 {resultDataTypeMenu.value}
             </S.LinkOfResultDataTypeMenu>
-        </S.DivOfResultDataTypeMenuWrapper>
-    ).reduce((prev, curr) => prev === null ? [curr] : [...prev, curr], null);
-
-    // const day = ['일', '월', '화', '수', '목', '금', '토'];
-    // const today = new Date();
-    // const date = `${today.getMonth() + 1}.${today.getDate()}(${day[today.getDay()]})`;
+        </S.DivOfResultDataTypeMenuWrapper>);
 
     return (
         <S.DivOfLayoutWrapper>
@@ -93,7 +116,7 @@ const Search = ({ keyword, setKeyword, result, setResult }) => {
                         <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkOfLogo>
                     <S.Div>
-                        <Input layoutName="search" keyword={keyword} setKeyword={setKeyword} setResult={setResult} />
+                        <Input layoutName="search" keyword={keyword} setKeyword={setKeyword} />
                     </S.Div>
                     <S.Nav>
                     </S.Nav>
