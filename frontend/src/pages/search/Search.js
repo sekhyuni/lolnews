@@ -28,9 +28,11 @@ const Search = ({ keyword, setKeyword }) => {
                 setModalIsOpen(resultData.data.map(() => false));
             });
 
-            if (!keyword) {
-                setKeyword(decodeURI(search.split('=')[1]));
-            }
+            // const resultData = require(`../../../test/${decodeURI(search.split('=')[1])}.json`);
+            // setResult(resultData);
+            // setModalIsOpen(resultData.map(() => false));
+
+            setKeyword(decodeURI(search.split('=')[1]));
         };
 
         fetchData();
