@@ -91,7 +91,7 @@ const SearchResultImage = ({ keyword, setKeyword }) => {
         { id: 1, link: `/search/?q=${keyword}`, value: '전체', svg: <Svg.All active={false} /> },
         { id: 2, link: `/search/document?q=${keyword}`, value: '문서', svg: <Svg.Document active={false} /> },
         { id: 3, link: `/search/image?q=${keyword}`, value: '포토', svg: <Svg.Image active={true} /> },
-        { id: 4, link: `/search/video?q=${keyword}`, value: '영상', svg: <Svg.Video active={false} /> },
+        // { id: 4, link: `/search/video?q=${keyword}`, value: '영상', svg: <Svg.Video active={false} /> },
     ];
 
     const elementsOfResultDataTypeMenu = resultDataTypeMenus.map(resultDataTypeMenu =>
