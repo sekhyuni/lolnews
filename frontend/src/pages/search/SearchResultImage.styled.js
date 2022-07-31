@@ -168,8 +168,8 @@ export const LinkOfResultDataTypeMenu = styled(Link_)`
     text-decoration: none;
     font-weight: bold;
     color: #000;
-    ${({ active, index }) => {
-        if (active[index]) {
+    ${({ id }) => {
+        if (id === 3) {
             return css`
                 border-bottom: 3px solid #1a73e8;
                 padding: 0 0 0 0;
