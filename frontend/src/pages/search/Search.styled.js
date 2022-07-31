@@ -51,7 +51,7 @@ export const DivOfLnb = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin: 20px 0 0 0;
+    margin: 20px 0 20px 0;
 `;
 
 export const Aside = styled.aside`
@@ -141,8 +141,8 @@ export const Li = styled.li`
     justify-content: center;
     padding: 20px 0 20px 0;
     border-bottom: 1px solid #e5e5e5;
-    :last-child {
-        border-bottom: 0;
+    :first-child {
+        border-top: 1px solid #e5e5e5;
     }
 `;
 

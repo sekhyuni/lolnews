@@ -12,6 +12,10 @@ const center = css`
     align-items: center;
 `;
 
+const headerWidth = '130px';
+
+const footerWidth = '100px';
+
 // layout
 export const DivOfLayoutWrapper = styled.div`
     ${vertical}
@@ -26,7 +30,7 @@ export const Main = styled.main`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    height: calc(100vh - 230px);
+    height: calc(100vh - (${headerWidth} + ${footerWidth}));
 `;
 
 export const Section = styled.section`

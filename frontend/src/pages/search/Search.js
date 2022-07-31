@@ -5,21 +5,24 @@ import ReactModal from 'react-modal';
 import doAxiosRequest from '../../functions/doAxiosRequest';
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
+import Pagination from '../../components/pagination/Pagination';
 import * as S from './Search.styled';
 import * as Svg from '../../components/svg/Svg';
 
 const Search = ({ keyword, setKeyword }) => {
     const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
+    // for location
     const { search } = useLocation();
-    const [hash, setHash] = useState(search);
+
+    // for result
     const [result, setResult] = useState([]);
     const [active, setActive] = useState([true, false, false, false]);
     const [modalIsOpen, setModalIsOpen] = useState([]);
 
-    if (hash !== search) {
-        setHash(search);
-    }
+    // for pagination
+    const [page, setPage] = useState(1);
+    const offset = (page - 1) * 20;
 
     useEffect(() => {
         const fetchData = () => {
@@ -28,15 +31,21 @@ const Search = ({ keyword, setKeyword }) => {
                 setModalIsOpen(resultData.data.map(() => false));
             });
 
-            // const resultData = require(`../../../test/${decodeURI(search.split('=')[1])}.json`);
+            // let resultData = [];
+            // try {
+            //     resultData = require(`../../../test/${decodeURI(search.split('=')[1])}.json`);
+            // } catch (error) {
+            //     console.error(error);
+            // }
             // setResult(resultData);
             // setModalIsOpen(resultData.map(() => false));
 
             setKeyword(decodeURI(search.split('=')[1]));
+            setPage(1);
         };
 
         fetchData();
-    }, [hash]);
+    }, [search, setKeyword]);
 
     const openModal = idx => {
         const newModalIsOpen = [...modalIsOpen];
@@ -72,7 +81,7 @@ const Search = ({ keyword, setKeyword }) => {
     //     { id: 4, link: '/search', value: '영상', svg: <Svg.Video active={active[3]} /> },
     // ];
 
-    const elementsOfESDocument = result.length !== 0 ? result.map((document, idx) =>
+    const elementsOfESDocument = result.length !== 0 ? result.slice(offset, offset + 20).map((document, idx) =>
         <S.Li key={document._id}>
             <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
@@ -93,7 +102,7 @@ const Search = ({ keyword, setKeyword }) => {
         :
         <S.Li>
             <h3>검색된 결과가 없습니다.</h3>
-        </S.Li>
+        </S.Li>;
 
     const elementsOfResultDataTypeMenu = resultDataTypeMenus.map((resultDataTypeMenu, idx) =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
@@ -137,6 +146,8 @@ const Search = ({ keyword, setKeyword }) => {
                     <S.Ul>
                         {elementsOfESDocument}
                     </S.Ul>
+                    {result.length !== 0 ?
+                        <Pagination total={result.length} page={page} setPage={setPage} /> : <></>}
                 </S.Section>
                 <S.Aside>
                     <S.AsideOfContent type={1}>
