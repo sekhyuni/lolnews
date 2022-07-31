@@ -13,7 +13,7 @@ const Main = ({ keyword, setKeyword }) => {
                 <S.Section>
                     <S.Img alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     <S.Div>
-                        <Input layoutName="main" keyword={keyword} setKeyword={setKeyword} />
+                        <Input layoutName="main" type="" keyword={keyword} setKeyword={setKeyword} />
                         <S.ButtonOfSearchTypeWrapper>
                             <S.Button onClick={() => { alert('서비스 준비중입니다.'); }}>선수별 검색</S.Button>
                             <S.Button onClick={() => { alert('서비스 준비중입니다.'); }}>챔피언별 검색</S.Button>
