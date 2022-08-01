@@ -5,24 +5,26 @@ from fake_useragent import UserAgent # User-urgent로 connection 막힌 것 해�
 import json
 import csv
 import pandas as pd
+import time
 from datetime import datetime, timedelta
-
+from config import *
 
 class NaverNewsCrawler:
     today = datetime.now().strftime("%Y-%m-%d")
-    def __init__(self):
-        self.data_dir = "C:/Users/mzmj/Desktop/toyproject/DataCollection/crawling_data"
+    def __init__(self, data_dir=CRAWLING_DATA_DIR, sort_mode='latest'):
+        self.data_dir = data_dir
+        self.sort_mode = sort_mode # latest or popular
 
-    def get_news_date_range(self, start_date, end_date):
+    def crawl_news_date_range(self, start_date, end_date):
         start_dt = datetime.strptime(start_date, '%Y-%m-%d')
         end_dt = datetime.strptime(end_date, '%Y-%m-%d')
 
         while True:
             date = start_dt.strftime('%Y-%m-%d')
             data = self.get_news_data(date=date)
-            datapath = f"{self.data_dir}/{date}.csv"
+            datapath = f"{self.data_dir}{date}.csv"
             self.create_news_data(datapath, data)
-            print(f'>>> Done create {date} data')
+            print(f'>>> Done create {date} data : {len(data)} articles')
             start_dt = start_dt + timedelta(days=1)
             if start_dt > end_dt:
                 break
@@ -39,6 +41,8 @@ class NaverNewsCrawler:
                 content = self._get_news_content(url)
                 news_added_content = {k: v for k, v in news.items() if k != 'subContent'}
                 news_added_content['content'] = content
+                news_added_content['updatedAt'] = self._convert_time_format(news_added_content['updatedAt'])
+                news_added_content['createdAt'] = self._convert_time_format(news_added_content['createdAt'])
                 data.append(news_added_content)
             return data
             
@@ -67,7 +71,7 @@ class NaverNewsCrawler:
 
         params = {
             'newsType': 'lol',
-            'sort': 'latest',
+            'sort': self.sort_mode,
             'day': date,
         }
 
@@ -80,12 +84,24 @@ class NaverNewsCrawler:
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
         news_content = soup.select_one("#newsEndContents")
-        news_content_split_list = list(news_content.strings)
-        idx = news_content_split_list.index('기사제공')
-        content = ' '.join(news_content_split_list[:idx])
+        if not news_content: # Nonetype
+            content = ''
+            print(f"Nonetype content")
+            print(news_content)
+        else:
+            news_content_split_list = list(news_content.strings)
+            idx = news_content_split_list.index('기사제공')
+            content = ' '.join(news_content_split_list[:idx])
         return content.strip()
 
+
+    def _convert_time_format(self, timeat):
+        """Convert a time expressed in seconds since the epoch to E/S format"""
+        struct_time = time.gmtime(timeat * 0.001)
+        es_time = datetime(*struct_time[:6]).strftime('%Y-%m-%dT%H:%M:%S%z')
+        return es_time
         
+
 if __name__ == "__main__":
     # test1
     # date = input("날짜를 입력하세요(예: 2022-07-13): ")
@@ -95,8 +111,9 @@ if __name__ == "__main__":
     # cralwer.create_news_data(datapath, data)
     # print(f'>>> Done create {date} data')
     #----------------------
-    # test2
-    cralwer = NaverNewsCrawler()
-    start_date = '2022-07-01'
-    end_date = "2022-07-26"
-    cralwer.get_news_date_range(start_date, end_date)
+    # test2 (기간입력)
+        ## 최신순이 default
+    cralwer = NaverNewsCrawler('/root/toyproject/DataCollection/crawling_data/latest/')
+    start_date = '2022-07-25'
+    end_date = "2022-08-01"
+    cralwer.crawl_news_date_range(start_date, end_date)
