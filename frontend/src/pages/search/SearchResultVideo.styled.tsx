@@ -63,7 +63,6 @@ export const Aside = styled.aside`
 export const AsideOfContent = styled.div`
     ${vertical}
     min-height: 100px;
-    /* height: ${({ type }) => type === 1 ? '100px' : '200px'}; */
     border-radius: 10px;
     padding: 20px 30px 20px 30px;
     background-color: #fff;
@@ -168,7 +167,7 @@ export const LinkOfResultDataTypeMenu = styled(Link_)`
     text-decoration: none;
     font-weight: bold;
     color: #000;
-    ${({ id }) => {
+    ${({ id }: any) => {
         if (id === 4) {
             return css`
                 border-bottom: 3px solid #1a73e8;

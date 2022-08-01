@@ -7,7 +7,7 @@ export const Form = styled.form`
 `;
 
 export const InputOfSearch = styled.input`
-    width: ${({ layoutName }) => layoutName === 'main' ? 'min(70vw, 850px)' : '800px'};
+    width: ${({ layoutName }: any) => layoutName === 'main' ? 'min(70vw, 850px)' : '800px'};
     height: 40px;
     border: 1.5px solid #ededed;
     border-radius: 30px;

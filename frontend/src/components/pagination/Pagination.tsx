@@ -1,6 +1,7 @@
+import { JsxAttribute } from 'typescript';
 import * as S from './Pagination.styled';
 
-function Pagination({ total, page, setPage }) {
+function Pagination({ total, page, setPage }: any) {
     const numPages = Math.ceil(total / 20);
 
     return (
@@ -9,11 +10,11 @@ function Pagination({ total, page, setPage }) {
                 <S.ButtonOfPage onClick={() => { setPage(page - 1); }} disabled={page === 1}>
                     &lt;
                 </S.ButtonOfPage>
-                {Array(numPages).fill().map((_, index) => (
+                {Array(numPages).fill('').map((_, index) => (
                     <S.ButtonOfPage
                         key={index + 1}
                         onClick={() => { setPage(index + 1); }}
-                        aria-current={page === index + 1 ? 'page' : null} >
+                        aria-current={page === index + 1 ? 'page' : undefined} >
                         {index + 1}
                     </S.ButtonOfPage>
                 ))}

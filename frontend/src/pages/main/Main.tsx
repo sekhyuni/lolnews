@@ -2,7 +2,7 @@ import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import * as S from './Main.styled';
 
-const Main = ({ keyword, setKeyword }) => {
+const Main = ({ keyword, setKeyword }: any) => {
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>

@@ -6,6 +6,14 @@ import Account from './pages/account/Account';
 import Login from './pages/login/Login';
 import NotFound from './pages/notfound/Notfound';
 
+declare module 'react' {
+  interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
+    // extends React's HTMLAttributes
+    layoutName?: string;
+    contentType?: string;
+  }
+}
+
 const App = () => {
   const [keyword, setKeyword] = useState('');
 

@@ -6,18 +6,18 @@ import doAxiosRequest from '../../functions/doAxiosRequest';
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import Pagination from '../../components/pagination/Pagination';
-import * as S from './SearchResultImage.styled';
+import * as S from './SearchResultDocument.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const SearchResultImage = ({ keyword, setKeyword }) => {
-    const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
+const SearchResultDocument = ({ keyword, setKeyword, type }: any) => {
+    const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     // for location
     const { search } = useLocation();
 
     // for result
     const [result, setResult] = useState([]);
-    const [modalIsOpen, setModalIsOpen] = useState([]);
+    const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
 
     // for pagination
     const [page, setPage] = useState(1);
@@ -25,7 +25,7 @@ const SearchResultImage = ({ keyword, setKeyword }) => {
 
     useEffect(() => {
         const fetchData = () => {
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { q: decodeURI(search.split('q=')[1]) }).then(resultData => {
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { q: decodeURI(search.split('q=')[1]) }).then((resultData: any):void => {
                 setResult(resultData.data);
                 setModalIsOpen(resultData.data.map(() => false));
             });
@@ -46,7 +46,7 @@ const SearchResultImage = ({ keyword, setKeyword }) => {
         fetchData();
     }, [search, setKeyword]);
 
-    const openModal = idx => {
+    const openModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = true;
 
@@ -55,7 +55,7 @@ const SearchResultImage = ({ keyword, setKeyword }) => {
         document.body.style.overflow = 'hidden';
     };
 
-    const closeModal = idx => {
+    const closeModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = false;
 
@@ -64,7 +64,7 @@ const SearchResultImage = ({ keyword, setKeyword }) => {
         document.body.style.overflow = '';
     };
 
-    const elementsOfESDocument = result.length !== 0 ? result.slice(offset, offset + 20).map((document, idx) =>
+    const elementsOfESDocument = result.length !== 0 ? result.slice(offset, offset + 20).map((document: any, idx: number): JSX.Element =>
         <S.Li key={document._id}>
             <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
@@ -89,12 +89,12 @@ const SearchResultImage = ({ keyword, setKeyword }) => {
 
     const resultDataTypeMenus = [
         { id: 1, link: `/search/?q=${keyword}`, value: '전체', svg: <Svg.All active={false} /> },
-        { id: 2, link: `/search/document?q=${keyword}`, value: '문서', svg: <Svg.Document active={false} /> },
-        { id: 3, link: `/search/image?q=${keyword}`, value: '포토', svg: <Svg.Image active={true} /> },
+        { id: 2, link: `/search/document?q=${keyword}`, value: '문서', svg: <Svg.Document active={true} /> },
+        { id: 3, link: `/search/image?q=${keyword}`, value: '포토', svg: <Svg.Image active={false} /> },
         // { id: 4, link: `/search/video?q=${keyword}`, value: '영상', svg: <Svg.Video active={false} /> },
     ];
 
-    const elementsOfResultDataTypeMenu = resultDataTypeMenus.map(resultDataTypeMenu =>
+    const elementsOfResultDataTypeMenu = resultDataTypeMenus.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
             <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id}>
                 <S.Span>
@@ -112,7 +112,7 @@ const SearchResultImage = ({ keyword, setKeyword }) => {
                         <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkOfLogo>
                     <S.Div>
-                        <Input layoutName="search" type="image" keyword={keyword} setKeyword={setKeyword} />
+                        <Input keyword={keyword} setKeyword={setKeyword} layoutName="search" type="document" />
                     </S.Div>
                     <S.Nav>
                     </S.Nav>
@@ -135,23 +135,23 @@ const SearchResultImage = ({ keyword, setKeyword }) => {
                         <Pagination total={result.length} page={page} setPage={setPage} /> : <></>}
                 </S.Section>
                 <S.Aside>
-                    <S.AsideOfContent type={1}>
+                    <S.AsideOfContent contentType="related">
                         <S.Strong>
                             연관 검색어
                         </S.Strong>
                         <S.DivOfRelatedSearchTermWrapper>
-                            <S.LinkOfRelatedSearchTerm to="/search/image?q=페이커">
+                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?q=페이커`}>
                                 페이커
                             </S.LinkOfRelatedSearchTerm>
-                            <S.LinkOfRelatedSearchTerm to="/search/image?q=롤">
+                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?q=롤`}>
                                 롤
                             </S.LinkOfRelatedSearchTerm>
-                            <S.LinkOfRelatedSearchTerm to="/search/image?q=LOL">
+                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?q=LOL`}>
                                 LOL
                             </S.LinkOfRelatedSearchTerm>
                         </S.DivOfRelatedSearchTermWrapper>
                     </S.AsideOfContent>
-                    {/* <S.AsideOfContent type={2}>
+                    {/* <S.AsideOfContent contentType="photo">
                         <strong>
                             포토
                         </strong>
@@ -163,4 +163,4 @@ const SearchResultImage = ({ keyword, setKeyword }) => {
     );
 };
 
-export default SearchResultImage;
+export default SearchResultDocument;

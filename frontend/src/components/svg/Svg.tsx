@@ -1,6 +1,6 @@
 import * as S from './Svg.styled';
 
-export const All = ({ active }) => {
+export const All = ({ active }: any) => {
     return (
         <S.Svg focusable="false" viewBox="0 0 24 24">
             {active ?
@@ -20,7 +20,7 @@ export const All = ({ active }) => {
     );
 };
 
-export const Document = ({ active }) => {
+export const Document = ({ active }: any) => {
     return (
         <S.Svg>
             {active ?
@@ -38,7 +38,7 @@ export const Document = ({ active }) => {
     );
 };
 
-export const Image = ({ active }) => {
+export const Image = ({ active }: any) => {
     return (
         <S.Svg>
             {active ?
@@ -56,7 +56,7 @@ export const Image = ({ active }) => {
     );
 };
 
-export const Video = ({ active }) => {
+export const Video = ({ active }: any) => {
     return (
         <S.Svg>
             {active ?
