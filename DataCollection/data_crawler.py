@@ -111,7 +111,8 @@ if __name__ == "__main__":
     # cralwer.create_news_data(datapath, data)
     # print(f'>>> Done create {date} data')
     #----------------------
-    # test2
+    # test2 (기간입력)
+        ## 최신순이 default
     cralwer = NaverNewsCrawler('/root/toyproject/DataCollection/crawling_data/latest/')
     start_date = '2022-07-25'
     end_date = "2022-08-01"
