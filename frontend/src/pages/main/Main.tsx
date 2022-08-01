@@ -7,11 +7,12 @@ const Main = ({ keyword, setKeyword }: any) => {
         <S.DivOfLayoutWrapper>
             <S.Header>
                 <S.Nav>
+                    <S.LinkOfLoginPage to="/login">로그인</S.LinkOfLoginPage>
                 </S.Nav>
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <S.Img alt="LOLNEWS" src={require('../../assets/logo.png')} />
+                    <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     <S.Div>
                         <Input layoutName="main" type="" keyword={keyword} setKeyword={setKeyword} />
                         {/* <S.ButtonOfSearchTypeWrapper>

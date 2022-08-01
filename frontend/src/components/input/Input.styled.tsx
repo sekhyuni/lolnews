@@ -7,7 +7,7 @@ export const Form = styled.form`
 `;
 
 export const InputOfSearch = styled.input`
-    width: ${({ layoutName }: any) => layoutName === 'main' ? 'min(70vw, 850px)' : '800px'};
+    width: ${({ layoutName }) => layoutName === 'main' ? 'min(70vw, 850px)' : '800px'};
     height: 40px;
     border: 1.5px solid #ededed;
     border-radius: 30px;
@@ -17,9 +17,9 @@ export const InputOfSearch = styled.input`
     ${({ layoutName }) => {
         if (layoutName === 'main') {
             return css`
-                box-shadow: 0 2px 5px 1px rgba(0, 113, 233, 0.7);
+                box-shadow: 0 2px 5px 1px #94cf58;
                 :hover {
-                    box-shadow: 0 4px 10px 2px rgba(0, 113, 233, 0.7);
+                    box-shadow: 0 4px 10px 2px #94cf58;
                 }
             `;
         } else {
@@ -40,7 +40,7 @@ const StyledIconOfSearch = styled(FontAwesomeIcon)`
     position: absolute; 
     top: 13px;
     left: 20px; 
-    color: #aaa;
+    color: #999;
 `;
 
 const StyledIconOfKeyboard = styled(FontAwesomeIcon)`
@@ -56,19 +56,19 @@ const StyledIconOfMic = styled(FontAwesomeIcon)`
     color: #4f86ec;
 `;
 
-export const IconOfSearch = () => {
+export const IconOfSearch = (): JSX.Element => {
     return (
         <StyledIconOfSearch icon={faSearch} />
     );
 };
 
-export const IconOfKeyboard = () => {
+export const IconOfKeyboard = (): JSX.Element => {
     return (
         <StyledIconOfKeyboard icon={faKeyboard} />
     );
 };
 
-export const IconOfMic = () => {
+export const IconOfMic = (): JSX.Element => {
     return (
         <StyledIconOfMic icon={faMicrophone} />
     );

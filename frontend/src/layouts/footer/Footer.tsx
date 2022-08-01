@@ -9,25 +9,25 @@ const Footer = ({ layoutName }: any) => {
 
     const elementsOfFooterMenu = footerMenus
         .map((footerMenu: any): JSX.Element =>
-            <S.FooterOfTopElement key={footerMenu.id} layout-Name={layoutName}>
+            <S.FooterOfTopElement key={footerMenu.id} layoutName={layoutName}>
                 {footerMenu.link.startsWith('http') ? <S.A href={footerMenu.link} target="_blank">{footerMenu.value}</S.A> : <S.Link to={footerMenu.link} onClick={event => { event.preventDefault(); }}>{footerMenu.value}</S.Link>}
             </S.FooterOfTopElement>
         );
 
     return (
-        <S.Footer layout-Name={layoutName}>
-            <S.FooterOfTopElementWrapper layout-Name={layoutName}>
+        <S.Footer layoutName={layoutName}>
+            <S.FooterOfTopElementWrapper layoutName={layoutName}>
                 {elementsOfFooterMenu}
             </S.FooterOfTopElementWrapper>
-            <S.FooterOfBottomElementWrapper layout-Name={layoutName}>
+            <S.FooterOfBottomElementWrapper layoutName={layoutName}>
                 <S.FooterOfBottomElement>
-                    Copyright ©
+                    Copyright ©&nbsp;
                 </S.FooterOfBottomElement>
                 <S.FooterOfBottomElement>
-                    <S.AOfCorps layout-Name={layoutName} href="https://gitlab.com/5622kmj/toyproject" target="_blank">LOLNEWS Corps.</S.AOfCorps>
+                    <S.AOfCorps layoutName={layoutName} href="https://gitlab.com/5622kmj/toyproject" target="_blank">LOLNEWS Corps.</S.AOfCorps>
                 </S.FooterOfBottomElement>
                 <S.FooterOfBottomElement>
-                    All Rights Reserved.
+                    &nbsp;All Rights Reserved.
                 </S.FooterOfBottomElement>
             </S.FooterOfBottomElementWrapper>
         </S.Footer>

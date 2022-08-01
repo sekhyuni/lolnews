@@ -45,10 +45,34 @@ export const Div = styled.div`
 `;
 
 export const Header = styled.header`
+    display: flex;
+    flex-direction: column;
     height: 130px;
 `;
 
 export const Nav = styled.nav`
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    height: 90px;
+`;
+
+export const LinkOfLoginPage = styled(Link_)`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 110px;
+    border-radius: 4px;
+    margin: 23.5px 20px 23.5px 20px;
+    background: #94cf58;
+    text-decoration: none;
+    color: #fff;
+    box-shadow: 0 2px 5px 1px #fff;
+    :hover {
+        box-shadow: 0 4px 10px 2px #fff;
+        filter: contrast(90%);
+    }
 `;
 
 // component
@@ -67,6 +91,6 @@ export const Button = styled.button`
     cursor: pointer;
 `;
 
-export const Img = styled.img`
+export const ImgOfLogo = styled.img`
     width: min(70vw, 600px);
 `;

@@ -11,6 +11,7 @@ declare module 'react' {
     // extends React's HTMLAttributes
     layoutName?: string;
     contentType?: string;
+    type?: string;
   }
 }
 
