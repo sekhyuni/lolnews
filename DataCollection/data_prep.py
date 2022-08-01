@@ -12,7 +12,7 @@ class TextPrep:
         self.mecab = Mecab()
 
     def text_refine(self, text):
-        """텍스트 정제"""
+        """step1) 텍스트 정제"""
         
         # 엑스포츠 뉴스
         text = re.sub("\(.+기자\)", "", text)
@@ -52,7 +52,14 @@ class TextPrep:
         return text
     
 
-    def pos_analysis(self):
+    def pos_analysis(self, refined_text):
+        """step2) 형태소 분석"""
+        pass
+    
+
+    def _apply_user_dict(self, text):
+        """따로 구축한 시소러스를 활용한 명사 추출
+        - output: 치환된 결과, decode를 위한 dictionary"""
         pass
 
 
