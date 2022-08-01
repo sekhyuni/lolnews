@@ -263,6 +263,21 @@ export const ImgOfModalContent = styled.img`
     margin: 0 40px 0 40px;
 `;
 
+export const DivOfModalPCLinkURL = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 20px 0 0 0;
+`;
+
+export const AOfPCLinkURL = styled.a`
+    text-decoration: none;
+    :hover {
+        text-decoration: underline;
+    }
+    color: #000;
+`;
+
 export const ButtonOfSort = styled.button`
     width: 150px;
     height: 45px;

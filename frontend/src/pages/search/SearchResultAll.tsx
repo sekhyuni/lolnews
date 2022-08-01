@@ -37,7 +37,7 @@ const SearchResultAll = ({ keyword, setKeyword, type }: any) => {
             //     console.error(error);
             // }
             // setResult(resultData);
-            // setModalIsOpen(resultData.map(() => false));
+            // setModalIsOpen(resultData.map((): boolean => false));
 
             setKeyword(decodeURI(search.split('q=')[1]));
             setPage(1);
@@ -46,7 +46,7 @@ const SearchResultAll = ({ keyword, setKeyword, type }: any) => {
         fetchData();
     }, [search, setKeyword]);
 
-    const openModal = (idx: number) => {
+    const openModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = true;
 
@@ -79,6 +79,7 @@ const SearchResultAll = ({ keyword, setKeyword, type }: any) => {
                     <S.DivOfModalTitle>{document._source.title}</S.DivOfModalTitle>
                     <S.DivOfModalContent>{document._source.content}</S.DivOfModalContent>
                     <S.ImgOfModalContent src={document._source.thumbnail} />
+                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
                 </S.DivOfModalWrapper>
             </ReactModal>
         </S.Li>)
