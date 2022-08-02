@@ -17,6 +17,7 @@ declare module 'react' {
 
 const App = () => {
   const [keyword, setKeyword] = useState('');
+  const [auth, setAuth] = useState(false);
 
   return (
     <Router>
@@ -24,7 +25,7 @@ const App = () => {
         <Route path="/" element={<Main keyword={keyword} setKeyword={setKeyword} />} />
         <Route path="/search/*" element={<Search keyword={keyword} setKeyword={setKeyword} />} />
         <Route path="/account" element={<Account />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setAuth={setAuth} />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </Router>

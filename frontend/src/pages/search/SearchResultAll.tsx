@@ -25,7 +25,10 @@ const SearchResultAll = ({ keyword, setKeyword, type }: any) => {
 
     useEffect(() => {
         const fetchData = () => {
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { query: decodeURI(search.split('query=')[1]) }).then((resultData: any): void => {
+            const params = {
+                query: decodeURI(search.split('query=')[1])
+            };
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, params).then((resultData: any): void => {
                 setResult(resultData.data);
                 setModalIsOpen(resultData.data.map((): boolean => false));
             });

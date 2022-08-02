@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
+import mongoose from 'mongoose';
+import { UserModel } from './domain/user';
+import { DB } from './domain/db';
 import { Client, ApiResponse, RequestParams } from '@elastic/elasticsearch';
 
 const app = express();
-app.listen(31053, () => {
-    console.log('Started server with 31053');
-});
 const allowedOrigins = [
     'http://172.24.24.84',
     'http://www.lolnews.com',
@@ -16,6 +16,21 @@ const options: cors.CorsOptions = {
 app.use(cors(options));
 app.use(express.json());
 
+// MongoDB connection
+const NODE_PORT: number = 31053;
+const MONGODB_URL: string = 'mongodb://localhost:27017/lolnews';
+const connection = mongoose.connect(MONGODB_URL);
+connection
+    .then(() => {
+        app.listen(NODE_PORT, () => {
+            console.log(`Server started at http://localhost:${NODE_PORT}`);
+        });
+    }).catch((error: Error) => {
+        console.error('Database connection failed', error);
+        process.exit();
+    });
+
+// Elasticsearch Connection
 const client = new Client({
     node: 'https://172.24.24.84:32311',
     auth: {
@@ -44,14 +59,59 @@ const run = async ({ query }: any): Promise<any> => {
         .catch((err: Error) => err);
 };
 
-app.listen(31053, () => {
-    console.log('Started server with 31053');
-});
-
+// 키워드 검색
 app.get('/search/keyword', async (req: express.Request, res: express.Response) => {
     const { query } = req;
 
     const result = await run(query);
 
     res.send(result);
+});
+
+// 임시 개발 코드
+// import path from 'path';
+// app.get('/search/keyword', (req: express.Request, res: express.Response) => {
+//     const { query } = req.query;
+
+//     res.sendFile(path.join(__dirname + `/../test/${query}.json`));
+// });
+
+// 로그인
+app.post('/accounts/signin', (req: express.Request, res: express.Response) => {
+    const { id, password } = req.body;
+
+    const db = new DB();
+    connection
+        .then(() => db.read({ id }))
+        .then(([user]) => {
+            if (user === undefined) {
+                res.send({ result: { isPermitted: false, reason: 'ID does not exist' } });
+            } else {
+                if (user.password !== password) {
+                    res.send({ result: { isPermitted: false, reason: 'Password is wrong' } });
+                } else {
+                    res.send({ result: { isPermitted: true, id: user.id } });
+                }
+            }
+        });
+});
+
+// 회원가입
+app.post('/accounts/signup', (req: express.Request, res: express.Response) => {
+    const { id, password, } = req.body;
+
+    const db = new DB();
+    const newUser = new UserModel({ id, password, });
+    connection
+        .then(() => db.create(newUser))
+        .then(({ id }) => {
+            db.read({ id }).then(([user]) => {
+                res.send({ result: { id: user.id } });
+            });
+        })
+        .catch(err => {
+            if (err.code === 11000) {
+                res.send({ result: { isDuplicated: true } });
+            }
+        });
 });
