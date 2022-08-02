@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../../layouts/footer/Footer';
 import doAxiosRequest from '../../functions/doAxiosRequest';
 import * as S from './Login.styled';
+import { Navigate } from 'react-router-dom';
 
-const Login = ({ onChangeAuth }: any) => {
+const Login = ({ setAuth }: any) => {
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
@@ -12,7 +14,7 @@ const Login = ({ onChangeAuth }: any) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <Form onChangeAuth={onChangeAuth} />
+                    <Form setAuth={setAuth} />
                 </S.Section>
             </S.Main>
             <Footer layoutName="login" />
@@ -20,9 +22,12 @@ const Login = ({ onChangeAuth }: any) => {
     );
 };
 
-const Form = ({ onChangeAuth }: any) => {
+const Form = ({ setAuth }: any) => {
+    const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
+
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     return (
         <>
@@ -31,14 +36,22 @@ const Form = ({ onChangeAuth }: any) => {
                 <S.Form onSubmit={event => {
                     event.preventDefault();
 
-                    doAxiosRequest('POST', '/account/login', { id, password, })
+                    const params = {
+                        id,
+                        password,
+                    };
+                    doAxiosRequest('POST', `${BASE_URL}/accounts/signin`, params)
                         .then((result: any) => {
-                            onChangeAuth(true);
+                            setAuth(true);
 
-                            alert(`Login ${result.data}`);
-                            console.log(result);
+                            if (result.data.result.isPermitted) {
+                                alert(`Welcome to ${result.data.result.id}!`);
+                                navigate('/');
+                            } else {
+                                alert(result.data.result.reason);
+                            }
                         }).catch((error: any) => {
-                            alert(`Login ${error.response.data}`);
+                            alert(`Login ${error}`);
                             console.error(error);
                         });
                 }}>
