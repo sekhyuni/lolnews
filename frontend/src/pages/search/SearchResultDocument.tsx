@@ -25,21 +25,21 @@ const SearchResultDocument = ({ keyword, setKeyword, type }: any) => {
 
     useEffect(() => {
         const fetchData = () => {
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { q: decodeURI(search.split('q=')[1]) }).then((resultData: any):void => {
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, { query: decodeURI(search.split('query=')[1]) }).then((resultData: any): void => {
                 setResult(resultData.data);
-                setModalIsOpen(resultData.map(():boolean => false));
+                setModalIsOpen(resultData.map((): boolean => false));
             });
 
             // let resultData = [];
             // try {
-            //     resultData = require(`../../../test/${decodeURI(search.split('q=')[1])}.json`);
+            //     resultData = require(`../../../test/${decodeURI(search.split('query=')[1])}.json`);
             // } catch (error) {
             //     console.error(error);
             // }
             // setResult(resultData);
             // setModalIsOpen(resultData.map((): boolean => false));
 
-            setKeyword(decodeURI(search.split('q=')[1]));
+            setKeyword(decodeURI(search.split('query=')[1]));
             setPage(1);
         };
 
@@ -89,10 +89,10 @@ const SearchResultDocument = ({ keyword, setKeyword, type }: any) => {
         </S.Li>;
 
     const resultDataTypeMenus = [
-        { id: 1, link: `/search/?q=${keyword}`, value: '전체', svg: <Svg.All active={false} /> },
-        { id: 2, link: `/search/document?q=${keyword}`, value: '문서', svg: <Svg.Document active={true} /> },
-        { id: 3, link: `/search/image?q=${keyword}`, value: '포토', svg: <Svg.Image active={false} /> },
-        // { id: 4, link: `/search/video?q=${keyword}`, value: '영상', svg: <Svg.Video active={false} /> },
+        { id: 1, link: `/search/?query=${keyword}`, value: '전체', svg: <Svg.All active={false} /> },
+        { id: 2, link: `/search/document?query=${keyword}`, value: '문서', svg: <Svg.Document active={true} /> },
+        { id: 3, link: `/search/image?query=${keyword}`, value: '포토', svg: <Svg.Image active={false} /> },
+        // { id: 4, link: `/search/video?query=${keyword}`, value: '영상', svg: <Svg.Video active={false} /> },
     ];
 
     const elementsOfResultDataTypeMenu = resultDataTypeMenus.map((resultDataTypeMenu: any): JSX.Element =>
@@ -141,13 +141,13 @@ const SearchResultDocument = ({ keyword, setKeyword, type }: any) => {
                             연관 검색어
                         </S.Strong>
                         <S.DivOfRelatedSearchTermWrapper>
-                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?q=페이커`}>
+                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
                                 페이커
                             </S.LinkOfRelatedSearchTerm>
-                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?q=롤`}>
+                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=롤`}>
                                 롤
                             </S.LinkOfRelatedSearchTerm>
-                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?q=LOL`}>
+                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=LOL`}>
                                 LOL
                             </S.LinkOfRelatedSearchTerm>
                         </S.DivOfRelatedSearchTermWrapper>

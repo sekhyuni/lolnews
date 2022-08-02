@@ -8,7 +8,7 @@ const Input = ({ keyword, setKeyword, layoutName, type }: any) => {
         <S.Form onSubmit={event => {
             event.preventDefault();
 
-            navigate(`/search/${type}?q=${keyword}`);
+            navigate(`/search/${type}?query=${keyword}`);
         }}>
             <S.InputOfSearch layoutName={layoutName} type="text" value={keyword} placeholder="검색어 입력" onChange={event => {
                 setKeyword(event.target.value);
