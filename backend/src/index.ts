@@ -1,6 +1,21 @@
 import express from 'express';
-const app = express();
+import cors from 'cors';
 import { Client, ApiResponse, RequestParams } from '@elastic/elasticsearch';
+
+const app = express();
+app.listen(31053, () => {
+    console.log('Started server with 31053');
+});
+const allowedOrigins = [
+    'http://172.24.24.84',
+    'http://www.lolnews.com',
+];
+const options: cors.CorsOptions = {
+    origin: allowedOrigins,
+};
+app.use(cors(options));
+app.use(express.json());
+
 const client = new Client({
     node: 'https://172.24.24.84:32311',
     auth: {
