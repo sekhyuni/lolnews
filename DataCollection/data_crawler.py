@@ -23,8 +23,11 @@ class NaverNewsCrawler:
             date = start_dt.strftime('%Y-%m-%d')
             data = self.get_news_data(date=date)
             datapath = f"{self.data_dir}{date}.csv"
-            self.create_news_data(datapath, data)
-            print(f'>>> Done create {date} data : {len(data)} articles')
+            if data:
+                self.create_news_data(datapath, data)
+                print(f'>>> Done create {date} data : {len(data)} articles')
+            else:
+                print(f">>> There's no data ({date})")
             start_dt = start_dt + timedelta(days=1)
             if start_dt > end_dt:
                 break
@@ -33,7 +36,7 @@ class NaverNewsCrawler:
         
         news_info = self._get_news_info(date)
         if not news_info:
-            print("No data")
+            return []
         else:
             data = []
             for news in news_info:
@@ -45,7 +48,6 @@ class NaverNewsCrawler:
                 news_added_content['createdAt'] = self._convert_time_format(news_added_content['createdAt'])
                 data.append(news_added_content)
             return data
-            
 
     def create_news_data(self, datapath, data):
         """
@@ -57,7 +59,6 @@ class NaverNewsCrawler:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval=None, lineterminator = '\n')
             writer.writeheader()
             writer.writerows(data)
-
 
     def _get_news_info(self, date):
         ua = UserAgent()
@@ -79,7 +80,6 @@ class NaverNewsCrawler:
         news_info_json = json.loads(response.text)['content']
         return news_info_json
 
-
     def _get_news_content(self, url):
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -94,10 +94,10 @@ class NaverNewsCrawler:
                 idx = news_content_split_list.index('기사제공')
             except:
                 # print(f'기사제공 없음({url})')
+                # print(news_content_split_list)
                 idx = len(news_content_split_list)
             content = ' '.join(news_content_split_list[:idx])
         return content.strip()
-
 
     def _convert_time_format(self, timeat):
         """Convert a time expressed in seconds since the epoch to E/S format"""
@@ -118,6 +118,6 @@ if __name__ == "__main__":
     # test2 (기간입력)
         ## 최신순이 default
     cralwer = NaverNewsCrawler('/root/toyproject/DataCollection/crawling_data/latest/')
-    start_date = '2019-01-27'
-    end_date = "2019-01-27"
+    start_date = '1800-01-27'
+    end_date = "1800-01-27"
     cralwer.crawl_news_date_range(start_date, end_date)
