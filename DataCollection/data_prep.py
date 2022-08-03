@@ -128,9 +128,15 @@ class TextPrep:
                     writer.writerow(item)
         
 if __name__ == "__main__":
-    preper = TextPrep()
-    crawled_file_lst = glob.glob(os.path.join(CRAWLING_DATA_DIR, 'latest') + '/*.csv')
-    date_lst = [i.split('/')[-1][:-4] for i in crawled_file_lst]
-    for date in date_lst:
-        preper.create_prep_file(date)
-        print(f">>> Done preprocessing {date}")
+    ## Test1 (크롤링한 데이터 전처리해서 다시 저장)
+    # preper = TextPrep()
+    # crawled_file_lst = glob.glob(os.path.join(CRAWLING_DATA_DIR, 'latest') + '/*.csv')
+    # date_lst = [i.split('/')[-1][:-4] for i in crawled_file_lst]
+    # for date in date_lst:
+    #     preper.create_prep_file(date)
+    #     print(f">>> Done preprocessing {date}")
+    ## Test2 (텍스트 넣어보기)
+    text = """Liiv Sandbox 이에 더해 쉬바나를 5판, 레넥톤을 2판 플레이하며 조커픽으로 활용할 여지를 더했다. 서머 시즌 우승팀은 리그오브레전드 월드 챔피언십(롤드컵) 직행이 확정된다. T1과 젠지 양 팀 모두 플레이오프 2라운드 상대팀 선택권을 갖는 리그 1위를 노리는 이유다. 유독 T1에게 약한 모습을 보였던 젠지가 오늘 트라우마를 극복할지, 아니면 T1이 다시 한번 젠지에게 공포심을 더할지 그 결과에 따라 서머 시즌 우승팀이 가려질 것으로 보인다."""
+    print(text)
+    print('-'*50)
+    print(TextPrep().text_analysis(text))
