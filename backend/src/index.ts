@@ -18,7 +18,7 @@ app.use(express.json());
 
 // MongoDB connection
 const NODE_PORT: number = 31053;
-const MONGODB_URL: string = 'mongodb://localhost:27017/lolnews';
+const MONGODB_URL: string = 'mongodb://root:B3JS8YWV5O@172.24.24.84:31806/lolnews?authSource=admin&authMechanism=SCRAM-SHA-1';
 const connection = mongoose.connect(MONGODB_URL);
 connection
     .then(() => {
