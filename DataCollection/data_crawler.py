@@ -52,7 +52,7 @@ class NaverNewsCrawler:
         data는 list of dicts
         """
         fieldnames = list(data[0].keys())
-        with open(datapath, 'a', encoding='utf-8') as csvfile:
+        with open(datapath, 'w', encoding='utf-8') as csvfile:
             fieldnames = fieldnames # 위에서 정의
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval=None, lineterminator = '\n')
             writer.writeheader()
@@ -90,7 +90,11 @@ class NaverNewsCrawler:
             print(news_content)
         else:
             news_content_split_list = list(news_content.strings)
-            idx = news_content_split_list.index('기사제공')
+            try:
+                idx = news_content_split_list.index('기사제공')
+            except:
+                # print(f'기사제공 없음({url})')
+                idx = len(news_content_split_list)
             content = ' '.join(news_content_split_list[:idx])
         return content.strip()
 
@@ -114,6 +118,6 @@ if __name__ == "__main__":
     # test2 (기간입력)
         ## 최신순이 default
     cralwer = NaverNewsCrawler('/root/toyproject/DataCollection/crawling_data/latest/')
-    start_date = '2022-07-25'
-    end_date = "2022-08-01"
+    start_date = '2019-01-27'
+    end_date = "2019-01-27"
     cralwer.crawl_news_date_range(start_date, end_date)
