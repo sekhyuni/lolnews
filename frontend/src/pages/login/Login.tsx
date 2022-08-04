@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Footer from '../../layouts/footer/Footer';
 import doAxiosRequest from '../../functions/doAxiosRequest';
 import * as S from './Login.styled';
-import { Navigate } from 'react-router-dom';
 
 const Login = ({ setAuth }: any) => {
     return (
