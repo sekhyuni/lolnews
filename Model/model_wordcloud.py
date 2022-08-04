@@ -2,6 +2,23 @@ from collections import Counter
 from wordcloud import WordCloud
 
 
+class ModelWordCloud:
+    
+    def __init__(self, start_date, end_date):
+        self.start_date = start_date
+        self.end_date = end_date
+
+    def get_data(self):
+        pass
+
+    def get_wordscore_list(self, n=100):
+        """output: tuple of list[(word1, freq1), (word2, freq2), ...]"""
+        word_list = self.get_data()
+        counts = Counter(word_list)
+        tags = counts.most_common(n)
+        return tags
+
+
 if __name__ == "__main__":
     word_list = ['T1', '오너', '문현준', '자신', '시그', '처', '픽', '리신', 
                 '평가', 'T1', '서울', '종로구', '그랑', '서울', 'LCK', '아레나', 
@@ -22,9 +39,9 @@ if __name__ == "__main__":
                 '기분', '팬', '감사', '날']
 
     counts = Counter(word_list)
-    tags = counts.most_common(40)
+    tags = counts.most_common(100)
 
-    wc = WordCloud(font_path="/root/toyproject/Model/utils/NanumSquareB.otf",background_color="white", max_font_size=60)
-    cloud = wc.generate_from_frequencies(dict(tags))
 
-    cloud.to_file('/root/toyproject/Model/test.jpg')
+    # wc = WordCloud(font_path="/root/toyproject/Model/utils/NanumSquareB.otf",background_color="white", max_font_size=60)
+    # cloud = wc.generate_from_frequencies(dict(tags))
+    # cloud.to_file('/root/toyproject/Model/test.jpg')
