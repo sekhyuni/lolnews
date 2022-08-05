@@ -9,6 +9,7 @@ export const NavOfButtonOfPageWrapper = styled.nav`
 `;
 
 export const ButtonOfPage = styled.button`
+    width: 35px;
     border: none;
     border-radius: 8px;
     padding: 8px;
