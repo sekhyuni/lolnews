@@ -47,6 +47,7 @@ const run = async ({ query }: any): Promise<any> => {
     const params: RequestParams.Search = {
         index: 'news_index',
         body: {
+            size: 10000,
             query: {
                 match: {
                     content: query
