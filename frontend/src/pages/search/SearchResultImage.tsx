@@ -24,6 +24,10 @@ const SearchResultImage = ({ keyword, setKeyword, type }: any) => {
     const [page, setPage] = useState(1);
     const offset = (page - 1) * 20;
 
+    // for sort
+    const [order, setOrder] = useState('score');
+    const [orderIsActive, setOrderIsActive] = useState([true, false, false]);
+
     useEffect(() => {
         const fetchData = () => {
             const params = {
@@ -68,7 +72,17 @@ const SearchResultImage = ({ keyword, setKeyword, type }: any) => {
         document.body.style.overflow = '';
     };
 
-    const elementsOfESDocument = result.length !== 0 ? result.slice(offset, offset + 20).map((document: any, idx: number): JSX.Element =>
+    const elementsOfESDocument = result.length !== 0 ? result.sort((a: any, b: any) => {
+        if (order === 'score') {
+            return b._score - a._score;
+        } else if (order === 'desc') {
+            return new Date(b._source.createdAt).getTime() - new Date(a._source.createdAt).getTime();
+        } else if (order === 'asc') {
+            return new Date(a._source.createdAt).getTime() - new Date(b._source.createdAt).getTime();
+        } else {
+            return b._score - a._score;
+        }
+    }).slice(offset, offset + 20).map((document: any, idx: number): JSX.Element =>
         <S.Li key={document._id}>
             <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
@@ -137,9 +151,24 @@ const SearchResultImage = ({ keyword, setKeyword, type }: any) => {
             <S.Main>
                 <S.Section>
                     <S.DivOfLnb>
-                        <S.ButtonOfSort>최신순</S.ButtonOfSort>
-                        <S.ButtonOfSort>과거순</S.ButtonOfSort>
-                        <S.ButtonOfSort>많이본순</S.ButtonOfSort>
+                        <S.ButtonOfSort orderIsActive={orderIsActive[0]} onClick={() => {
+                            setOrder('score');
+
+                            const newActive = [true, false, false];
+                            setOrderIsActive(newActive);
+                        }}>유사도순</S.ButtonOfSort>
+                        <S.ButtonOfSort orderIsActive={orderIsActive[1]} onClick={() => {
+                            setOrder('desc');
+
+                            const newActive = [false, true, false];
+                            setOrderIsActive(newActive);
+                        }}>최신순</S.ButtonOfSort>
+                        <S.ButtonOfSort orderIsActive={orderIsActive[2]} onClick={() => {
+                            setOrder('asc');
+
+                            const newActive = [false, false, true];
+                            setOrderIsActive(newActive);
+                        }}>과거순</S.ButtonOfSort>
                     </S.DivOfLnb>
                     <S.Ul>
                         {elementsOfESDocument}

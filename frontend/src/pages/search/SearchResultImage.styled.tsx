@@ -292,8 +292,16 @@ export const ButtonOfSort = styled.button`
     margin: 0 10px 0 10px;
     font-size: 18px;
     background-color: #f2f4f7;
+    ${({ orderIsActive }: any) => {
+        if (orderIsActive) {
+            return css`
+                color: #1a73e8;
+            `;
+        }
+    }}
     cursor: pointer;
     :hover {
         text-decoration: underline;
+        color: #1a73e8;
     }
 `;
