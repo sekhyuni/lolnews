@@ -255,6 +255,11 @@ export const DivOfModalTitle = styled.div`
     font-weight: bold;
 `;
 
+export const SpanOfKeyword = styled.span`
+    color: #1a73e8;
+    font-weight: bold;
+`;
+
 export const DivOfModalContent = styled.div`
     margin: 20px 40px 20px 40px;
 `;
