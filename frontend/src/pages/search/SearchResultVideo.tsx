@@ -135,7 +135,19 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                         <Input keyword={keyword} setKeyword={setKeyword} layoutName="search" type="video" />
                     </S.Div>
                     <S.Nav>
-                        {isAuthorized ? <S.LinkOfUser to="/login" onClick={() => { setIsAuthorized(false); }}><Svg.User layoutName="search" /></S.LinkOfUser> : <S.LinkOfLoginPage to="/login">로그인</S.LinkOfLoginPage>}
+                        {isAuthorized ?
+                            <S.LinkOfUser to="/login" onClick={() => {
+                                setKeyword(decodeURI(search.split('query=')[1]));
+                                setIsAuthorized(false);
+                            }}>
+                                <Svg.User layoutName="search" />
+                            </S.LinkOfUser>
+                            :
+                            <S.LinkOfLoginPage to="/login" onClick={() => {
+                                setKeyword(decodeURI(search.split('query=')[1]));
+                            }}>
+                                로그인
+                            </S.LinkOfLoginPage>}
                     </S.Nav>
                 </S.HeaderOfTop>
                 <S.HeaderOfBottom>

@@ -44,11 +44,8 @@ const Form = ({ setIsAuthorized, keyword, setKeyword }: any) => {
                             if (result.data.result.isPermitted) {
                                 setIsAuthorized(true);
                                 alert(`Welcome to ${result.data.result.id}!`);
-                                if (keyword) {
-                                    navigate(`/search/?query=${keyword}`);
-                                } else {
-                                    navigate('/');
-                                }
+
+                                keyword ? navigate(`/search/?query=${keyword}`) : navigate('/');
                             } else {
                                 alert(result.data.result.reason);
                             }

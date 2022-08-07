@@ -9,7 +9,19 @@ const Main = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
             <S.Header>
                 <S.HeaderOfTop>
                     <S.Nav>
-                        {isAuthorized ? <S.LinkOfUser to="/login" onClick={() => { setIsAuthorized(false); }}><Svg.User layoutName="main" /></S.LinkOfUser> : <S.LinkOfLoginPage to="/login">로그인</S.LinkOfLoginPage>}
+                        {isAuthorized ?
+                            <S.LinkOfUser to="/login" onClick={() => {
+                                setKeyword('');
+                                setIsAuthorized(false);
+                            }}>
+                                <Svg.User layoutName="main" />
+                            </S.LinkOfUser>
+                            :
+                            <S.LinkOfLoginPage to="/login" onClick={() => {
+                                setKeyword('');
+                            }}>
+                                로그인
+                            </S.LinkOfLoginPage>}
                     </S.Nav>
                 </S.HeaderOfTop>
             </S.Header>
