@@ -10,7 +10,7 @@ const Search = ({ keyword, setKeyword }: any) => {
             <Route path="" element={<SearchResultAll keyword={keyword} setKeyword={setKeyword} type="" />} />
             <Route path="/document" element={<SearchResultDocument keyword={keyword} setKeyword={setKeyword} type="document" />} />
             <Route path="/image" element={<SearchResultImage keyword={keyword} setKeyword={setKeyword} type="image" />} />
-            {/* <Route path="/video" element={<SearchResultVideo keyword={keyword} setKeyword={setKeyword} />} /> */}
+            {/* <Route path="/video" element={<SearchResultVideo keyword={keyword} setKeyword={setKeyword} type="video" />} /> */}
         </Routes>
     );
 };
