@@ -10,7 +10,7 @@ import Pagination from '../../components/pagination/Pagination';
 import * as S from './SearchResultDocument.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const SearchResultDocument = ({ keyword, setKeyword, type }: any) => {
+const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, type }: any) => {
     const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     // for location
@@ -135,6 +135,7 @@ const SearchResultDocument = ({ keyword, setKeyword, type }: any) => {
                         <Input keyword={keyword} setKeyword={setKeyword} layoutName="search" type="document" />
                     </S.Div>
                     <S.Nav>
+                        {isAuthorized ? <S.LinkOfUser to="/login" onClick={() => { setIsAuthorized(false); }}><Svg.User layoutName="search" /></S.LinkOfUser> : <S.LinkOfLoginPage to="/login">로그인</S.LinkOfLoginPage>}
                     </S.Nav>
                 </S.HeaderOfTop>
                 <S.HeaderOfBottom>

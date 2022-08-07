@@ -1,14 +1,17 @@
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import * as S from './Main.styled';
+import * as Svg from '../../components/svg/Svg';
 
-const Main = ({ keyword, setKeyword }: any) => {
+const Main = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
-                <S.Nav>
-                    <S.LinkOfLoginPage to="/login">로그인</S.LinkOfLoginPage>
-                </S.Nav>
+                <S.HeaderOfTop>
+                    <S.Nav>
+                        {isAuthorized ? <S.LinkOfUser to="/login" onClick={() => { setIsAuthorized(false); }}><Svg.User layoutName="main" /></S.LinkOfUser> : <S.LinkOfLoginPage to="/login">로그인</S.LinkOfLoginPage>}
+                    </S.Nav>
+                </S.HeaderOfTop>
             </S.Header>
             <S.Main>
                 <S.Section>

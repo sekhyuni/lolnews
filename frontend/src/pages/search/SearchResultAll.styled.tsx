@@ -146,6 +146,11 @@ export const Li = styled.li`
 `;
 
 export const Nav = styled.nav`
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    width: 100%;
+    height: inherit;
 `;
 
 // component
@@ -303,4 +308,26 @@ export const ButtonOfSort = styled.button`
         text-decoration: underline;
         color: #1a73e8;
     }
+`;
+
+export const LinkOfLoginPage = styled(Link_)`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 110px;
+    border-radius: 4px;
+    margin: 23.5px 20px 23.5px 20px;
+    background: #1a73e8;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    :hover {
+        filter: contrast(90%);
+    }
+`;
+
+export const LinkOfUser = styled(Link_)`
+    height: 43px;
+    margin: 23.5px 20px 23.5px 20px;
 `;
