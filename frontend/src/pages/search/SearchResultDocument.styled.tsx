@@ -252,18 +252,14 @@ export const SpanOfModalClose = styled.span`
 `;
 
 export const DivOfModalTitle = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
     margin: 0 40px 0 40px;
+    text-align: center;
     font-size: 20px;
     font-weight: bold;
 `;
 
-export const SpanOfKeyword = styled.span`
-    display: inline;
+export const StrongOfKeyword = styled.strong`
     color: #1a73e8;
-    font-weight: bold;
 `;
 
 export const DivOfModalContent = styled.div`
