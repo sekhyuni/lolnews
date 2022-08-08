@@ -6,6 +6,7 @@ import doAxiosRequest from '../../functions/doAxiosRequest';
 import { re } from '../../functions/re-template-tag';
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
+import Dropdown from '../../components/dropdown/Dropdown';
 import Pagination from '../../components/pagination/Pagination';
 import * as S from './SearchResultVideo.styled';
 import * as Svg from '../../components/svg/Svg';
@@ -136,12 +137,7 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                     </S.Div>
                     <S.Nav>
                         {isAuthorized ?
-                            <S.LinkOfUser to="/login" onClick={() => {
-                                setKeyword(decodeURI(search.split('query=')[1]));
-                                setIsAuthorized(false);
-                            }}>
-                                <Svg.User layoutName="search" />
-                            </S.LinkOfUser>
+                            <Dropdown layoutName="search" search={search} setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
                             :
                             <S.LinkOfLoginPage to="/login" onClick={() => {
                                 setKeyword(decodeURI(search.split('query=')[1]));

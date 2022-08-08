@@ -1,7 +1,7 @@
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
+import Dropdown from '../../components/dropdown/Dropdown';
 import * as S from './Main.styled';
-import * as Svg from '../../components/svg/Svg';
 
 const Main = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
     return (
@@ -10,12 +10,7 @@ const Main = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
                 <S.HeaderOfTop>
                     <S.Nav>
                         {isAuthorized ?
-                            <S.LinkOfUser to="/login" onClick={() => {
-                                setKeyword('');
-                                setIsAuthorized(false);
-                            }}>
-                                <Svg.User layoutName="main" />
-                            </S.LinkOfUser>
+                            <Dropdown layoutName="main" setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
                             :
                             <S.LinkOfLoginPage to="/login" onClick={() => {
                                 setKeyword('');
