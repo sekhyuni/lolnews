@@ -1,6 +1,6 @@
 const Account = () => {
     return (
-        <></>
+        <>Acoount Page</>
     );
 };
 

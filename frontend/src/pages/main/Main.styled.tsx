@@ -84,11 +84,6 @@ export const LinkOfLoginPage = styled(Link_)`
     }
 `;
 
-export const LinkOfUser = styled(Link_)`
-    height: 43px;
-    margin: 23.5px 20px 23.5px 20px;
-`;
-
 // component
 export const ButtonOfSearchTypeWrapper = styled.div`
 `;
