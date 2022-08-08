@@ -146,6 +146,11 @@ export const Li = styled.li`
 `;
 
 export const Nav = styled.nav`
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    width: 100%;
+    height: inherit;
 `;
 
 // component
@@ -247,12 +252,14 @@ export const SpanOfModalClose = styled.span`
 `;
 
 export const DivOfModalTitle = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
     margin: 0 40px 0 40px;
+    text-align: center;
     font-size: 20px;
     font-weight: bold;
+`;
+
+export const StrongOfKeyword = styled.strong`
+    color: #1a73e8;
 `;
 
 export const DivOfModalContent = styled.div`
@@ -286,8 +293,38 @@ export const ButtonOfSort = styled.button`
     margin: 0 10px 0 10px;
     font-size: 18px;
     background-color: #f2f4f7;
+    ${({ orderIsActive }: any) => {
+        if (orderIsActive) {
+            return css`
+                color: #1a73e8;
+            `;
+        }
+    }}
     cursor: pointer;
     :hover {
         text-decoration: underline;
+        color: #1a73e8;
     }
+`;
+
+export const LinkOfLoginPage = styled(Link_)`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 110px;
+    border-radius: 4px;
+    margin: 23.5px 20px 23.5px 20px;
+    background: #1a73e8;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    :hover {
+        filter: contrast(90%);
+    }
+`;
+
+export const LinkOfUser = styled(Link_)`
+    height: 43px;
+    margin: 23.5px 20px 23.5px 20px;
 `;

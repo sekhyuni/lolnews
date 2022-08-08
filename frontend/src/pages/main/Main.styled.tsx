@@ -50,11 +50,19 @@ export const Header = styled.header`
     height: 130px;
 `;
 
+export const HeaderOfTop = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 90px;
+`;
+
 export const Nav = styled.nav`
     display: flex;
     flex-direction: row;
     justify-content: end;
-    height: 90px;
+    width: 100%;
+    height: inherit;
 `;
 
 export const LinkOfLoginPage = styled(Link_)`
@@ -63,15 +71,16 @@ export const LinkOfLoginPage = styled(Link_)`
     justify-content: center;
     align-items: center;
     width: 110px;
+    border: 1.5px solid #ededed;
     border-radius: 4px;
     margin: 23.5px 20px 23.5px 20px;
-    background: #94cf58;
+    background: #fff;
     text-decoration: none;
-    color: #fff;
-    box-shadow: 0 2px 5px 1px #fff;
+    color: #999;
+    font-weight: 500;
+    box-shadow: 0 2px 5px 1px #94cf58;
     :hover {
-        box-shadow: 0 4px 10px 2px #fff;
-        filter: contrast(90%);
+        box-shadow: 0 4px 10px 2px #94cf58;
     }
 `;
 

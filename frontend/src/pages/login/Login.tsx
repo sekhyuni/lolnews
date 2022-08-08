@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Footer from '../../layouts/footer/Footer';
 import doAxiosRequest from '../../functions/doAxiosRequest';
 import * as S from './Login.styled';
-import { Navigate } from 'react-router-dom';
 
-const Login = ({ setAuth }: any) => {
+const Login = ({ setIsAuthorized, keyword, setKeyword }: any) => {
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
@@ -14,7 +13,7 @@ const Login = ({ setAuth }: any) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <Form setAuth={setAuth} />
+                    <Form setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />
                 </S.Section>
             </S.Main>
             <Footer layoutName="login" />
@@ -22,7 +21,7 @@ const Login = ({ setAuth }: any) => {
     );
 };
 
-const Form = ({ setAuth }: any) => {
+const Form = ({ setIsAuthorized, keyword, setKeyword }: any) => {
     const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     const [id, setId] = useState('');
@@ -32,7 +31,7 @@ const Form = ({ setAuth }: any) => {
     return (
         <>
             <S.DivOfLoginForm>
-                <S.Link to="/"><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.Link>
+                <S.Link to="/" onClick={() => { setKeyword(''); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.Link>
                 <S.Form onSubmit={event => {
                     event.preventDefault();
 
@@ -42,11 +41,11 @@ const Form = ({ setAuth }: any) => {
                     };
                     doAxiosRequest('POST', `${BASE_URL}/accounts/signin`, params)
                         .then((result: any) => {
-                            setAuth(true);
-
                             if (result.data.result.isPermitted) {
+                                setIsAuthorized(true);
                                 alert(`Welcome to ${result.data.result.id}!`);
-                                navigate('/');
+
+                                keyword ? navigate(`/search/?query=${keyword}`) : navigate('/');
                             } else {
                                 alert(result.data.result.reason);
                             }

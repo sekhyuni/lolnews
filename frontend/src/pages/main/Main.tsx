@@ -1,14 +1,24 @@
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
+import Dropdown from '../../components/dropdown/Dropdown';
 import * as S from './Main.styled';
 
-const Main = ({ keyword, setKeyword }: any) => {
+const Main = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
-                <S.Nav>
-                    <S.LinkOfLoginPage to="/login">로그인</S.LinkOfLoginPage>
-                </S.Nav>
+                <S.HeaderOfTop>
+                    <S.Nav>
+                        {isAuthorized ?
+                            <Dropdown layoutName="main" setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
+                            :
+                            <S.LinkOfLoginPage to="/login" onClick={() => {
+                                setKeyword('');
+                            }}>
+                                로그인
+                            </S.LinkOfLoginPage>}
+                    </S.Nav>
+                </S.HeaderOfTop>
             </S.Header>
             <S.Main>
                 <S.Section>
