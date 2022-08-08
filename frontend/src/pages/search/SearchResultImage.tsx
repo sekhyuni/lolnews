@@ -73,10 +73,10 @@ const SearchResultImage = ({ keyword, setKeyword, type }: any) => {
             <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
                 <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.SpanOfKeyword>{pieceOfTitle}</S.SpanOfKeyword>) : pieceOfTitle)}
+                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfTitle>
                 <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.SpanOfKeyword>{pieceOfTitle}</S.SpanOfKeyword>) : pieceOfTitle)}
+                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfContent>
             </S.DivOfTitleContentWrapper>
             <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={() => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
@@ -85,10 +85,10 @@ const SearchResultImage = ({ keyword, setKeyword, type }: any) => {
                         <S.SpanOfModalClose onClick={() => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.SpanOfKeyword>{pieceOfTitle}</S.SpanOfKeyword>) : pieceOfTitle)}
+                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                     </S.DivOfModalTitle>
                     <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.SpanOfKeyword>{pieceOfTitle}</S.SpanOfKeyword>) : pieceOfTitle)}
+                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                     </S.DivOfModalContent>
                     <S.ImgOfModalContent src={document._source.thumbnail} />
                     <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
