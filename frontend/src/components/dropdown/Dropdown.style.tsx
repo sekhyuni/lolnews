@@ -10,6 +10,7 @@ export const DivOfDropdownMenuWrapper = styled.div`
 `;
 
 export const DivOfDropdownWrapper = styled.div`
+    width: 110px;
     height: 43px;
     margin: 23.5px 20px 23.5px 20px;
     :hover ${DivOfDropdownMenuWrapper} {
@@ -19,7 +20,6 @@ export const DivOfDropdownWrapper = styled.div`
 
 export const DivOfUser = styled.div`
     height: inherit;
-    margin: 0 0 0 43px;
 `;
 
 export const LinkOfDropdownMenu = styled(Link_)`

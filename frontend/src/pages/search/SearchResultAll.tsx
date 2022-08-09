@@ -84,7 +84,7 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
 
         return b._score - a._score;
     }).slice(offset, offset + 20).map((document: any, idx: number): JSX.Element =>
-        <S.Li key={document._id}>
+        <S.Li key={document._id} id={document._id}>
             <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
                 <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>

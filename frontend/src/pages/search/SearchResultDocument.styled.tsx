@@ -41,6 +41,7 @@ export const Section = styled.section`
     ${vertical}
     width: ${sectionWidth};
     height: fit-content;
+    border: 0.5px solid #e1e1e1;
     border-radius: 10px;
     padding: 0 30px 0 30px;
     margin: 20px 0 20px 0;
@@ -63,6 +64,7 @@ export const Aside = styled.aside`
 export const AsideOfContent = styled.div`
     ${vertical}
     min-height: 100px;
+    border: 0.5px solid #e1e1e1;
     border-radius: 10px;
     padding: 20px 30px 20px 30px;
     background-color: #fff;
@@ -103,7 +105,6 @@ export const Header = styled.header`
     ${vertical}
     min-width: calc(${mainLeftDistance} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
     height: ${headerWidth};
-    border-bottom: 0.5px solid #e1e1e1;
 `;
 
 export const HeaderOfTop = styled.div`
@@ -111,13 +112,15 @@ export const HeaderOfTop = styled.div`
     flex-direction: row;
     align-items: center;
     height: 90px;
+    border-bottom: 0.5px solid #e1e1e1;
 `;
 
 export const HeaderOfBottom = styled.div`
     display: flex;
     flex-direction: row;
     height: 40px;
-    margin: 0 0 0 200px;
+    border-bottom: 0.5px solid #e1e1e1;
+    padding: 0 0 0 200px;
 `;
 
 export const DivOfResultDataTypeMenuWrapper = styled.div`
@@ -139,7 +142,7 @@ export const Li = styled.li`
     flex-direction: row;
     justify-content: center;
     padding: 20px 0 20px 0;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: ${({ id }) => id ? '1px solid #e5e5e5' : 'none'};
     :first-child {
         border-top: 1px solid #e5e5e5;
     }
