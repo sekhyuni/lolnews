@@ -87,33 +87,34 @@ app.post('/accounts/signin', (req: express.Request, res: express.Response) => {
         .then(() => db.read({ id }))
         .then(([user]) => {
             if (user === undefined) {
-                res.send({ result: { isPermitted: false, reason: 'ID does not exist' } });
+                res.send({ result: { isPermitted: false, reason: '아이디가 존재하지 않습니다.' } });
             } else {
-                if (user.password !== password) {
-                    res.send({ result: { isPermitted: false, reason: 'Password is wrong' } });
-                } else {
+                user.password !== password ?
+                    res.send({ result: { isPermitted: false, reason: '패스워드가 일치하지 않습니다.' } }) :
                     res.send({ result: { isPermitted: true, id: user.id } });
-                }
             }
         });
 });
 
 // 회원가입
 app.post('/accounts/signup', (req: express.Request, res: express.Response) => {
-    const { id, password, } = req.body;
+    const { id, password, email, } = req.body;
 
     const db = new DB();
-    const newUser = new UserModel({ id, password, });
+    const newUser = new UserModel({ id, password, email, });
     connection
         .then(() => db.create(newUser))
         .then(({ id }) => {
             db.read({ id }).then(([user]) => {
-                res.send({ result: { id: user.id } });
+                res.send({ result: { isDuplicated: false, id: user.id } });
             });
         })
         .catch(err => {
             if (err.code === 11000) {
-                res.send({ result: { isDuplicated: true } });
+                const [duplicatedField] = Object.keys(err.keyValue);
+                duplicatedField === 'id' ?
+                    res.send({ result: { isDuplicated: true, reason: '이미 존재하는 아이디입니다.' } }) :
+                    res.send({ result: { isDuplicated: true, reason: '이미 존재하는 이메일입니다.' } });
             }
         });
 });

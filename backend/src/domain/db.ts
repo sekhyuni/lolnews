@@ -4,8 +4,8 @@ export class DB {
     constructor() { }
 
     create(user: User): Promise<User> {
-        let p = new UserModel(user);
-        return p.save();
+        const newUser = new UserModel(user);
+        return newUser.save();
     }
 
     read(query: any) {

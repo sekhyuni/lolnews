@@ -50,7 +50,7 @@ export const Nav = styled.nav`
     height: 90px;
 `;
 
-export const DivOfLoginForm = styled.div`
+export const DivOfJoinForm = styled.div`
     ${vertical}
     align-items: center;
     width: 100%;
@@ -61,7 +61,7 @@ export const DivOfLoginForm = styled.div`
     background-color: #fff;
 `;
 
-export const DivOfToJoinForm = styled.div`
+export const DivOfToLoginForm = styled.div`
     display: flex;
     flex-direction: row;
     ${center}
@@ -130,7 +130,7 @@ export const LinkOfLogo = styled(Link_)`
     flex-direction: row;
 `;
 
-export const LinkOfToJoin = styled(Link_)`
+export const LinkOfToLogin = styled(Link_)`
     font-weight: bold;
     text-decoration: none;
     color: #94cf58;
