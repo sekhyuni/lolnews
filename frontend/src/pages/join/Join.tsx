@@ -4,7 +4,7 @@ import Footer from '../../layouts/footer/Footer';
 import doAxiosRequest from '../../functions/doAxiosRequest';
 import * as S from './Join.styled';
 
-const Join = ({ setKeyword }: any) => {
+const Join = () => {
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
@@ -13,7 +13,7 @@ const Join = ({ setKeyword }: any) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <Form setKeyword={setKeyword} />
+                    <Form />
                 </S.Section>
             </S.Main>
             <Footer layoutName="Join" />
@@ -21,7 +21,7 @@ const Join = ({ setKeyword }: any) => {
     );
 };
 
-const Form = ({ setKeyword }: any) => {
+const Form = () => {
     const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     const [id, setId] = useState('');
@@ -33,7 +33,7 @@ const Form = ({ setKeyword }: any) => {
     return (
         <>
             <S.DivOfJoinForm>
-                <S.LinkOfLogo to="/" onClick={() => { setKeyword(''); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
+                <S.LinkOfLogo to="/"><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
                 <S.Form onSubmit={event => {
                     event.preventDefault();
 

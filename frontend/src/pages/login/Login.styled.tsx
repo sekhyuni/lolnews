@@ -55,7 +55,7 @@ export const DivOfLoginForm = styled.div`
     align-items: center;
     width: 100%;
     border: 1px solid #dbdbdb;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 0 0 6px 0;
     margin: 0 0 10px 0;
     background-color: #fff;
@@ -68,7 +68,7 @@ export const DivOfToJoinForm = styled.div`
     width: 100%;
     height: 60px;
     border: 1px solid #dbdbdb;
-    border-radius: 8px; 
+    border-radius: 10px; 
     background-color: #fff;
 `;
 

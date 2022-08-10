@@ -25,7 +25,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Main isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />} />
-        <Route path="/join" element={<Join setKeyword={setKeyword} />} />
+        <Route path="/join" element={<Join />} />
         <Route path="/login" element={<Login setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />} />
         <Route path="/search/*" element={<Search isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />} />
         <Route path="/community" element={<Community />} />
