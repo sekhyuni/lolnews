@@ -39,12 +39,19 @@ const Form = () => {
 
                     if (!id) {
                         alert('아이디는 필수로 입력하셔야 합니다.');
-                    } else if (!password) {
+                        return;
+                    }
+                    if (!password) {
                         alert('패스워드는 필수로 입력하셔야 합니다.');
-                    } else if (password !== passwordCheck) {
+                        return;
+                    }
+                    if (password !== passwordCheck) {
                         alert('패스워드가 일치하지 않습니다.');
-                    } else if (!email) {
+                        return;
+                    }
+                    if (!email) {
                         alert('이메일은 필수로 입력하셔야 합니다.');
+                        return;
                     }
 
                     const params = {
