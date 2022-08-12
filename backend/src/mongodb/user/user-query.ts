@@ -1,6 +1,6 @@
 import { User, UserModel } from './user';
 
-export class DB {
+export class QueryOfUser {
     constructor() { }
 
     create(user: User): Promise<User> {
