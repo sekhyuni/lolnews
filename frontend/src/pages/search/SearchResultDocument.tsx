@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactModal from 'react-modal';
 import doAxiosRequest from '../../functions/doAxiosRequest';
@@ -58,12 +57,18 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
 
     useEffect(() => {
         const fetchData = (): void => {
-            const params = {
+            const paramsOfSearch = {
                 query: decodeURI(search.split('query=')[1])
             };
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, params).then((resultData: any): void => {
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch).then((resultData: any): void => {
                 setResult(resultData.data);
                 setModalIsOpen(resultData.data.map((): boolean => false));
+            });
+            const paramsOfInsert = {
+                word: decodeURI(search.split('query=')[1])
+            }
+            doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
+                console.log(resultData);
             });
 
             setKeyword(decodeURI(search.split('query=')[1]));
@@ -73,7 +78,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
         };
 
         fetchData();
-    }, [search, setKeyword]);
+    }, [search]);
 
     const elementsOfESDocument = result.length !== 0 ? result.sort((a: any, b: any): number => {
         for (let idx = 0; idx < listOfOrder.length; idx++) {

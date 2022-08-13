@@ -129,7 +129,7 @@ app.post('/accounts/signup', (req: express.Request, res: express.Response) => {
         });
 });
 
-// 검색어 select
+// 검색어 Select
 app.get('/word', (req: express.Request, res: express.Response) => {
     const queryOfWord = new QueryOfWord();
     connection
