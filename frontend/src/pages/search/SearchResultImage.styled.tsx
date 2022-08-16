@@ -38,6 +38,7 @@ export const Main = styled.main`
 
 export const Section = styled.section`
     ${vertical}
+    text-align: center;
     width: 100vw;
     height: fit-content;
     border: 0.5px solid #e1e1e1;
@@ -95,17 +96,12 @@ export const UlOfImageListWrapper = styled.ul`
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
-
-    // 잠시 대기
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    /* box-sizing: border-box; */
-    align-content: space-between;
 `;
 
 export const LiOfImageWrapper = styled.li`
-    // 잠시 대기
     width: 20%;
     :nth-child(5n + 1) {
         order: 1;
@@ -129,9 +125,7 @@ export const LiOfImageWrapper = styled.li`
 `;
 
 export const ImgOfContent = styled.img`
-    // 잠시 대기
     max-width: 100%;
-
     cursor: pointer;
     transition: transform .1s;
     :hover {
@@ -327,4 +321,15 @@ export const LinkOfLoginPage = styled(Link_)`
 export const LinkOfUser = styled(Link_)`
     height: 43px;
     margin: 23.5px 20px 23.5px 20px;
+`;
+
+export const POfLoading = styled.p`
+    font-size: 20px;
+`;
+
+export const POfError = styled.p`
+    font-size: 20px;
+`;
+
+export const DivOfLoader = styled.div`
 `;

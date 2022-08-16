@@ -3,19 +3,19 @@ import * as S from './Pagination.styled';
 
 function Pagination({ total, page, setPage }: any) {
     const numPages = Math.ceil(total / 10);
-    const [pageStartIdx, setPageStartIdx] = useState(1);
-    const [pageEndIdx, setPageEndIdx] = useState(10);
+    const [pageStartIdx, setPageStartIdx] = useState<number>(1);
+    const [pageEndIdx, setPageEndIdx] = useState<number>(10);
 
     return (
         <>
             <S.NavOfButtonOfPageWrapper>
                 <S.ButtonOfPage onClick={() => {
                     if (page === pageStartIdx) {
-                        setPageStartIdx(pageStartIdx - 1);
-                        setPageEndIdx(pageEndIdx - 1);
+                        setPageStartIdx((prev: number): number => prev - 1);
+                        setPageEndIdx((prev: number): number => prev - 1);
                     }
 
-                    setPage(page - 1);
+                    setPage((prev: number): number => prev - 1);
                 }} disabled={page === 1}>
                     &lt;
                 </S.ButtonOfPage>
@@ -33,11 +33,11 @@ function Pagination({ total, page, setPage }: any) {
                 })}
                 <S.ButtonOfPage onClick={() => {
                     if (page === pageEndIdx) {
-                        setPageStartIdx(pageStartIdx + 1);
-                        setPageEndIdx(pageEndIdx + 1);
+                        setPageStartIdx((prev: number): number => prev + 1);
+                        setPageEndIdx((prev: number): number => prev + 1);
                     }
 
-                    setPage(page + 1);
+                    setPage((prev: number): number => prev + 1);
                 }} disabled={page === numPages}>
                     &gt;
                 </S.ButtonOfPage>

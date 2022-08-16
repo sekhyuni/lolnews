@@ -51,8 +51,8 @@ const run = async ({ query, page, order, isImageRequest }: any): Promise<any> =>
         index: 'news_index',
         body: {
             track_total_hits: true,
-            from: JSON.parse(isImageRequest) ? (Number(page) - 1) * 20 : (Number(page) - 1) * 10,
-            size: JSON.parse(isImageRequest) ? 20 : 10,
+            from: JSON.parse(isImageRequest) ? (Number(page) - 1) * 30 : (Number(page) - 1) * 10,
+            size: JSON.parse(isImageRequest) ? 30 : 10,
             query: {
                 match: {
                     content: query

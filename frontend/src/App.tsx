@@ -18,8 +18,8 @@ declare module 'react' {
 }
 
 const App = () => {
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const [keyword, setKeyword] = useState('');
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState<string>('');
 
   return (
     <Router>

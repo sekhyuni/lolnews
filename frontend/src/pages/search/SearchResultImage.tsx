@@ -42,6 +42,28 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
 
     // for pagination
     const [page, setPage] = useState<number>(1);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState(false);
+    const loader = useRef(null);
+
+    const handleObserver = useCallback((entries: any) => {
+        const target = entries[0];
+        if (target.isIntersecting) {
+            setPage((prev: number): number => prev + 1);
+        }
+    }, []);
+
+    useEffect(() => {
+        const option = {
+            root: null,
+            rootMargin: "20px",
+            threshold: 0
+        };
+        const observer = new IntersectionObserver(handleObserver, option);
+        if (loader.current) {
+            observer.observe(loader.current);
+        }
+    }, [handleObserver]);
 
     // for sort
     const listOfOrder = [
@@ -61,24 +83,30 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     ];
 
     useEffect(() => {
+        setResult({ meta: {}, data: [] });
         setKeyword(decodeURI(search.split('query=')[1]));
         setChangedKeyword(decodeURI(search.split('query=')[1]));
         setPage(1);
-        setOrder('score');
-        setOrderIsActive([true, false, false]);
-    }, [search]);
+    }, [search, order]);
 
     useEffect(() => {
-        const fetchData = (): void => {
+        const fetchData = (): void => { // 나중에 useCallback으로 바꿀까?
             const paramsOfSearch = {
                 query: decodeURI(search.split('query=')[1]),
                 page,
-                order
+                order,
+                isImageRequest: true,
             };
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch).then((resultData: any): void => {
-                setResult(resultData.data);
-                setModalIsOpen(resultData.data.data.map((): boolean => false));
-            });
+            setLoading(true);
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch)
+                .then((resultData: any): void => {
+                    setResult((prev: Result): Result => ({ meta: resultData.data.meta, data: [...prev.data, ...resultData.data.data] }));
+                    setModalIsOpen(resultData.data.data.map((): boolean => false));
+                }).then(() => {
+                    setLoading(false);
+                }).catch((err: any) => {
+                    setError(err);
+                });
             const paramsOfInsert = {
                 word: decodeURI(search.split('query=')[1])
             };
@@ -88,7 +116,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
         };
 
         fetchData();
-    }, [page, order, changedKeyword]);
+    }, [page, changedKeyword]);
 
     const imagesOnLoad = (idx: number, arr: any) => {
         const maxCount = listRef.current.dataset.columns;
@@ -119,6 +147,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
             });
             const maxHeight = Math.max(...columns); // 5개 column 중에 최대 높이
             listRef.current.style.height = maxHeight + 'px';
+            itemsRef.current = [];
 
             console.log(maxHeight);
         };
@@ -211,6 +240,9 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                     <S.UlOfImageListWrapper ref={listRef} data-columns="5">
                         {elementsOfESDocument}
                     </S.UlOfImageListWrapper>
+                    {loading && <S.POfLoading>Loading...</S.POfLoading>}
+                    {error && <S.POfError>Error!</S.POfError>}
+                    <S.DivOfLoader ref={loader} />
                 </S.Section>
             </S.Main>
             <Footer layoutName="search" />
