@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactModal from 'react-modal';
 import doAxiosRequest from '../../functions/doAxiosRequest';
@@ -18,8 +17,13 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
     const { search } = useLocation();
 
     // for result
-    const [result, setResult] = useState([]);
+    interface Result {
+        meta: any;
+        data: any;
+    }
+    const [result, setResult] = useState<Result>({ meta: {}, data: [] });
     const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
+    const [changedKeyword, setChangedKeyword] = useState<string>(decodeURI(search.split('query=')[1]));
     const openModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = true;
@@ -36,17 +40,16 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
     };
 
     // for pagination
-    const [page, setPage] = useState(1);
-    const offset = (page - 1) * 20;
+    const [page, setPage] = useState<number>(1);
 
     // for sort
     const listOfOrder = [
-        { name: '유사도순', value: 'score', sort: (a: any, b: any): number => b._score - a._score },
-        { name: '최신순', value: 'desc', sort: (a: any, b: any): number => new Date(b._source.createdAt).getTime() - new Date(a._source.createdAt).getTime() },
-        { name: '과거순', value: 'asc', sort: (a: any, b: any): number => new Date(a._source.createdAt).getTime() - new Date(b._source.createdAt).getTime() },
+        { name: '유사도순', value: 'score' },
+        { name: '최신순', value: 'desc' },
+        { name: '과거순', value: 'asc' },
     ];
-    const [order, setOrder] = useState('score');
-    const [orderIsActive, setOrderIsActive] = useState([true, false, false]);
+    const [order, setOrder] = useState<string>('score');
+    const [orderIsActive, setOrderIsActive] = useState<Array<boolean>>([true, false, false]);
 
     // for type
     const listOfResultDataTypeMenu = [
@@ -57,41 +60,44 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
     ];
 
     useEffect(() => {
-        const fetchData = (): void => {
-            const params = {
-                query: decodeURI(search.split('query=')[1])
-            };
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, params).then((resultData: any): void => {
-                setResult(resultData.data);
-                setModalIsOpen(resultData.data.map((): boolean => false));
-            });
+        setKeyword(decodeURI(search.split('query=')[1]));
+        setChangedKeyword(decodeURI(search.split('query=')[1]));
+        setPage(1);
+        setOrder('score');
+        setOrderIsActive([true, false, false]);
+    }, [search]);
 
-            setKeyword(decodeURI(search.split('query=')[1]));
-            setPage(1);
-            setOrder('score');
-            setOrderIsActive([true, false, false]);
+    useEffect(() => {
+        const fetchData = (): void => {
+            const paramsOfSearch = {
+                query: decodeURI(search.split('query=')[1]),
+                page,
+                order
+            };
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch).then((resultData: any): void => {
+                setResult(resultData.data);
+                setModalIsOpen(resultData.data.data.map((): boolean => false));
+            });
+            const paramsOfInsert = {
+                word: decodeURI(search.split('query=')[1])
+            };
+            doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
+                console.log(resultData);
+            });
         };
 
         fetchData();
-    }, [search, setKeyword]);
+    }, [page, order, changedKeyword]);
 
-    const elementsOfESDocument = result.length !== 0 ? result.sort((a: any, b: any): number => {
-        for (let idx = 0; idx < listOfOrder.length; idx++) {
-            if (order === listOfOrder[idx].value) {
-                return listOfOrder[idx].sort(a, b);
-            }
-        }
-
-        return b._score - a._score;
-    }).slice(offset, offset + 20).map((document: any, idx: number): JSX.Element =>
-        <S.Li key={document._id}>
+    const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number): JSX.Element =>
+        <S.LiOfDocumentWrapper key={document._id} id={document._id}>
             <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
                 <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                     pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfTitle>
-                <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
+                <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
+                    pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
                 </S.DivOfContent>
             </S.DivOfTitleContentWrapper>
             <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={() => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
@@ -102,18 +108,18 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                     </S.DivOfModalTitle>
-                    <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
+                    <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
+                        pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
                     </S.DivOfModalContent>
                     <S.ImgOfModalContent src={document._source.thumbnail} />
                     <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
                 </S.DivOfModalWrapper>
             </ReactModal>
-        </S.Li>)
+        </S.LiOfDocumentWrapper>)
         :
-        <S.Li>
+        <S.LiOfDocumentWrapper>
             <h3>검색된 결과가 없습니다.</h3>
-        </S.Li>;
+        </S.LiOfDocumentWrapper>;
 
     const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
@@ -165,11 +171,11 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                                 {order.name}
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
-                    <S.Ul>
+                    <S.UlOfDocumentListWrapper>
                         {elementsOfESDocument}
-                    </S.Ul>
-                    {result.length !== 0 ?
-                        <Pagination total={result.length} page={page} setPage={setPage} /> : <></>}
+                    </S.UlOfDocumentListWrapper>
+                    {result.data.length !== 0 ?
+                        <Pagination total={result.meta.count} page={page} setPage={setPage} /> : <></>}
                 </S.Section>
                 <S.Aside>
                     <S.AsideOfContent contentType="related">

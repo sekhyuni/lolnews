@@ -4,12 +4,14 @@ import styled from 'styled-components';
 export const DivOfDropdownMenuWrapper = styled.div`
     display: none;
     position: absolute;
+    border-radius: 4px;
     background-color: ${({ layoutName }) => layoutName === 'main' ? '#fff' : '#000'};
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 `;
 
 export const DivOfDropdownWrapper = styled.div`
+    width: 110px;
     height: 43px;
     margin: 23.5px 20px 23.5px 20px;
     :hover ${DivOfDropdownMenuWrapper} {
@@ -19,13 +21,13 @@ export const DivOfDropdownWrapper = styled.div`
 
 export const DivOfUser = styled.div`
     height: inherit;
-    margin: 0 0 0 43px;
 `;
 
 export const LinkOfDropdownMenu = styled(Link_)`
     display: block;
     color: ${({ layoutName }) => layoutName === 'main' ? '#000' : '#fff'};
     padding: 12px 16px;
+    border-radius: 4px;
     text-decoration: none;
     :hover {
         background-color: ${({ layoutName }) => layoutName === 'main' ? '#ddd' : '#1e1e1e'};

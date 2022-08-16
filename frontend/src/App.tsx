@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Main from './pages/main/Main';
-import Account from './pages/account/Account';
+import Join from './pages/join/Join';
 import Login from './pages/login/Login';
 import Search from './pages/search/index';
 import Community from './pages/community/Community';
@@ -25,7 +25,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Main isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />} />
-        <Route path="/account" element={<Account />} />
+        <Route path="/join" element={<Join />} />
         <Route path="/login" element={<Login setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />} />
         <Route path="/search/*" element={<Search isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />} />
         <Route path="/community" element={<Community />} />

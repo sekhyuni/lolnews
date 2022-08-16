@@ -31,7 +31,7 @@ const Form = ({ setIsAuthorized, keyword, setKeyword }: any) => {
     return (
         <>
             <S.DivOfLoginForm>
-                <S.Link to="/" onClick={() => { setKeyword(''); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.Link>
+                <S.LinkOfLogo to="/" onClick={() => { setKeyword(''); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
                 <S.Form onSubmit={event => {
                     event.preventDefault();
 
@@ -43,7 +43,7 @@ const Form = ({ setIsAuthorized, keyword, setKeyword }: any) => {
                         .then((result: any) => {
                             if (result.data.result.isPermitted) {
                                 setIsAuthorized(true);
-                                alert(`Welcome to ${result.data.result.id}!`);
+                                alert(`${result.data.result.id}님 정상적으로 로그인되었어요!`);
 
                                 keyword ? navigate(`/search/?query=${keyword}`) : navigate('/');
                             } else {
@@ -55,19 +55,19 @@ const Form = ({ setIsAuthorized, keyword, setKeyword }: any) => {
                         });
                 }}>
                     <S.Label>
-                        <S.Span>전화번호, 사용자, 이름 또는 이메일</S.Span>
+                        <S.Span>아이디</S.Span>
                         <S.Input type="text" value={id} onChange={event => { setId(event.target.value); }} />
                     </S.Label>
                     <S.Label>
                         <S.Span>비밀번호</S.Span>
                         <S.Input type="password" value={password} onChange={event => { setPassword(event.target.value); }} />
                     </S.Label>
-                    <S.Button type="submit">로그인</S.Button>
+                    <S.ButtonOfSubmit type="submit">로그인</S.ButtonOfSubmit>
                 </S.Form>
             </S.DivOfLoginForm>
-            <S.DivOfJoinForm>
-                <S.P>계정이 없으신가요? <S.Link to="/account">가입하기</S.Link></S.P>
-            </S.DivOfJoinForm>
+            <S.DivOfToJoinForm>
+                <S.P>계정이 없으신가요? <S.LinkOfToJoin to="/join">가입하기</S.LinkOfToJoin></S.P>
+            </S.DivOfToJoinForm>
         </>
     );
 };

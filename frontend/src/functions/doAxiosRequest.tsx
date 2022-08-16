@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const doAxiosRequest = (method: string, url: string, params: any): any => {
+const doAxiosRequest = (method: string, url: string, params?: any): any => {
     if (method === 'GET') {
         return axios.get(url, { params, });
     } else if (method === 'POST') {

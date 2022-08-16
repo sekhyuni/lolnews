@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactModal from 'react-modal';
 import doAxiosRequest from '../../functions/doAxiosRequest';
@@ -7,12 +6,14 @@ import { re } from '../../functions/re-template-tag';
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import Dropdown from '../../components/dropdown/Dropdown';
-import Pagination from '../../components/pagination/Pagination';
 import * as S from './SearchResultImage.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, type }: any) => {
+const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
     const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
+
+    const listRef = useRef<any>();
+    const itemsRef = useRef<Array<HTMLLIElement>>([]);
 
     // for location
     const { search } = useLocation();
@@ -35,10 +36,6 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         document.body.style.overflow = '';
     };
 
-    // for pagination
-    const [page, setPage] = useState(1);
-    const offset = (page - 1) * 20;
-
     // for sort
     const listOfOrder = [
         { name: '유사도순', value: 'score', sort: (a: any, b: any): number => b._score - a._score },
@@ -58,22 +55,69 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
 
     useEffect(() => {
         const fetchData = (): void => {
-            const params = {
+            const paramsOfSearch = {
                 query: decodeURI(search.split('query=')[1])
             };
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, params).then((resultData: any): void => {
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch).then((resultData: any): void => {
                 setResult(resultData.data);
                 setModalIsOpen(resultData.data.map((): boolean => false));
             });
+            const paramsOfInsert = {
+                word: decodeURI(search.split('query=')[1])
+            }
+            doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
+                console.log(resultData);
+            });
 
             setKeyword(decodeURI(search.split('query=')[1]));
-            setPage(1);
             setOrder('score');
             setOrderIsActive([true, false, false]);
         };
 
         fetchData();
-    }, [search, setKeyword]);
+    }, [search]);
+
+    const imagesOnLoad = (idx: number, arr: any) => {
+        const maxCount = listRef.current.dataset.columns;
+
+        function getHeight(item: HTMLLIElement) {
+            let elmMargin = 0;
+            let elmHeight = Math.ceil(item.offsetHeight);
+
+            elmMargin += Math.ceil(parseFloat(getComputedStyle(item).marginTop));
+            elmMargin += Math.ceil(parseFloat(getComputedStyle(item).marginBottom));
+
+            return elmHeight + elmMargin;
+        }
+        function calculateMasonryHeight(itemsRef: any) {
+            let index = 0;
+            const columns: any = [];
+
+            itemsRef.current.forEach((item: HTMLLIElement) => {
+                console.log(item);
+                if (item) {
+                    if (!columns[index]) {
+                        columns[index] = getHeight(item);
+                    } else {
+                        columns[index] += getHeight(item);
+                    }
+                    index === maxCount - 1 ? index = 0 : index++;
+                }
+            });
+            const maxHeight = Math.max(...columns); // 5개 column 중에 최대 높이
+            listRef.current.style.height = maxHeight + 'px';
+
+            console.log(maxHeight);
+        };
+
+        if (idx === arr.length - 1) { // 모든 이미지가 로드돼서 사이즈 계산 끝난 시점
+            calculateMasonryHeight(itemsRef);
+        }
+    }
+
+    const onChangeRef = useCallback((element: HTMLLIElement, idx: number) => {
+        itemsRef.current[idx] = element;
+    }, []);
 
     const elementsOfESDocument = result.length !== 0 ? result.sort((a: any, b: any): number => {
         for (let idx = 0; idx < listOfOrder.length; idx++) {
@@ -83,17 +127,11 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         }
 
         return b._score - a._score;
-    }).slice(offset, offset + 20).map((document: any, idx: number): JSX.Element =>
-        <S.Li key={document._id}>
-            <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
-            <S.DivOfTitleContentWrapper>
-                <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
-                </S.DivOfTitle>
-                <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
-                </S.DivOfContent>
-            </S.DivOfTitleContentWrapper>
+    }).map((document: any, idx: number, arr: any): JSX.Element =>
+        <S.LiOfImageWrapper ref={(element: HTMLLIElement) => {
+            onChangeRef(element, idx);
+        }} key={document._id} id={document._id} >
+            <S.ImgOfContent onLoad={() => { imagesOnLoad(idx, arr); }} src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
             <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={() => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
@@ -102,18 +140,18 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                     </S.DivOfModalTitle>
-                    <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
+                    <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
+                        pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
                     </S.DivOfModalContent>
                     <S.ImgOfModalContent src={document._source.thumbnail} />
                     <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
                 </S.DivOfModalWrapper>
             </ReactModal>
-        </S.Li>)
+        </S.LiOfImageWrapper>)
         :
-        <S.Li>
+        <S.LiOfImageWrapper>
             <h3>검색된 결과가 없습니다.</h3>
-        </S.Li>;
+        </S.LiOfImageWrapper>;
 
     const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
@@ -165,35 +203,10 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                                 {order.name}
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
-                    <S.Ul>
+                    <S.UlOfImageListWrapper ref={listRef} data-columns="5">
                         {elementsOfESDocument}
-                    </S.Ul>
-                    {result.length !== 0 ?
-                        <Pagination total={result.length} page={page} setPage={setPage} /> : <></>}
+                    </S.UlOfImageListWrapper>
                 </S.Section>
-                <S.Aside>
-                    <S.AsideOfContent contentType="related">
-                        <S.Strong>
-                            연관 검색어
-                        </S.Strong>
-                        <S.DivOfRelatedSearchTermWrapper>
-                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
-                                페이커
-                            </S.LinkOfRelatedSearchTerm>
-                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=롤`}>
-                                롤
-                            </S.LinkOfRelatedSearchTerm>
-                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=LOL`}>
-                                LOL
-                            </S.LinkOfRelatedSearchTerm>
-                        </S.DivOfRelatedSearchTermWrapper>
-                    </S.AsideOfContent>
-                    {/* <S.AsideOfContent contentType="photo">
-                        <strong>
-                            포토
-                        </strong>
-                    </S.AsideOfContent> */}
-                </S.Aside>
             </S.Main>
             <Footer layoutName="search" />
         </S.DivOfLayoutWrapper>

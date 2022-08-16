@@ -84,22 +84,41 @@ export const LinkOfLoginPage = styled(Link_)`
     }
 `;
 
+export const DivOfPopularWordWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0 0 0;
+`;
+
 // component
-export const ButtonOfSearchTypeWrapper = styled.div`
-`;
-
-export const Button = styled.button`
-    width: 150px;
-    border: none;
-    border-radius: 3px;
-    padding: 13px;
-    margin: 15px 3px 10px 3px;
-    font-weight: 500;
-    color: #6e6a6a;
-    background-color: #f4f4f4;
-    cursor: pointer;
-`;
-
 export const ImgOfLogo = styled.img`
     width: min(70vw, 600px);
 `;
+
+export const LinkOfPopularWord = styled(Link_)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+    border-radius: 30px;
+    padding: 0 12px 0 12px;
+    margin: 0 0 0 10px;
+    :nth-child(1) {
+        margin: 0 0 0 0px;
+        background-color: #ffd700;
+    }
+    :nth-child(2) {
+        background-color: #b5b5bd;
+    }
+    :nth-child(3) {
+        background-color: #cd7f32;
+    }
+    font-size: 14px;
+    text-decoration: none;
+    color: inherit;
+    background-color: #fff;
+    :hover {
+        text-decoration: underline;
+        filter: contrast(90%);
+    }
+`

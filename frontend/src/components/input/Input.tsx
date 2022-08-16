@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import * as S from './Input.styled';
 
-const Input = ({ keyword, setKeyword, layoutName, type }: any) => {
+const Input = ({ keyword, setKeyword, layoutName, type = '' }: any) => {
     const navigate = useNavigate();
 
     return (

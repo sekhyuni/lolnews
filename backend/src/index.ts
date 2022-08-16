@@ -1,9 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import { UserModel } from './domain/user';
-import { DB } from './domain/db';
+import { UserModel } from './mongodb/user/user';
+import { QueryOfUser } from './mongodb/user/user-query';
+import { WordModel } from './mongodb/word/word';
+import { QueryOfWord } from './mongodb/word/word-query';
 import { Client, ApiResponse, RequestParams } from '@elastic/elasticsearch';
+import moment from 'moment';
 
 const app = express();
 const allowedOrigins = [
@@ -43,21 +46,24 @@ const client = new Client({
     },
 });
 
-const run = async ({ query }: any): Promise<any> => {
+const run = async ({ query, page, order }: any): Promise<any> => {
     const params: RequestParams.Search = {
         index: 'news_index',
         body: {
-            size: 10000,
+            track_total_hits: true,
+            from: (page - 1) * 20,
+            size: 20,
             query: {
                 match: {
                     content: query
                 }
-            }
+            },
+            sort: [order !== 'score' ? { createdAt: { order } } : {}]
         }
     };
 
     return client.search(params)
-        .then((result: ApiResponse) => result.body.hits.hits)
+        .then((result: ApiResponse) => ({ meta: { count: result.body.hits.total.value }, data: result.body.hits.hits }))
         .catch((err: Error) => err);
 };
 
@@ -82,38 +88,98 @@ app.get('/search/keyword', async (req: express.Request, res: express.Response) =
 app.post('/accounts/signin', (req: express.Request, res: express.Response) => {
     const { id, password } = req.body;
 
-    const db = new DB();
+    const queryOfUser = new QueryOfUser();
     connection
-        .then(() => db.read({ id }))
+        .then(() => queryOfUser.read({ id }))
         .then(([user]) => {
             if (user === undefined) {
-                res.send({ result: { isPermitted: false, reason: 'ID does not exist' } });
+                res.send({ result: { isPermitted: false, reason: '아이디가 존재하지 않습니다.' } });
             } else {
-                if (user.password !== password) {
-                    res.send({ result: { isPermitted: false, reason: 'Password is wrong' } });
-                } else {
+                user.password !== password ?
+                    res.send({ result: { isPermitted: false, reason: '패스워드가 일치하지 않습니다.' } }) :
                     res.send({ result: { isPermitted: true, id: user.id } });
-                }
             }
+        })
+        .catch(err => {
+            console.error(err);
+            res.send(err);
         });
 });
 
 // 회원가입
 app.post('/accounts/signup', (req: express.Request, res: express.Response) => {
-    const { id, password, } = req.body;
+    const { id, password, email, } = req.body;
 
-    const db = new DB();
-    const newUser = new UserModel({ id, password, });
+    const queryOfUser = new QueryOfUser();
+    const newUser = new UserModel({ id, password, email, });
     connection
-        .then(() => db.create(newUser))
+        .then(() => queryOfUser.create(newUser))
         .then(({ id }) => {
-            db.read({ id }).then(([user]) => {
-                res.send({ result: { id: user.id } });
+            queryOfUser.read({ id }).then(([user]) => {
+                res.send({ result: { isDuplicated: false, id: user.id } });
             });
         })
         .catch(err => {
+            console.error(err);
             if (err.code === 11000) {
-                res.send({ result: { isDuplicated: true } });
+                const [duplicatedField] = Object.keys(err.keyValue);
+                duplicatedField === 'id' ?
+                    res.send({ result: { isDuplicated: true, reason: '이미 존재하는 아이디입니다.' } }) :
+                    res.send({ result: { isDuplicated: true, reason: '이미 존재하는 이메일입니다.' } });
+            } else {
+                res.send(err);
             }
+        });
+});
+
+// 검색어 Select
+app.get('/word', (req: express.Request, res: express.Response) => {
+    const queryOfWord = new QueryOfWord();
+    connection
+        .then(() => queryOfWord.aggregate([
+            {
+                $match: {
+                    date: {
+                        $gte: moment().subtract(7, 'days').add(9, 'hours').toDate(),
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: "$word",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $sort: {
+                    count: -1
+                }
+            }
+        ]))
+        .then(words => {
+            res.send(words.filter((_, idx) => idx < 5).map(word => word._id));
+        })
+        .catch(err => {
+            console.error(err);
+            res.send(err);
+        });
+});
+
+// 검색어 Insert
+app.post('/word', (req: express.Request, res: express.Response) => {
+    const { word } = req.body;
+
+    const queryOfWord = new QueryOfWord();
+    const newWord = new WordModel({ word });
+    connection
+        .then(() => queryOfWord.create(newWord))
+        .then(({ id }) => {
+            queryOfWord.read({ id }).then(([{ word }]) => {
+                res.send(word);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            res.send(err);
         });
 });

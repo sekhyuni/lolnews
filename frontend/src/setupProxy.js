@@ -9,6 +9,7 @@ module.exports = app => {
         '/search/keyword',
         '/accounts/signin',
         '/accounts/signup',
+        '/word'
     ],
         createProxyMiddleware(proxy)
     );
