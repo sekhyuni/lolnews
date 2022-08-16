@@ -39,6 +39,7 @@ export const Main = styled.main`
 export const Section = styled.section`
     ${vertical}
     width: 100vw;
+    height: fit-content;
     border: 0.5px solid #e1e1e1;
     border-radius: 10px;
     padding: 0 30px 0 30px;

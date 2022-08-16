@@ -158,6 +158,8 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
             </S.Header>
             <S.Main>
                 <S.Section>
+                    <S.SpanfCountOfResultWrapper>검색 결과 : 총 <S.StrongOfCountOfResult>{String(result.meta.count)
+                        .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</S.StrongOfCountOfResult>건</S.SpanfCountOfResultWrapper>
                     <S.DivOfLnb>
                         {listOfOrder.map((order: any, idx: number): JSX.Element =>
                             <S.ButtonOfSort
