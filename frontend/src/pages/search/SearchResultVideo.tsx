@@ -89,7 +89,7 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
 
         return b._score - a._score;
     }).slice(offset, offset + 20).map((document: any, idx: number): JSX.Element =>
-        <S.Li key={document._id} id={document._id}>
+        <S.LiOfDocumentWrapper key={document._id} id={document._id}>
             <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
                 <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
@@ -114,11 +114,11 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                     <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
                 </S.DivOfModalWrapper>
             </ReactModal>
-        </S.Li>)
+        </S.LiOfDocumentWrapper>)
         :
-        <S.Li>
+        <S.LiOfDocumentWrapper>
             <h3>검색된 결과가 없습니다.</h3>
-        </S.Li>;
+        </S.LiOfDocumentWrapper>;
 
     const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
@@ -170,9 +170,9 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                                 {order.name}
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
-                    <S.Ul>
+                    <S.UlOfDocumentListWrapper>
                         {elementsOfESDocument}
-                    </S.Ul>
+                    </S.UlOfDocumentListWrapper>
                     {result.length !== 0 ?
                         <Pagination total={result.length} page={page} setPage={setPage} /> : <></>}
                 </S.Section>

@@ -15,7 +15,7 @@ const headerWidth = '130px';
 
 const mainLeftDistance = '200px';
 
-const sectionWidth = '700px';
+const sectionWidth = '690px';
 
 const asideWidth = '350px';
 
@@ -40,7 +40,6 @@ export const Main = styled.main`
 export const Section = styled.section`
     ${vertical}
     width: ${sectionWidth};
-    height: fit-content;
     border: 0.5px solid #e1e1e1;
     border-radius: 10px;
     padding: 0 30px 0 30px;
@@ -131,13 +130,13 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
     }
 `;
 
-export const Ul = styled.ul`
+export const UlOfDocumentListWrapper = styled.ul`
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
 `;
 
-export const Li = styled.li`
+export const LiOfDocumentWrapper = styled.li`
     display: flex;
     flex-direction: row;
     justify-content: center;

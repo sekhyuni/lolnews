@@ -15,7 +15,7 @@ const headerWidth = '130px';
 
 const mainLeftDistance = '200px';
 
-const sectionWidth = '700px';
+const sectionWidth = '690px';
 
 const asideWidth = '350px';
 
@@ -33,14 +33,12 @@ export const Main = styled.main`
     flex-direction: row;
     min-width: calc(${mainLeftDistance} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
     min-height: calc(100vh - (${headerWidth} + ${footerWidth}));
-    padding: 0 0 0 ${mainLeftDistance};
     background-color: #f2f4f7;
 `;
 
 export const Section = styled.section`
     ${vertical}
-    width: ${sectionWidth};
-    height: fit-content;
+    width: 100vw;
     border: 0.5px solid #e1e1e1;
     border-radius: 10px;
     padding: 0 30px 0 30px;
@@ -55,47 +53,8 @@ export const DivOfLnb = styled.div`
     margin: 20px 0 20px 0;
 `;
 
-export const Aside = styled.aside`
-    ${vertical}
-    width: ${asideWidth};
-    margin: 20px 0 0 20px;
-`;
-
-export const AsideOfContent = styled.div`
-    ${vertical}
-    min-height: 100px;
-    border: 0.5px solid #e1e1e1;
-    border-radius: 10px;
-    padding: 20px 30px 20px 30px;
-    background-color: #fff;
-`;
-
 export const Strong = styled.strong`
     font-size: 16px;
-`;
-
-export const DivOfRelatedSearchTermWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin: 18px 0 0 0;
-`;
-
-export const LinkOfRelatedSearchTerm = styled(Link_)`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: 30px;
-    border: 1px solid #eaeced;
-    border-radius: 3px;
-    padding: 0 12px 0 12px;
-    margin: 0 0 0 10px;
-    :first-child {
-        margin: 0 0 0 0;
-    }
-    font-size: 14px;
-    text-decoration: none;
-    color: inherit;
-    background-color: #fff;
 `;
 
 export const Div = styled.div`
@@ -131,20 +90,53 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
     }
 `;
 
-export const Ul = styled.ul`
+export const UlOfImageListWrapper = styled.ul`
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
+
+    // 잠시 대기
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    /* box-sizing: border-box; */
+    align-content: space-between;
 `;
 
-export const Li = styled.li`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding: 20px 0 20px 0;
-    border-bottom: ${({ id }) => id ? '1px solid #e5e5e5' : 'none'};
-    :first-child {
-        border-top: 1px solid #e5e5e5;
+export const LiOfImageWrapper = styled.li`
+    // 잠시 대기
+    width: 20%;
+    :nth-child(5n + 1) {
+        order: 1;
+    }
+    :nth-child(5n + 2) {
+        order: 2;
+    }
+    :nth-child(5n + 3) {
+        order: 3;
+    }
+    :nth-child(5n + 4) {
+        order: 4;
+    }
+    :nth-child(5n) {
+        order: 5;
+    }
+
+    border-radius: 10px;
+    margin: 0 0 0 5px;
+    overflow: hidden;
+`;
+
+export const ImgOfContent = styled.img`
+    // 잠시 대기
+    max-width: 100%;
+
+    cursor: pointer;
+    transition: transform .1s;
+    :hover {
+        -ms-transform: scale(1.2); /* IE 9 */
+        -webkit-transform: scale(1.2); /* Safari 3-8 */
+        transform: scale(1.2); 
     }
 `;
 
@@ -226,13 +218,17 @@ export const DivOfContent = styled.div`
     color: #666;
 `;
 
-export const ImgOfContent = styled.img`
-    width: ${imageOfContentWidth};
-    height: 80px;
-    border: 1px solid rgba(0,0,0,0.1);
-    margin: 0 20px 0 0;
-    cursor: pointer;
-`;
+// export const ImgOfContent = styled.img`
+//     width: inherit;
+//     border: 1px solid rgba(0,0,0,0.1);
+//     cursor: pointer;
+//     transition: transform .1s;
+//     :hover {
+//         -ms-transform: scale(1.2); /* IE 9 */
+//         -webkit-transform: scale(1.2); /* Safari 3-8 */
+//         transform: scale(1.2); 
+//     }
+// `;
 
 export const DivOfModalWrapper = styled.div`
     ${vertical}
