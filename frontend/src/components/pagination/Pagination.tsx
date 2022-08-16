@@ -2,7 +2,7 @@ import { useState } from 'react';
 import * as S from './Pagination.styled';
 
 function Pagination({ total, page, setPage }: any) {
-    const numPages = Math.ceil(total / 20);
+    const numPages = Math.ceil(total / 10);
     const [pageStartIdx, setPageStartIdx] = useState(1);
     const [pageEndIdx, setPageEndIdx] = useState(10);
 

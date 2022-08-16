@@ -51,8 +51,8 @@ const run = async ({ query, page, order }: any): Promise<any> => {
         index: 'news_index',
         body: {
             track_total_hits: true,
-            from: (page - 1) * 20,
-            size: 20,
+            from: (page - 1) * 10,
+            size: 10,
             query: {
                 match: {
                     content: query
@@ -75,14 +75,6 @@ app.get('/search/keyword', async (req: express.Request, res: express.Response) =
 
     res.send(result);
 });
-
-// 임시 개발 코드
-// import path from 'path';
-// app.get('/search/keyword', (req: express.Request, res: express.Response) => {
-//     const { query } = req.query;
-
-//     res.sendFile(path.join(__dirname + `/../test/${query}.json`));
-// });
 
 // 로그인
 app.post('/accounts/signin', (req: express.Request, res: express.Response) => {
