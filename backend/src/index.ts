@@ -46,13 +46,13 @@ const client = new Client({
     },
 });
 
-const run = async ({ query, page, order }: any): Promise<any> => {
+const run = async ({ query, page, order, isImageRequest }: any): Promise<any> => {
     const params: RequestParams.Search = {
         index: 'news_index',
         body: {
             track_total_hits: true,
-            from: (page - 1) * 10,
-            size: 10,
+            from: JSON.parse(isImageRequest) ? (Number(page) - 1) * 20 : (Number(page) - 1) * 10,
+            size: JSON.parse(isImageRequest) ? 20 : 10,
             query: {
                 match: {
                     content: query

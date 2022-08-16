@@ -1,4 +1,4 @@
-import * as S from './Dropdown.style';
+import * as S from './Dropdown.styled';
 import * as Svg from '../../components/svg/Svg';
 
 const Dropdown = ({ layoutName, search, setKeyword, setIsAuthorized }: any) => {
