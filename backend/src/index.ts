@@ -46,21 +46,24 @@ const client = new Client({
     },
 });
 
-const run = async ({ query }: any): Promise<any> => {
+const run = async ({ query, page, order }: any): Promise<any> => {
     const params: RequestParams.Search = {
         index: 'news_index',
         body: {
-            size: 10000,
+            track_total_hits: true,
+            from: (page - 1) * 20,
+            size: 20,
             query: {
                 match: {
                     content: query
                 }
-            }
+            },
+            sort: [order !== 'score' ? { createdAt: { order } } : {}]
         }
     };
 
     return client.search(params)
-        .then((result: ApiResponse) => result.body.hits.hits)
+        .then((result: ApiResponse) => ({ meta: { count: result.body.hits.total.value }, data: result.body.hits.hits }))
         .catch((err: Error) => err);
 };
 

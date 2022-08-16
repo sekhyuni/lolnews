@@ -17,8 +17,13 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
     const { search } = useLocation();
 
     // for result
-    const [result, setResult] = useState([]);
+    interface Result {
+        meta: any;
+        data: any;
+    }
+    const [result, setResult] = useState<Result>({ meta: {}, data: [] });
     const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
+    const [changedKeyword, setChangedKeyword] = useState<string>(decodeURI(search.split('query=')[1]));
     const openModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = true;
@@ -35,17 +40,16 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
     };
 
     // for pagination
-    const [page, setPage] = useState(1);
-    const offset = (page - 1) * 20;
+    const [page, setPage] = useState<number>(1);
 
     // for sort
     const listOfOrder = [
-        { name: '유사도순', value: 'score', sort: (a: any, b: any): number => b._score - a._score },
-        { name: '최신순', value: 'desc', sort: (a: any, b: any): number => new Date(b._source.createdAt).getTime() - new Date(a._source.createdAt).getTime() },
-        { name: '과거순', value: 'asc', sort: (a: any, b: any): number => new Date(a._source.createdAt).getTime() - new Date(b._source.createdAt).getTime() },
+        { name: '유사도순', value: 'score' },
+        { name: '최신순', value: 'desc' },
+        { name: '과거순', value: 'asc' },
     ];
-    const [order, setOrder] = useState('score');
-    const [orderIsActive, setOrderIsActive] = useState([true, false, false]);
+    const [order, setOrder] = useState<string>('score');
+    const [orderIsActive, setOrderIsActive] = useState<Array<boolean>>([true, false, false]);
 
     // for type
     const listOfResultDataTypeMenu = [
@@ -56,39 +60,36 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
     ];
 
     useEffect(() => {
+        setKeyword(decodeURI(search.split('query=')[1]));
+        setChangedKeyword(decodeURI(search.split('query=')[1]));
+        setPage(1);
+        setOrder('score');
+        setOrderIsActive([true, false, false]);
+    }, [search]);
+
+    useEffect(() => {
         const fetchData = (): void => {
             const paramsOfSearch = {
-                query: decodeURI(search.split('query=')[1])
+                query: decodeURI(search.split('query=')[1]),
+                page,
+                order
             };
             doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch).then((resultData: any): void => {
                 setResult(resultData.data);
-                setModalIsOpen(resultData.data.map((): boolean => false));
+                setModalIsOpen(resultData.data.data.map((): boolean => false));
             });
             const paramsOfInsert = {
                 word: decodeURI(search.split('query=')[1])
-            }
+            };
             doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
                 console.log(resultData);
             });
-
-            setKeyword(decodeURI(search.split('query=')[1]));
-            setPage(1);
-            setOrder('score');
-            setOrderIsActive([true, false, false]);
         };
 
         fetchData();
-    }, [search]);
+    }, [page, order, changedKeyword]);
 
-    const elementsOfESDocument = result.length !== 0 ? result.sort((a: any, b: any): number => {
-        for (let idx = 0; idx < listOfOrder.length; idx++) {
-            if (order === listOfOrder[idx].value) {
-                return listOfOrder[idx].sort(a, b);
-            }
-        }
-
-        return b._score - a._score;
-    }).slice(offset, offset + 20).map((document: any, idx: number): JSX.Element =>
+    const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number): JSX.Element =>
         <S.LiOfDocumentWrapper key={document._id} id={document._id}>
             <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
@@ -173,8 +174,8 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
                     <S.UlOfDocumentListWrapper>
                         {elementsOfESDocument}
                     </S.UlOfDocumentListWrapper>
-                    {result.length !== 0 ?
-                        <Pagination total={result.length} page={page} setPage={setPage} /> : <></>}
+                    {result.data.length !== 0 ?
+                        <Pagination total={result.meta.count} page={page} setPage={setPage} /> : <></>}
                 </S.Section>
                 <S.Aside>
                     <S.AsideOfContent contentType="related">
