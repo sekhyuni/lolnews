@@ -12,6 +12,7 @@ const app = express();
 const allowedOrigins = [
     'http://172.24.24.84',
     'http://www.lolnews.com',
+    'http://lolnews.project.co.kr',
 ];
 const options: cors.CorsOptions = {
     origin: allowedOrigins,
@@ -132,7 +133,7 @@ app.get('/word', (req: express.Request, res: express.Response) => {
             {
                 $match: {
                     date: {
-                        $gte: moment().subtract(7, 'days').add(9, 'hours').toDate(),
+                        $gte: moment().subtract(1, 'days').add(9, 'hours').toDate(),
                     }
                 }
             },
