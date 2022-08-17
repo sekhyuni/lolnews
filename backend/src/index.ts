@@ -12,6 +12,7 @@ const app = express();
 const allowedOrigins = [
     'http://172.24.24.84',
     'http://www.lolnews.com',
+    'http://lolnews.project.co.kr',
 ];
 const options: cors.CorsOptions = {
     origin: allowedOrigins,
