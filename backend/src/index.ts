@@ -12,6 +12,7 @@ const app = express();
 const allowedOrigins = [
     'http://172.24.24.84',
     'http://www.lolnews.com',
+    'http://lolnews.project.co.kr',
 ];
 const options: cors.CorsOptions = {
     origin: allowedOrigins,
@@ -46,13 +47,13 @@ const client = new Client({
     },
 });
 
-const run = async ({ query, page, order }: any): Promise<any> => {
+const run = async ({ query, page, order, isImageRequest }: any): Promise<any> => {
     const params: RequestParams.Search = {
         index: 'news_index',
         body: {
             track_total_hits: true,
-            from: (page - 1) * 20,
-            size: 20,
+            from: JSON.parse(isImageRequest) ? (Number(page) - 1) * 30 : (Number(page) - 1) * 10,
+            size: JSON.parse(isImageRequest) ? 30 : 10,
             query: {
                 match: {
                     content: query
@@ -75,14 +76,6 @@ app.get('/search/keyword', async (req: express.Request, res: express.Response) =
 
     res.send(result);
 });
-
-// 임시 개발 코드
-// import path from 'path';
-// app.get('/search/keyword', (req: express.Request, res: express.Response) => {
-//     const { query } = req.query;
-
-//     res.sendFile(path.join(__dirname + `/../test/${query}.json`));
-// });
 
 // 로그인
 app.post('/accounts/signin', (req: express.Request, res: express.Response) => {
@@ -140,7 +133,7 @@ app.get('/word', (req: express.Request, res: express.Response) => {
             {
                 $match: {
                     date: {
-                        $gte: moment().subtract(7, 'days').add(9, 'hours').toDate(),
+                        $gte: moment().subtract(1, 'days').add(9, 'hours').toDate(),
                     }
                 }
             },

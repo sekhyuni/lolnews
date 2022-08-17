@@ -68,11 +68,12 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
     }, [search]);
 
     useEffect(() => {
-        const fetchData = (): void => {
+        const fetchData = (): void => { // 나중에 useCallback으로 바꿀까?
             const paramsOfSearch = {
                 query: decodeURI(search.split('query=')[1]),
                 page,
-                order
+                order,
+                isImageRequest: false,
             };
             doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch).then((resultData: any): void => {
                 setResult(resultData.data);
@@ -158,6 +159,8 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
             </S.Header>
             <S.Main>
                 <S.Section>
+                    <S.SpanfCountOfResultWrapper>검색결과 : 총 <S.StrongOfCountOfResult>{String(result.meta.count)
+                        .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</S.StrongOfCountOfResult>건</S.SpanfCountOfResultWrapper>
                     <S.DivOfLnb>
                         {listOfOrder.map((order: any, idx: number): JSX.Element =>
                             <S.ButtonOfSort

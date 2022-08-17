@@ -331,3 +331,11 @@ export const LinkOfUser = styled(Link_)`
     height: 43px;
     margin: 23.5px 20px 23.5px 20px;
 `;
+
+export const SpanfCountOfResultWrapper = styled.span`  
+    text-align: center;
+    margin: 20px 0 0 0;
+`;
+
+export const StrongOfCountOfResult = styled.strong`    
+`;

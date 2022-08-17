@@ -12,15 +12,17 @@ import * as Svg from '../../components/svg/Svg';
 const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
     const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
-    const listRef = useRef<any>();
-    const itemsRef = useRef<Array<HTMLLIElement>>([]);
-
     // for location
     const { search } = useLocation();
 
     // for result
-    const [result, setResult] = useState([]);
+    interface Result {
+        meta: any;
+        data: any;
+    }
+    const [result, setResult] = useState<Result>({ meta: {}, data: [] });
     const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
+    const [changedKeyword, setChangedKeyword] = useState<string>(decodeURI(search.split('query=')[1]));
     const openModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = true;
@@ -35,15 +37,42 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
 
         document.body.style.overflow = '';
     };
+    const listRef = useRef<any>();
+    const itemsRef = useRef<Array<HTMLLIElement>>([]);
+
+    // for pagination
+    const [page, setPage] = useState<number>(1);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState(false);
+    const loader = useRef(null);
+
+    const handleObserver = useCallback((entries: any) => {
+        const target = entries[0];
+        if (target.isIntersecting) {
+            setPage((prev: number): number => prev + 1);
+        }
+    }, []);
+
+    useEffect(() => {
+        const option = {
+            root: null,
+            rootMargin: "20px",
+            threshold: 0
+        };
+        const observer = new IntersectionObserver(handleObserver, option);
+        if (loader.current) {
+            observer.observe(loader.current);
+        }
+    }, [handleObserver]);
 
     // for sort
     const listOfOrder = [
-        { name: '유사도순', value: 'score', sort: (a: any, b: any): number => b._score - a._score },
-        { name: '최신순', value: 'desc', sort: (a: any, b: any): number => new Date(b._source.createdAt).getTime() - new Date(a._source.createdAt).getTime() },
-        { name: '과거순', value: 'asc', sort: (a: any, b: any): number => new Date(a._source.createdAt).getTime() - new Date(b._source.createdAt).getTime() },
+        { name: '유사도순', value: 'score' },
+        { name: '최신순', value: 'desc' },
+        { name: '과거순', value: 'asc' },
     ];
-    const [order, setOrder] = useState('score');
-    const [orderIsActive, setOrderIsActive] = useState([true, false, false]);
+    const [order, setOrder] = useState<string>('score');
+    const [orderIsActive, setOrderIsActive] = useState<Array<boolean>>([true, false, false]);
 
     // for type
     const listOfResultDataTypeMenu = [
@@ -54,28 +83,40 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     ];
 
     useEffect(() => {
-        const fetchData = (): void => {
+        setResult({ meta: {}, data: [] });
+        setKeyword(decodeURI(search.split('query=')[1]));
+        setChangedKeyword(decodeURI(search.split('query=')[1]));
+        setPage(1);
+    }, [search, order]);
+
+    useEffect(() => {
+        const fetchData = (): void => { // 나중에 useCallback으로 바꿀까?
             const paramsOfSearch = {
-                query: decodeURI(search.split('query=')[1])
+                query: decodeURI(search.split('query=')[1]),
+                page,
+                order,
+                isImageRequest: true,
             };
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch).then((resultData: any): void => {
-                setResult(resultData.data);
-                setModalIsOpen(resultData.data.map((): boolean => false));
-            });
+            setLoading(true);
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch)
+                .then((resultData: any): void => {
+                    setResult((prev: Result): Result => ({ meta: resultData.data.meta, data: [...prev.data, ...resultData.data.data] }));
+                    setModalIsOpen(resultData.data.data.map((): boolean => false));
+                }).then(() => {
+                    setLoading(false);
+                }).catch((err: any) => {
+                    setError(err);
+                });
             const paramsOfInsert = {
                 word: decodeURI(search.split('query=')[1])
-            }
+            };
             doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
                 console.log(resultData);
             });
-
-            setKeyword(decodeURI(search.split('query=')[1]));
-            setOrder('score');
-            setOrderIsActive([true, false, false]);
         };
 
         fetchData();
-    }, [search]);
+    }, [page, changedKeyword]);
 
     const imagesOnLoad = (idx: number, arr: any) => {
         const maxCount = listRef.current.dataset.columns;
@@ -106,6 +147,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
             });
             const maxHeight = Math.max(...columns); // 5개 column 중에 최대 높이
             listRef.current.style.height = maxHeight + 'px';
+            itemsRef.current = [];
 
             console.log(maxHeight);
         };
@@ -119,15 +161,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
         itemsRef.current[idx] = element;
     }, []);
 
-    const elementsOfESDocument = result.length !== 0 ? result.sort((a: any, b: any): number => {
-        for (let idx = 0; idx < listOfOrder.length; idx++) {
-            if (order === listOfOrder[idx].value) {
-                return listOfOrder[idx].sort(a, b);
-            }
-        }
-
-        return b._score - a._score;
-    }).map((document: any, idx: number, arr: any): JSX.Element =>
+    const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number, arr: any): JSX.Element =>
         <S.LiOfImageWrapper ref={(element: HTMLLIElement) => {
             onChangeRef(element, idx);
         }} key={document._id} id={document._id} >
@@ -206,6 +240,9 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                     <S.UlOfImageListWrapper ref={listRef} data-columns="5">
                         {elementsOfESDocument}
                     </S.UlOfImageListWrapper>
+                    {loading && <S.POfLoading>Loading...</S.POfLoading>}
+                    {error && <S.POfError>Error!</S.POfError>}
+                    <S.DivOfLoader ref={loader} />
                 </S.Section>
             </S.Main>
             <Footer layoutName="search" />
