@@ -22,6 +22,9 @@ class TextPrep:
         self.mecab = Mecab()
 
     def text_analysis(self, text, valid_pos = ["NNG", "NNP", "SL"]):
+        """Preprcessing 전체
+        - input) 원본 텍스트
+        - output) 명사 list"""
         refined_text = self.text_refine(text)
         # print(f"after step1)\n{refined_text}")
         # print('-'*50)
@@ -36,6 +39,13 @@ class TextPrep:
 
     def text_refine(self, text):
         """step1) 텍스트 정제"""
+
+        # html character entity
+        text = re.sub('&lt;', "", text) # <
+        text = re.sub("&gt;", "", text) # >
+        text = re.sub("&nbsp;", "", text) # 공백
+        text = re.sub("&amp;", "", text) # &
+        text = re.sub("&quot;", "", text) # "         
         
         # 엑스포츠 뉴스
         text = re.sub("\(.+기자\)", "", text)
