@@ -1,6 +1,6 @@
 import { Link as Link_ } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import urlOfWallpaperbette from '../../assets/wallpaperbette.jpg';
+import urlOfBackgroundImage from '../../assets/background5.jpg';
 
 const vertical = css`
     display: flex;
@@ -19,7 +19,7 @@ const footerWidth = '100px';
 export const DivOfLayoutWrapper = styled.div`
     ${vertical}
     height: 100vh;
-    background-image: url(${urlOfWallpaperbette});
+    background-image: url(${urlOfBackgroundImage});
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: scroll;
