@@ -92,19 +92,19 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
 
     const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number): JSX.Element =>
         <S.LiOfDocumentWrapper key={document._id} id={document._id}>
-            <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
+            <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
-                <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                <S.DivOfTitle onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                     pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfTitle>
                 <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
                     pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
                 </S.DivOfContent>
             </S.DivOfTitleContentWrapper>
-            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={() => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
+            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={() => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
@@ -136,7 +136,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
         <S.DivOfLayoutWrapper>
             <S.Header>
                 <S.HeaderOfTop>
-                    <S.LinkOfLogo to="/" onClick={() => { setKeyword(''); }}>
+                    <S.LinkOfLogo to="/" onClick={(): void => { setKeyword(''); }}>
                         <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkOfLogo>
                     <S.Div>
@@ -146,7 +146,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
                         {isAuthorized ?
                             <Dropdown layoutName="search" search={search} setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
                             :
-                            <S.LinkOfLoginPage to="/login" onClick={() => {
+                            <S.LinkOfLoginPage to="/login" onClick={(): void => {
                                 setKeyword(decodeURI(search.split('query=')[1]));
                             }}>
                                 로그인
@@ -164,10 +164,10 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
                     <S.DivOfLnb>
                         {listOfOrder.map((order: any, idx: number): JSX.Element =>
                             <S.ButtonOfSort
-                                orderIsActive={orderIsActive[idx]} onClick={() => {
+                                orderIsActive={orderIsActive[idx]} onClick={(): void => {
                                     setOrder(order.value);
 
-                                    const newOrderIsActive = listOfOrder.map(() => false);
+                                    const newOrderIsActive = listOfOrder.map((): boolean => false);
                                     newOrderIsActive[idx] = true;
                                     setOrderIsActive(newOrderIsActive);
                                 }}>

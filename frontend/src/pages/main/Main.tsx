@@ -8,7 +8,7 @@ import * as S from './Main.styled';
 const Main = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
     const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
-    const [listOfPopularWord, setListOfPopularWord] = useState([]);
+    const [listOfPopularWord, setListOfPopularWord] = useState<Array<string>>([]);
 
     useEffect(() => {
         const fetchData = (): void => {
@@ -28,7 +28,7 @@ const Main = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
                         {isAuthorized ?
                             <Dropdown layoutName="main" setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
                             :
-                            <S.LinkOfLoginPage to="/login" onClick={() => {
+                            <S.LinkOfLoginPage to="/login" onClick={(): void => {
                                 setKeyword('');
                             }}>
                                 로그인
@@ -42,7 +42,7 @@ const Main = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
                     <S.Div>
                         <Input layoutName="main" keyword={keyword} setKeyword={setKeyword} />
                         <S.DivOfPopularWordWrapper>
-                            {listOfPopularWord.map(popularWord => <S.LinkOfPopularWord to={`/search/?query=${popularWord}`}>{`#${popularWord}`}</S.LinkOfPopularWord>)}
+                            {listOfPopularWord.map((popularWord: string): JSX.Element => <S.LinkOfPopularWord to={`/search/?query=${popularWord}`}>{`#${popularWord}`}</S.LinkOfPopularWord>)}
                         </S.DivOfPopularWordWrapper>
                     </S.Div>
                 </S.Section>

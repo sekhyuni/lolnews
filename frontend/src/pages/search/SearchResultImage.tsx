@@ -165,11 +165,11 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
         <S.LiOfImageWrapper ref={(element: HTMLLIElement) => {
             onChangeRef(element, idx);
         }} key={document._id} id={document._id} >
-            <S.ImgOfContent onLoad={() => { imagesOnLoad(idx, arr); }} src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
-            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={() => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
+            <S.ImgOfContent onLoad={(): void => { imagesOnLoad(idx, arr); }} src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
+            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={() => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
@@ -201,7 +201,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
         <S.DivOfLayoutWrapper>
             <S.Header>
                 <S.HeaderOfTop>
-                    <S.LinkOfLogo to="/" onClick={() => { setKeyword(''); }}>
+                    <S.LinkOfLogo to="/" onClick={(): void => { setKeyword(''); }}>
                         <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkOfLogo>
                     <S.Div>
@@ -211,7 +211,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                         {isAuthorized ?
                             <Dropdown layoutName="search" search={search} setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
                             :
-                            <S.LinkOfLoginPage to="/login" onClick={() => {
+                            <S.LinkOfLoginPage to="/login" onClick={(): void => {
                                 setKeyword(decodeURI(search.split('query=')[1]));
                             }}>
                                 로그인
@@ -227,10 +227,10 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                     <S.DivOfLnb>
                         {listOfOrder.map((order: any, idx: number): JSX.Element =>
                             <S.ButtonOfSort
-                                orderIsActive={orderIsActive[idx]} onClick={() => {
+                                orderIsActive={orderIsActive[idx]} onClick={(): void => {
                                     setOrder(order.value);
 
-                                    const newOrderIsActive = listOfOrder.map(() => false);
+                                    const newOrderIsActive = listOfOrder.map((): boolean => false);
                                     newOrderIsActive[idx] = true;
                                     setOrderIsActive(newOrderIsActive);
                                 }}>
