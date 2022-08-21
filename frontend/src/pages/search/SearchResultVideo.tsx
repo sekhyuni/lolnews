@@ -23,7 +23,8 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
     }
     const [result, setResult] = useState<Result>({ meta: {}, data: [] });
     const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
-    const [changedKeyword, setChangedKeyword] = useState<string>(decodeURI(search.split('query=')[1]));
+    const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
+    const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const openModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = true;
@@ -50,6 +51,7 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
     ];
     const [order, setOrder] = useState<string>('score');
     const [orderIsActive, setOrderIsActive] = useState<Array<boolean>>([true, false, false]);
+    const [orderForDetectOfFetchEffect, setOrderForDetectOfFetchEffect] = useState<string>('score');
 
     // for type
     const listOfResultDataTypeMenu = [
@@ -59,15 +61,23 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         // { id: 4, link: `/search/video?query=${decodeURI(search.split('query=')[1])}`, name: '영상', svg: <Svg.Video active={true} /> },
     ];
 
-    useEffect(() => {
+    useEffect(() => { // for set order, when keyword is changed
         setKeyword(decodeURI(search.split('query=')[1]));
-        setChangedKeyword(decodeURI(search.split('query=')[1]));
-        setPage(1);
+        setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
+
         setOrder('score');
         setOrderIsActive([true, false, false]);
     }, [search]);
 
-    useEffect(() => {
+    useEffect(() => { // for set page, when keyword or order is changed
+        setKeywordForDetectOfFetchEffect(decodeURI(search.split('query=')[1]));
+
+        setOrderForDetectOfFetchEffect(order);
+
+        setPage(1);
+    }, [order, keywordForDetectOfSetPageEffect]);
+
+    useEffect(() => { // for fetch, when keyword or order or page is changed
         const fetchData = (): void => { // 나중에 useCallback으로 바꿀까?
             const paramsOfSearch = {
                 query: decodeURI(search.split('query=')[1]),
@@ -88,7 +98,7 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         };
 
         fetchData();
-    }, [page, order, changedKeyword]);
+    }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
 
     const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number): JSX.Element =>
         <S.LiOfDocumentWrapper key={document._id} id={document._id}>
