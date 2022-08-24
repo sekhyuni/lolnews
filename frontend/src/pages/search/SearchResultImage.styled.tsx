@@ -43,7 +43,7 @@ export const Section = styled.section`
     height: fit-content;
     border: 0.5px solid #e1e1e1;
     border-radius: 10px;
-    padding: 0 30px 0 30px;
+    padding: 0 20px 0 20px;
     margin: 20px 0 20px 0;
     background-color: #fff;
 `;
@@ -92,7 +92,7 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
     }
 `;
 
-export const UlOfImageListWrapper = styled.ul`
+export const UlOfListOfImageWrapper = styled.ul`
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
@@ -102,36 +102,27 @@ export const UlOfImageListWrapper = styled.ul`
 `;
 
 export const LiOfImageWrapper = styled.li`
-    width: 20%;
-    :nth-child(5n + 1) {
+    width: calc(20% - 9.6px);
+    border-radius: 10px;
+    margin: 0 6px 12px 6px; 
+    overflow: hidden;
+    line-height: 0;
+    :nth-of-type(5n + 1) {
+        margin: 0 6px 12px 0; 
         order: 1;
     }
-    :nth-child(5n + 2) {
+    :nth-of-type(5n + 2) {
         order: 2;
     }
-    :nth-child(5n + 3) {
+    :nth-of-type(5n + 3) {
         order: 3;
     }
-    :nth-child(5n + 4) {
+    :nth-of-type(5n + 4) {
         order: 4;
     }
-    :nth-child(5n) {
+    :nth-of-type(5n) {
+        margin: 0 0 12px 6px; 
         order: 5;
-    }
-
-    border-radius: 10px;
-    margin: 0 0 0 5px;
-    overflow: hidden;
-`;
-
-export const ImgOfContent = styled.img`
-    max-width: 100%;
-    cursor: pointer;
-    transition: transform .1s;
-    :hover {
-        -ms-transform: scale(1.2); /* IE 9 */
-        -webkit-transform: scale(1.2); /* Safari 3-8 */
-        transform: scale(1.2); 
     }
 `;
 
@@ -186,44 +177,38 @@ export const Span = styled.span`
     pointer-events: none;
 `;
 
-export const DivOfTitleContentWrapper = styled.div`
-    ${vertical}
-    justify-content: center;
-    width: calc(100% - (${imageOfContentWidth} + 20px));
-`
-
-export const DivOfTitle = styled.div`
-    margin: 0 0 8px 0;
+export const ImgOfContent = styled.img`
+    width: 100%;
     cursor: pointer;
+    transition: transform .1s;
     :hover {
-        text-decoration: underline;
+        -ms-transform: scale(1.2); // IE 9
+        -webkit-transform: scale(1.2); // Safari 3-8
+        transform: scale(1.2); 
     }
-    font-size: 18px;
-    font-weight: bold;
 `;
 
-export const DivOfContent = styled.div`
-    /* display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical; */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 15px;
-    color: #666;
+export const SpanOfBreaker = styled.span`
+    flex-basis: 100%;
+    width: 0 0 0 0;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    :nth-of-type(5n + 1) {
+        order: 1;
+    }
+    :nth-of-type(5n + 2) {
+        order: 2;
+    }
+    :nth-of-type(5n + 3) {
+        order: 3;
+    }
+    :nth-of-type(5n + 4) {
+        order: 4;
+    }
+    :nth-of-type(5n) {
+        order: 5;
+    }
 `;
-
-// export const ImgOfContent = styled.img`
-//     width: inherit;
-//     border: 1px solid rgba(0,0,0,0.1);
-//     cursor: pointer;
-//     transition: transform .1s;
-//     :hover {
-//         -ms-transform: scale(1.2); /* IE 9 */
-//         -webkit-transform: scale(1.2); /* Safari 3-8 */
-//         transform: scale(1.2); 
-//     }
-// `;
 
 export const DivOfModalWrapper = styled.div`
     ${vertical}

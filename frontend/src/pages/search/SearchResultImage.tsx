@@ -22,7 +22,8 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     }
     const [result, setResult] = useState<Result>({ meta: {}, data: [] });
     const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
-    const [changedKeyword, setChangedKeyword] = useState<string>(decodeURI(search.split('query=')[1]));
+    const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
+    const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const openModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = true;
@@ -37,8 +38,6 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
 
         document.body.style.overflow = '';
     };
-    const listRef = useRef<any>();
-    const itemsRef = useRef<Array<HTMLLIElement>>([]);
 
     // for pagination
     const [page, setPage] = useState<number>(1);
@@ -46,7 +45,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     const [error, setError] = useState(false);
     const loader = useRef(null);
 
-    const handleObserver = useCallback((entries: any) => {
+    const handleObserver = useCallback((entries: any): void => {
         const target = entries[0];
         if (target.isIntersecting) {
             setPage((prev: number): number => prev + 1);
@@ -73,6 +72,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     ];
     const [order, setOrder] = useState<string>('score');
     const [orderIsActive, setOrderIsActive] = useState<Array<boolean>>([true, false, false]);
+    const [orderForDetectOfFetchEffect, setOrderForDetectOfFetchEffect] = useState<string>('score');
 
     // for type
     const listOfResultDataTypeMenu = [
@@ -82,12 +82,56 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
         // { id: 4, link: `/search/video?query=${decodeURI(search.split('query=')[1])}`, name: '영상', svg: <Svg.Video active={false} /> },
     ];
 
+    // for image arrangement
+    const containerOfListOfImageWrapperRef = useRef<any>([]);
+    const listOfImageWrapperRef = useRef<Array<HTMLLIElement>>([]);
+    const imageOnloaded = (idxOfImage: number, arrOfImage: any): void => {
+        const maxCountOfColumn = containerOfListOfImageWrapperRef.current.dataset.columns;
+
+        const getHeight = (ImageWrapper: any): number => { // listOfImageWrapperRef.current[idx]
+            let elmMargin = 0;
+            let elmHeight = Math.ceil(parseFloat(getComputedStyle(ImageWrapper).height));
+            elmMargin += Math.ceil(parseFloat(getComputedStyle(ImageWrapper).marginTop));
+            elmMargin += Math.ceil(parseFloat(getComputedStyle(ImageWrapper).marginBottom));
+            return elmHeight + elmMargin;
+        };
+
+        const calculateMasonryHeight = (listOfImageWrapper: any): void => { // listOfImageWrapperRef.current
+            let idxOfColumn = 0;
+            const columns: any = [];
+            listOfImageWrapper.forEach((ImageWrapper: any): void => { // listOfImageWrapperRef.current[idx]
+                if (!columns[idxOfColumn]) {
+                    columns[idxOfColumn] = getHeight(ImageWrapper);
+                } else {
+                    columns[idxOfColumn] += getHeight(ImageWrapper);
+                }
+                idxOfColumn === maxCountOfColumn - 1 ? idxOfColumn = 0 : idxOfColumn++;
+            });
+            const maxHeight = Math.max(...columns);
+            containerOfListOfImageWrapperRef.current.style.height = maxHeight + 'px';
+        };
+
+        if (idxOfImage === arrOfImage.length - 1) {
+            calculateMasonryHeight(listOfImageWrapperRef.current);
+        }
+    };
+
+    useEffect(() => {
+        setKeyword(decodeURI(search.split('query=')[1]));
+        setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
+
+        setOrder('score');
+        setOrderIsActive([true, false, false]);
+    }, [search]);
+
     useEffect(() => {
         setResult({ meta: {}, data: [] });
-        setKeyword(decodeURI(search.split('query=')[1]));
-        setChangedKeyword(decodeURI(search.split('query=')[1]));
+        setKeywordForDetectOfFetchEffect(decodeURI(search.split('query=')[1]));
+
+        setOrderForDetectOfFetchEffect(order);
+
         setPage(1);
-    }, [search, order]);
+    }, [order, keywordForDetectOfSetPageEffect]);
 
     useEffect(() => {
         const fetchData = (): void => { // 나중에 useCallback으로 바꿀까?
@@ -102,9 +146,9 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                 .then((resultData: any): void => {
                     setResult((prev: Result): Result => ({ meta: resultData.data.meta, data: [...prev.data, ...resultData.data.data] }));
                     setModalIsOpen(resultData.data.data.map((): boolean => false));
-                }).then(() => {
+                }).then((): void => {
                     setLoading(false);
-                }).catch((err: any) => {
+                }).catch((err: any): void => {
                     setError(err);
                 });
             const paramsOfInsert = {
@@ -116,56 +160,13 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
         };
 
         fetchData();
-    }, [page, changedKeyword]);
-
-    const imagesOnLoad = (idx: number, arr: any) => {
-        const maxCount = listRef.current.dataset.columns;
-
-        function getHeight(item: HTMLLIElement) {
-            let elmMargin = 0;
-            let elmHeight = Math.ceil(item.offsetHeight);
-
-            elmMargin += Math.ceil(parseFloat(getComputedStyle(item).marginTop));
-            elmMargin += Math.ceil(parseFloat(getComputedStyle(item).marginBottom));
-
-            return elmHeight + elmMargin;
-        }
-        function calculateMasonryHeight(itemsRef: any) {
-            let index = 0;
-            const columns: any = [];
-
-            itemsRef.current.forEach((item: HTMLLIElement) => {
-                console.log(item);
-                if (item) {
-                    if (!columns[index]) {
-                        columns[index] = getHeight(item);
-                    } else {
-                        columns[index] += getHeight(item);
-                    }
-                    index === maxCount - 1 ? index = 0 : index++;
-                }
-            });
-            const maxHeight = Math.max(...columns); // 5개 column 중에 최대 높이
-            listRef.current.style.height = maxHeight + 'px';
-            itemsRef.current = [];
-
-            console.log(maxHeight);
-        };
-
-        if (idx === arr.length - 1) { // 모든 이미지가 로드돼서 사이즈 계산 끝난 시점
-            calculateMasonryHeight(itemsRef);
-        }
-    }
-
-    const onChangeRef = useCallback((element: HTMLLIElement, idx: number) => {
-        itemsRef.current[idx] = element;
-    }, []);
+    }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
 
     const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number, arr: any): JSX.Element =>
-        <S.LiOfImageWrapper ref={(element: HTMLLIElement) => {
-            onChangeRef(element, idx);
+        <S.LiOfImageWrapper onLoad={(): void => { imageOnloaded(idx, arr); }} ref={(element: HTMLLIElement): void => {
+            listOfImageWrapperRef.current[idx] = element;
         }} key={document._id} id={document._id} >
-            <S.ImgOfContent onLoad={(): void => { imagesOnLoad(idx, arr); }} src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
+            <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
             <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
@@ -186,6 +187,8 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
         <S.LiOfImageWrapper>
             <h3>검색된 결과가 없습니다.</h3>
         </S.LiOfImageWrapper>;
+
+    const elementsOfBreakerSpan = Array(5).fill('').map((): JSX.Element => <S.SpanOfBreaker />);
 
     const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
@@ -237,9 +240,10 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                                 {order.name}
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
-                    <S.UlOfImageListWrapper ref={listRef} data-columns="5">
+                    <S.UlOfListOfImageWrapper ref={containerOfListOfImageWrapperRef} data-columns="5">
                         {elementsOfESDocument}
-                    </S.UlOfImageListWrapper>
+                        {elementsOfBreakerSpan}
+                    </S.UlOfListOfImageWrapper>
                     {loading && <S.POfLoading>Loading...</S.POfLoading>}
                     {error && <S.POfError>Error!</S.POfError>}
                     <S.DivOfLoader ref={loader} />
