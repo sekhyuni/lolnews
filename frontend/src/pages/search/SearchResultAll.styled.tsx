@@ -43,7 +43,7 @@ export const Section = styled.section`
     height: fit-content;
     border: 0.5px solid #e1e1e1;
     border-radius: 10px;
-    padding: 0 30px 0 30px;
+    padding: 0 20px 0 20px;
     margin: 20px 0 20px 0;
     background-color: #fff;
 `;
@@ -66,7 +66,7 @@ export const AsideOfContent = styled.div`
     min-height: 100px;
     border: 0.5px solid #e1e1e1;
     border-radius: 10px;
-    padding: 20px 30px 20px 30px;
+    padding: 20px 20px 20px 20px;
     background-color: #fff;
 `;
 
@@ -131,7 +131,7 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
     }
 `;
 
-export const UlOfDocumentListWrapper = styled.ul`
+export const UlOfListOfDocumentWrapper = styled.ul`
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    

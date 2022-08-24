@@ -184,9 +184,9 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                                 {order.name}
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
-                    <S.UlOfDocumentListWrapper>
+                    <S.UlOfListOfDocumentWrapper>
                         {elementsOfESDocument}
-                    </S.UlOfDocumentListWrapper>
+                    </S.UlOfListOfDocumentWrapper>
                     {result.data.length !== 0 ?
                         <Pagination total={result.meta.count} page={page} setPage={setPage} /> : <></>}
                 </S.Section>
