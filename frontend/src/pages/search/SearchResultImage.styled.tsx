@@ -102,8 +102,8 @@ export const UlOfListOfImageWrapper = styled.ul`
 `;
 
 export const LiOfImageWrapper = styled.li`
-    ${({ dataExists }: any) => {
-        if (dataExists) {
+    ${({ id }: any) => {
+        if (id) {
             return css`
                 width: calc(20% - 9.6px);
                 border-radius: 10px;
@@ -133,6 +133,8 @@ export const LiOfImageWrapper = styled.li`
                 display: 'flex';
                 flex-direction: row;
                 justify-content: center;
+                border-top: 1px solid #e5e5e5;
+                padding: 20px 0 20px 0;
             `;
         }
     }}
@@ -329,4 +331,7 @@ export const POfError = styled.p`
 `;
 
 export const DivOfLoader = styled.div`
+`;
+
+export const H3OfNoneResult = styled.h3`  
 `;

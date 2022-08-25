@@ -142,7 +142,7 @@ export const LiOfDocumentWrapper = styled.li`
     flex-direction: row;
     justify-content: center;
     padding: 20px 0 20px 0;
-    border-bottom: ${({ id }) => id ? '1px solid #e5e5e5' : 'none'};
+    border-bottom: ${({ id }: any) => id ? '1px solid #e5e5e5' : 'none'};
     :first-child {
         border-top: 1px solid #e5e5e5;
     }
@@ -338,4 +338,7 @@ export const SpanfCountOfResultWrapper = styled.span`
 `;
 
 export const StrongOfCountOfResult = styled.strong`    
+`;
+
+export const H3OfNoneResult = styled.h3`  
 `;

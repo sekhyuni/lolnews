@@ -14,7 +14,6 @@ declare module 'react' {
     contentType?: string;
     type?: string;
     orderIsActive?: any;
-    dataExists?: boolean;
   }
 }
 

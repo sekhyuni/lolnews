@@ -165,7 +165,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
 
     const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number, arr: any): JSX.Element =>
-        <S.LiOfImageWrapper dataExists={true} onLoad={(): void => { imageOnloaded(idx, arr); }} ref={(element: HTMLLIElement): void => {
+        <S.LiOfImageWrapper onLoad={(): void => { imageOnloaded(idx, arr); }} ref={(element: HTMLLIElement): void => {
             listOfImageWrapperRef.current[idx] = element;
         }} key={document._id} id={document._id} >
             <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
@@ -186,8 +186,8 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
             </ReactModal>
         </S.LiOfImageWrapper>)
         :
-        <S.LiOfImageWrapper dataExists={false}>
-            {loading ? <></> : <h3>검색된 결과가 없습니다.</h3>}
+        <S.LiOfImageWrapper>
+            {loading ? <></> : <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>}
         </S.LiOfImageWrapper>;
 
     const elementsOfBreakerSpan = Array(5).fill('').map((): JSX.Element => <S.SpanOfBreaker />);
@@ -246,12 +246,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                         {elementsOfESDocument}
                         {elementsOfBreakerSpan}
                     </S.UlOfListOfImageWrapper>
-                    {loading && <Loader
-                        type="Oval"
-                        color="#1a73e8"
-                        height={100}
-                        width={100}
-                    />}
+                    {loading && <Loader type="Oval" color="#1a73e8" width={100} height={100} />}
                     <S.DivOfLoader ref={loader} />
                 </S.Section>
             </S.Main>

@@ -17,7 +17,7 @@ export const Footer = styled.footer`
     justify-content: center;
     align-items: center;
     height: 100px;
-    ${({ layoutName }) => {
+    ${({ layoutName }: any) => {
         if (layoutName === 'search') {
             return css`
                 border-top: 0.5px solid #e1e1e1;
@@ -32,7 +32,7 @@ export const FooterOfTopElementWrapper = styled.div`
     display: flex;
     flex-direction: row;
     font-size: 16px;
-    color: ${({ layoutName }) => layoutName !== 'search' ? '#fff' : '#7e7e7e'};
+    color: ${({ layoutName }: any) => layoutName !== 'search' ? '#fff' : '#7e7e7e'};
 `;
 
 export const FooterOfBottomElementWrapper = styled.div`
@@ -40,11 +40,11 @@ export const FooterOfBottomElementWrapper = styled.div`
     flex-direction: row;
     margin: 12px 0 12px 0;
     font-size: 16px;
-    color: ${({ layoutName }) => layoutName !== 'search' ? '#fff' : '#7e7e7e'};
+    color: ${({ layoutName }: any) => layoutName !== 'search' ? '#fff' : '#7e7e7e'};
 `;
 
 export const FooterOfTopElement = styled.div`
-    border-left: ${({ layoutName }) => layoutName !== 'search' ? '1.2px solid #fff' : '1.2px solid #7e7e7e'};
+    border-left: ${({ layoutName }: any) => layoutName !== 'search' ? '1.2px solid #fff' : '1.2px solid #7e7e7e'};
     :first-child {
         border-left: 0;
     }
@@ -78,5 +78,5 @@ export const AOfCorps = styled.a`
         text-decoration: underline;
     }
     font-weight: bold;
-    color: ${({ layoutName }) => layoutName !== 'search' ? '#94cf58' : 'inherit'};
+    color: ${({ layoutName }: any) => layoutName !== 'search' ? '#94cf58' : 'inherit'};
 `;

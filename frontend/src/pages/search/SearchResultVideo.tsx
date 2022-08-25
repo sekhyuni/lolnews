@@ -129,7 +129,7 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         </S.LiOfDocumentWrapper>)
         :
         <S.LiOfDocumentWrapper>
-            <h3>검색된 결과가 없습니다.</h3>
+            <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>
         </S.LiOfDocumentWrapper>;
 
     const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
