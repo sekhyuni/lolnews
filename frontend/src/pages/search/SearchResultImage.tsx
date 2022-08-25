@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactModal from 'react-modal';
+import Loader from 'react-loader-spinner';
 import doAxiosRequest from '../../functions/doAxiosRequest';
 import { re } from '../../functions/re-template-tag';
 import Footer from '../../layouts/footer/Footer';
@@ -41,28 +42,6 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
 
     // for pagination
     const [page, setPage] = useState<number>(1);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState(false);
-    const loader = useRef(null);
-
-    const handleObserver = useCallback((entries: any): void => {
-        const target = entries[0];
-        if (target.isIntersecting) {
-            setPage((prev: number): number => prev + 1);
-        }
-    }, []);
-
-    useEffect(() => {
-        const option = {
-            root: null,
-            rootMargin: "20px",
-            threshold: 0
-        };
-        const observer = new IntersectionObserver(handleObserver, option);
-        if (loader.current) {
-            observer.observe(loader.current);
-        }
-    }, [handleObserver]);
 
     // for sort
     const listOfOrder = [
@@ -81,6 +60,28 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
         { id: 3, link: `/search/image?query=${decodeURI(search.split('query=')[1])}`, name: '포토', svg: <Svg.Image active={true} /> },
         // { id: 4, link: `/search/video?query=${decodeURI(search.split('query=')[1])}`, name: '영상', svg: <Svg.Video active={false} /> },
     ];
+
+    // for loading
+    const [loading, setLoading] = useState<boolean>(true);
+    const loader = useRef<HTMLDivElement>(null);
+    const handleObserver = useCallback((entries: any): void => {
+        const target = entries[0];
+        if (target.isIntersecting) {
+            setPage((prev: number): number => prev + 1);
+        }
+    }, []);
+
+    useEffect(() => {
+        const option = {
+            root: null,
+            rootMargin: "500px 500px 500px 500px", // 값이 클수록 빨리 감지됨
+            threshold: 0 // 0~1에서 1이면 추적하는 요소가 전부 보여야 감지됨
+        };
+        const observer = new IntersectionObserver(handleObserver, option);
+        if (loader.current) {
+            observer.observe(loader.current);
+        }
+    }, [handleObserver]);
 
     // for image arrangement
     const containerOfListOfImageWrapperRef = useRef<any>([]);
@@ -113,6 +114,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
 
         if (idxOfImage === arrOfImage.length - 1) {
             calculateMasonryHeight(listOfImageWrapperRef.current);
+            setLoading(false);
         }
     };
 
@@ -146,10 +148,10 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                 .then((resultData: any): void => {
                     setResult((prev: Result): Result => ({ meta: resultData.data.meta, data: [...prev.data, ...resultData.data.data] }));
                     setModalIsOpen(resultData.data.data.map((): boolean => false));
-                }).then((): void => {
-                    setLoading(false);
                 }).catch((err: any): void => {
-                    setError(err);
+                    setLoading(false);
+                    containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
+                    console.error(err);
                 });
             const paramsOfInsert = {
                 word: decodeURI(search.split('query=')[1])
@@ -163,7 +165,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
 
     const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number, arr: any): JSX.Element =>
-        <S.LiOfImageWrapper onLoad={(): void => { imageOnloaded(idx, arr); }} ref={(element: HTMLLIElement): void => {
+        <S.LiOfImageWrapper dataExists={true} onLoad={(): void => { imageOnloaded(idx, arr); }} ref={(element: HTMLLIElement): void => {
             listOfImageWrapperRef.current[idx] = element;
         }} key={document._id} id={document._id} >
             <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
@@ -184,8 +186,8 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
             </ReactModal>
         </S.LiOfImageWrapper>)
         :
-        <S.LiOfImageWrapper>
-            <h3>검색된 결과가 없습니다.</h3>
+        <S.LiOfImageWrapper dataExists={false}>
+            {loading ? <></> : <h3>검색된 결과가 없습니다.</h3>}
         </S.LiOfImageWrapper>;
 
     const elementsOfBreakerSpan = Array(5).fill('').map((): JSX.Element => <S.SpanOfBreaker />);
@@ -244,8 +246,12 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                         {elementsOfESDocument}
                         {elementsOfBreakerSpan}
                     </S.UlOfListOfImageWrapper>
-                    {loading && <S.POfLoading>Loading...</S.POfLoading>}
-                    {error && <S.POfError>Error!</S.POfError>}
+                    {loading && <Loader
+                        type="Oval"
+                        color="#1a73e8"
+                        height={100}
+                        width={100}
+                    />}
                     <S.DivOfLoader ref={loader} />
                 </S.Section>
             </S.Main>

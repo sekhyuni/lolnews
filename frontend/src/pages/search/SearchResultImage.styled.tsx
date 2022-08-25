@@ -102,28 +102,40 @@ export const UlOfListOfImageWrapper = styled.ul`
 `;
 
 export const LiOfImageWrapper = styled.li`
-    width: calc(20% - 9.6px);
-    border-radius: 10px;
-    margin: 0 6px 12px 6px; 
-    overflow: hidden;
-    line-height: 0;
-    :nth-of-type(5n + 1) {
-        margin: 0 6px 12px 0; 
-        order: 1;
-    }
-    :nth-of-type(5n + 2) {
-        order: 2;
-    }
-    :nth-of-type(5n + 3) {
-        order: 3;
-    }
-    :nth-of-type(5n + 4) {
-        order: 4;
-    }
-    :nth-of-type(5n) {
-        margin: 0 0 12px 6px; 
-        order: 5;
-    }
+    ${({ dataExists }: any) => {
+        if (dataExists) {
+            return css`
+                width: calc(20% - 9.6px);
+                border-radius: 10px;
+                margin: 0 6px 12px 6px; 
+                overflow: hidden;
+                line-height: 0;
+                :nth-of-type(5n + 1) {
+                    margin: 0 6px 12px 0; 
+                    order: 1;
+                }
+                :nth-of-type(5n + 2) {
+                    order: 2;
+                }
+                :nth-of-type(5n + 3) {
+                    order: 3;
+                }
+                :nth-of-type(5n + 4) {
+                    order: 4;
+                }
+                :nth-of-type(5n) {
+                    margin: 0 0 12px 6px; 
+                    order: 5;
+                }
+            `;
+        } else {
+            return css`
+                display: 'flex';
+                flex-direction: row;
+                justify-content: center;
+            `;
+        }
+    }}
 `;
 
 export const Nav = styled.nav`
