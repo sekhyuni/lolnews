@@ -87,33 +87,10 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     const containerOfListOfImageWrapperRef = useRef<any>([]);
     const listOfImageWrapperRef = useRef<Array<HTMLLIElement>>([]);
     const imageOnloaded = (idxOfImage: number, arrOfImage: any): void => {
-        const maxCountOfColumn = containerOfListOfImageWrapperRef.current.dataset.columns;
-
-        const getHeight = (ImageWrapper: any): number => { // listOfImageWrapperRef.current[idx]
-            let elmMargin = 0;
-            let elmHeight = Math.ceil(parseFloat(getComputedStyle(ImageWrapper).height));
-            elmMargin += Math.ceil(parseFloat(getComputedStyle(ImageWrapper).marginTop));
-            elmMargin += Math.ceil(parseFloat(getComputedStyle(ImageWrapper).marginBottom));
-            return elmHeight + elmMargin;
-        };
-
-        const calculateMasonryHeight = (listOfImageWrapper: any): void => { // listOfImageWrapperRef.current
-            let idxOfColumn = 0;
-            const columns: any = [];
-            listOfImageWrapper.forEach((ImageWrapper: any): void => { // listOfImageWrapperRef.current[idx]
-                if (!columns[idxOfColumn]) {
-                    columns[idxOfColumn] = getHeight(ImageWrapper);
-                } else {
-                    columns[idxOfColumn] += getHeight(ImageWrapper);
-                }
-                idxOfColumn === maxCountOfColumn - 1 ? idxOfColumn = 0 : idxOfColumn++;
-            });
-            const maxHeight = Math.max(...columns);
-            containerOfListOfImageWrapperRef.current.style.height = maxHeight + 'px';
-        };
 
         if (idxOfImage === arrOfImage.length - 1) {
-            calculateMasonryHeight(listOfImageWrapperRef.current);
+
+            
             setLoading(false);
         }
     };
