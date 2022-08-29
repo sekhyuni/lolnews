@@ -87,15 +87,15 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     const containerOfListOfImageWrapperRef = useRef<any>([]);
     const listOfImageWrapperRef = useRef<Array<HTMLLIElement>>([]);
     const imageOnloaded = (idxOfImage: number, arrOfImage: any): void => {
+        Bricks({
+            container: containerOfListOfImageWrapperRef.current,
+            packed: 'data-packed',
+            position: true,
+            sizes: [
+                { columns: 5, gutter: 12 }, // gutter는 column 사이 간격 (px)
+            ]
+        }).resize(true).pack();
         if (idxOfImage === arrOfImage.length - 1) {
-            Bricks({
-                container: containerOfListOfImageWrapperRef.current,
-                packed: 'data-packed',
-                position: true,
-                sizes: [
-                    { columns: 5, gutter: 12 }, // gutter는 column 사이 간격 (px)
-                ]
-            }).resize(true).pack();
             setLoading(false);
         }
     };
