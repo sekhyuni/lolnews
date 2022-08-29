@@ -40,7 +40,7 @@ const client = new Client({
     node: 'https://172.24.24.84:32311',
     auth: {
         username: 'elastic',
-        password: '4w88klz48xcgvdq8m9gsncvt',
+        password: '82xplpfhp796slkbzx55csbl',
     },
     ssl: {
         rejectUnauthorized: false,

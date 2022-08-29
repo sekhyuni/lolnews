@@ -19,7 +19,7 @@ function Pagination({ total, page, setPage }: any) {
                 }} disabled={page === 1}>
                     &lt;
                 </S.ButtonOfPage>
-                {Array(numPages).fill('').map((_, idx) => {
+                {Array(numPages).fill('').map((_, idx: number): JSX.Element | undefined => {
                     if (idx >= pageStartIdx - 1 && idx <= pageEndIdx - 1) {
                         return (
                             <S.ButtonOfPage

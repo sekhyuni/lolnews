@@ -23,7 +23,8 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
     }
     const [result, setResult] = useState<Result>({ meta: {}, data: [] });
     const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
-    const [changedKeyword, setChangedKeyword] = useState<string>(decodeURI(search.split('query=')[1]));
+    const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
+    const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const openModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = true;
@@ -50,6 +51,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
     ];
     const [order, setOrder] = useState<string>('score');
     const [orderIsActive, setOrderIsActive] = useState<Array<boolean>>([true, false, false]);
+    const [orderForDetectOfFetchEffect, setOrderForDetectOfFetchEffect] = useState<string>('score');
 
     // for type
     const listOfResultDataTypeMenu = [
@@ -59,15 +61,23 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
         // { id: 4, link: `/search/video?query=${decodeURI(search.split('query=')[1])}`, name: '영상', svg: <Svg.Video active={false} /> },
     ];
 
-    useEffect(() => {
+    useEffect(() => { // for set order, when keyword is changed
         setKeyword(decodeURI(search.split('query=')[1]));
-        setChangedKeyword(decodeURI(search.split('query=')[1]));
-        setPage(1);
+        setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
+
         setOrder('score');
         setOrderIsActive([true, false, false]);
     }, [search]);
 
-    useEffect(() => {
+    useEffect(() => { // for set page, when keyword or order is changed
+        setKeywordForDetectOfFetchEffect(decodeURI(search.split('query=')[1]));
+
+        setOrderForDetectOfFetchEffect(order);
+
+        setPage(1);
+    }, [order, keywordForDetectOfSetPageEffect]);
+
+    useEffect(() => { // for fetch, when keyword or order or page is changed
         const fetchData = (): void => { // 나중에 useCallback으로 바꿀까?
             const paramsOfSearch = {
                 query: decodeURI(search.split('query=')[1]),
@@ -88,23 +98,23 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
         };
 
         fetchData();
-    }, [page, order, changedKeyword]);
+    }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
 
     const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number): JSX.Element =>
         <S.LiOfDocumentWrapper key={document._id} id={document._id}>
-            <S.ImgOfContent src={document._source.thumbnail} onClick={() => { openModal(idx); }} />
+            <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
             <S.DivOfTitleContentWrapper>
-                <S.DivOfTitle onClick={() => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                <S.DivOfTitle onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                     pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfTitle>
                 <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
                     pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
                 </S.DivOfContent>
             </S.DivOfTitleContentWrapper>
-            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={() => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
+            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={() => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
@@ -119,7 +129,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
         </S.LiOfDocumentWrapper>)
         :
         <S.LiOfDocumentWrapper>
-            <h3>검색된 결과가 없습니다.</h3>
+            <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>
         </S.LiOfDocumentWrapper>;
 
     const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
@@ -136,7 +146,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
         <S.DivOfLayoutWrapper>
             <S.Header>
                 <S.HeaderOfTop>
-                    <S.LinkOfLogo to="/" onClick={() => { setKeyword(''); }}>
+                    <S.LinkOfLogo to="/" onClick={(): void => { setKeyword(''); }}>
                         <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkOfLogo>
                     <S.Div>
@@ -146,7 +156,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
                         {isAuthorized ?
                             <Dropdown layoutName="search" search={search} setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
                             :
-                            <S.LinkOfLoginPage to="/login" onClick={() => {
+                            <S.LinkOfLoginPage to="/login" onClick={(): void => {
                                 setKeyword(decodeURI(search.split('query=')[1]));
                             }}>
                                 로그인
@@ -164,19 +174,19 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
                     <S.DivOfLnb>
                         {listOfOrder.map((order: any, idx: number): JSX.Element =>
                             <S.ButtonOfSort
-                                orderIsActive={orderIsActive[idx]} onClick={() => {
+                                orderIsActive={orderIsActive[idx]} onClick={(): void => {
                                     setOrder(order.value);
 
-                                    const newOrderIsActive = listOfOrder.map(() => false);
+                                    const newOrderIsActive = listOfOrder.map((): boolean => false);
                                     newOrderIsActive[idx] = true;
                                     setOrderIsActive(newOrderIsActive);
                                 }}>
                                 {order.name}
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
-                    <S.UlOfDocumentListWrapper>
+                    <S.UlOfListOfDocumentWrapper>
                         {elementsOfESDocument}
-                    </S.UlOfDocumentListWrapper>
+                    </S.UlOfListOfDocumentWrapper>
                     {result.data.length !== 0 ?
                         <Pagination total={result.meta.count} page={page} setPage={setPage} /> : <></>}
                 </S.Section>

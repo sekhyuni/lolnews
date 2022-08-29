@@ -1,6 +1,19 @@
 import { Link as Link_ } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import urlOfWallpaperbette from '../../assets/wallpaperbette.jpg';
+import urlOfSunOfBackgroundImage from '../../assets/background0.jpg';
+import urlOfMonOfBackgroundImage from '../../assets/background1.jpg';
+import urlOfTueOfBackgroundImage from '../../assets/background2.jpg';
+import urlOfWedOfBackgroundImage from '../../assets/background3.jpg';
+import urlOfThuOfBackgroundImage from '../../assets/background4.jpg';
+import urlOfFriOfBackgroundImage from '../../assets/background5.jpg';
+import urlOfSatOfBackgroundImage from '../../assets/background6.jpg';
+
+const getUrlOfBackgroundImage = () => {
+    const day = new Date().getDay();
+    const listOfImage = [urlOfSunOfBackgroundImage, urlOfMonOfBackgroundImage, urlOfTueOfBackgroundImage, urlOfWedOfBackgroundImage, urlOfThuOfBackgroundImage, urlOfFriOfBackgroundImage, urlOfSatOfBackgroundImage];
+
+    return listOfImage.filter((_, idx: number): boolean => day === idx);
+};
 
 const vertical = css`
     display: flex;
@@ -20,7 +33,7 @@ const footerWidth = '100px';
 export const DivOfLayoutWrapper = styled.div`
     ${vertical}
     height: 100vh;
-    background-image: url(${urlOfWallpaperbette});
+    background-image: url(${getUrlOfBackgroundImage()});
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: scroll;

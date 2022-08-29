@@ -21,14 +21,17 @@ class TextPrep:
     def __init__(self):
         self.mecab = Mecab()
 
-    def text_analysis(self, text, valid_pos = ["NNG", "NNP", "SL"]):
+    def text_analysis(self, text, only_noun=True):
+        """Preprcessing 전체
+        - input) 원본 텍스트
+        - output) 토큰 list"""
         refined_text = self.text_refine(text)
         # print(f"after step1)\n{refined_text}")
         # print('-'*50)
         text_applied_thes, index_to_key = self.apply_thesaurus(refined_text)
         # print(f"after step2)\n{text_applied_thes}")
         # print('-'*50)
-        text_valid_lst = self.pos_analysis(text_applied_thes)
+        text_valid_lst = self.pos_analysis(text_applied_thes, only_noun)
         # print(f"after step3)\n{text_valid_lst}")
         # print('-'*50)
         decoded_text_lst = [index_to_key[word] if word in index_to_key else word for word, _ in text_valid_lst ]
@@ -36,6 +39,13 @@ class TextPrep:
 
     def text_refine(self, text):
         """step1) 텍스트 정제"""
+
+        # html character entity
+        text = re.sub('&lt;', "", text) # <
+        text = re.sub("&gt;", "", text) # >
+        text = re.sub("&nbsp;", "", text) # 공백
+        text = re.sub("&amp;", "", text) # &
+        text = re.sub("&quot;", "", text) # "         
         
         # 엑스포츠 뉴스
         text = re.sub("\(.+기자\)", "", text)
@@ -77,11 +87,54 @@ class TextPrep:
 
         return text
 
-    def pos_analysis(self, text_applied_thes, valid_pos = ["NNG", "NNP", "SL"]):
+    def pos_analysis(self, text_applied_thes, only_noun=True):
         """step3) 형태소 분석"""
         text_pos_lst = self.mecab.pos(text_applied_thes)
-        text_valid_lst = [(word, pos) for word, pos in text_pos_lst if pos in valid_pos]
+        if only_noun:
+            valid_pos = ["NNG", "NNP", "SL"]
+            text_valid_lst = [(word, pos) for word, pos in text_pos_lst if pos in valid_pos]
+        else:
+            valid_pos = ["NNG", "NNP", "NNB", "NNBC", "NR", # 대명사 제외
+                         "VV", "VA", "MAG", "SL", "SN", "VX", "XR"]
+            text_pos_lst = [(word+'다', pos) if pos in ['VV', 'VA', 'VX'] else (word, pos) \
+                        for word, pos in text_pos_lst ]
+            pv = re.compile(r"VX|VV|VA") 
+            text_valid_lst = [(word, pos)
+                                for word, pos
+                                in text_pos_lst
+                                if (pos in valid_pos) | (re.search(pv, pos) is not None)]
+            text_valid_lst = self._combine_pos_sn_nnbc(text_valid_lst)
         return text_valid_lst
+
+    def _combine_pos_sn_nnbc(self, pos_lst):
+        """
+        input : 형태소분석 결과 list [(word1, pos1), (word2, pos2), ...]
+        output : 형태소분석 결과 list [(word1, pos1), (word2, pos2), ...]
+            - SN + NNBC = NNBC로 합치기
+        예) 2주 = [('2', 'SN'), ('주', 'NNBC)] -> [('2주', 'NNBC')]
+        """
+        res_sn = ()
+        final_pos_lst = []
+        for res in pos_lst:
+            next_word, next_pos = res
+            if res_sn:
+                if next_pos == "NNBC":
+                    word, _ = res_sn
+                    next_word = word + next_word
+                    final_pos_lst.append((next_word, next_pos))
+                    res_sn = ()
+                elif next_pos == 'SN':
+                    final_pos_lst.append(res_sn)
+                    res_sn = res
+                else:
+                    final_pos_lst += [res_sn, res]
+                    res_sn = ()
+            else:
+                if next_pos == 'SN':
+                    res_sn = res
+                else:
+                    final_pos_lst.append(res)
+        return final_pos_lst
 
     def _iter_all_strings(self):
         for size in itertools.count(1):
@@ -116,6 +169,9 @@ class TextPrep:
                 header = next(reader)
                 header.append("text_prep_title_array")
                 header.append("text_prep_content_array")
+                header.append("text_prep_noun_title_array")
+                header.append("text_prep_noun_content_array")
+        
                 writer.writerow(header)
 
                 idx_title = header.index('title')
@@ -123,20 +179,23 @@ class TextPrep:
                 for item in reader:
                     title = item[idx_title]
                     content = item[idx_content]
-                    item.append(self.text_analysis(title))
-                    item.append(self.text_analysis(content))
+                    item.append(self.text_analysis(title, only_noun=False))
+                    item.append(self.text_analysis(content, only_noun=False))
+                    item.append(self.text_analysis(title, only_noun=True))
+                    item.append(self.text_analysis(content, only_noun=True))
                     writer.writerow(item)
         
 if __name__ == "__main__":
-    ## Test1 (크롤링한 데이터 전처리해서 다시 저장)
-    # preper = TextPrep()
-    # crawled_file_lst = glob.glob(os.path.join(CRAWLING_DATA_DIR, 'latest') + '/*.csv')
-    # date_lst = [i.split('/')[-1][:-4] for i in crawled_file_lst]
-    # for date in date_lst:
-    #     preper.create_prep_file(date)
-    #     print(f">>> Done preprocessing {date}")
-    ## Test2 (텍스트 넣어보기)
-    text = """Liiv Sandbox 이에 더해 쉬바나를 5판, 레넥톤을 2판 플레이하며 조커픽으로 활용할 여지를 더했다. 서머 시즌 우승팀은 리그오브레전드 월드 챔피언십(롤드컵) 직행이 확정된다. T1과 젠지 양 팀 모두 플레이오프 2라운드 상대팀 선택권을 갖는 리그 1위를 노리는 이유다. 유독 T1에게 약한 모습을 보였던 젠지가 오늘 트라우마를 극복할지, 아니면 T1이 다시 한번 젠지에게 공포심을 더할지 그 결과에 따라 서머 시즌 우승팀이 가려질 것으로 보인다."""
-    print(text)
-    print('-'*50)
-    print(TextPrep().text_analysis(text))
+    # Test1 (크롤링한 데이터 전처리해서 다시 저장)
+    preper = TextPrep()
+    crawled_file_lst = glob.glob(os.path.join(CRAWLING_DATA_DIR, 'latest') + '/*.csv')
+    date_lst = [i.split('/')[-1][:-4] for i in crawled_file_lst]
+    for date in date_lst:
+        preper.create_prep_file(date)
+        print(f">>> Done preprocessing {date}")
+    # # Test2 (텍스트 넣어보기)
+    # # text = """Liiv Sandbox 이에 더해 쉬바나를 5판, 레넥톤을 2판 플레이하며 조커픽으로 활용할 여지를 더했다. 서머 시즌 우승팀은 리그오브레전드 월드 챔피언십(롤드컵) 직행이 확정된다. T1과 젠지 양 팀 모두 플레이오프 2라운드 상대팀 선택권을 갖는 리그 1위를 노리는 이유다. 유독 T1에게 약한 모습을 보였던 젠지가 오늘 트라우마를 극복할지, 아니면 T1이 다시 한번 젠지에게 공포심을 더할지 그 결과에 따라 서머 시즌 우승팀이 가려질 것으로 보인다."""
+    # text = "[위클리 파워랭킹] 정글 모르가나 선보인 '피넛', 2주 연속 정글 1위"
+    # print(text)
+    # print('-'*50)
+    # print(TextPrep().text_analysis(text, only_noun=False))

@@ -7,14 +7,14 @@ export const Form = styled.form`
 `;
 
 export const InputOfSearch = styled.input`
-    width: ${({ layoutName }) => layoutName === 'main' ? 'min(70vw, 850px)' : '800px'};
+    width: ${({ layoutName }: any) => layoutName === 'main' ? 'min(70vw, 850px)' : '800px'};
     height: 40px;
     border: 1.5px solid #ededed;
     border-radius: 30px;
     padding: 20px 45px;
     font-size: 1.1rem;
     font-weight: 500;
-    ${({ layoutName }) => {
+    ${({ layoutName }: any) => {
         if (layoutName === 'main') {
             return css`
                 box-shadow: 0 2px 5px 1px #94cf58;

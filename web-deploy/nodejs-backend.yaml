@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nodejs-backend
+  name: nodejs-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-backend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nodejs-backend
+    spec:
+      containers:
+      - image: lbg3977/nodejs:backend
+        name: nodejs
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - mountPath: /backend
+          name: backend
+        resources: {}
+      volumes:
+      - name: backend
+        persistentVolumeClaim:
+          claimName: nodejs-backend
+status: {}
+
