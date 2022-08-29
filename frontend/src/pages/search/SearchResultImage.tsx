@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactModal from 'react-modal';
+import Bricks from 'bricks.js';
 import Loader from 'react-loader-spinner';
 import doAxiosRequest from '../../functions/doAxiosRequest';
 import { re } from '../../functions/re-template-tag';
@@ -70,11 +71,10 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
             setPage((prev: number): number => prev + 1);
         }
     }, []);
-
     useEffect(() => {
         const option = {
             root: null,
-            rootMargin: "500px 500px 500px 500px", // 값이 클수록 빨리 감지됨
+            rootMargin: "0px", // 값이 클수록 빨리 감지됨
             threshold: 0 // 0~1에서 1이면 추적하는 요소가 전부 보여야 감지됨
         };
         const observer = new IntersectionObserver(handleObserver, option);
@@ -87,33 +87,15 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     const containerOfListOfImageWrapperRef = useRef<any>([]);
     const listOfImageWrapperRef = useRef<Array<HTMLLIElement>>([]);
     const imageOnloaded = (idxOfImage: number, arrOfImage: any): void => {
-        const maxCountOfColumn = containerOfListOfImageWrapperRef.current.dataset.columns;
-
-        const getHeight = (ImageWrapper: any): number => { // listOfImageWrapperRef.current[idx]
-            let elmMargin = 0;
-            let elmHeight = Math.ceil(parseFloat(getComputedStyle(ImageWrapper).height));
-            elmMargin += Math.ceil(parseFloat(getComputedStyle(ImageWrapper).marginTop));
-            elmMargin += Math.ceil(parseFloat(getComputedStyle(ImageWrapper).marginBottom));
-            return elmHeight + elmMargin;
-        };
-
-        const calculateMasonryHeight = (listOfImageWrapper: any): void => { // listOfImageWrapperRef.current
-            let idxOfColumn = 0;
-            const columns: any = [];
-            listOfImageWrapper.forEach((ImageWrapper: any): void => { // listOfImageWrapperRef.current[idx]
-                if (!columns[idxOfColumn]) {
-                    columns[idxOfColumn] = getHeight(ImageWrapper);
-                } else {
-                    columns[idxOfColumn] += getHeight(ImageWrapper);
-                }
-                idxOfColumn === maxCountOfColumn - 1 ? idxOfColumn = 0 : idxOfColumn++;
-            });
-            const maxHeight = Math.max(...columns);
-            containerOfListOfImageWrapperRef.current.style.height = maxHeight + 'px';
-        };
-
         if (idxOfImage === arrOfImage.length - 1) {
-            calculateMasonryHeight(listOfImageWrapperRef.current);
+            Bricks({
+                container: containerOfListOfImageWrapperRef.current,
+                packed: 'data-packed',
+                position: true,
+                sizes: [
+                    { columns: 5, gutter: 12 }, // gutter는 column 사이 간격 (px)
+                ]
+            }).resize(true).pack();
             setLoading(false);
         }
     };
@@ -148,6 +130,10 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                 .then((resultData: any): void => {
                     setResult((prev: Result): Result => ({ meta: resultData.data.meta, data: [...prev.data, ...resultData.data.data] }));
                     setModalIsOpen(resultData.data.data.map((): boolean => false));
+                    if (resultData.data.data.length === 0) {
+                        setLoading(false);
+                        containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
+                    }
                 }).catch((err: any): void => {
                     setLoading(false);
                     containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
@@ -189,8 +175,6 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
         <S.LiOfImageWrapper>
             {loading ? <></> : <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>}
         </S.LiOfImageWrapper>;
-
-    const elementsOfBreakerSpan = Array(5).fill('').map((): JSX.Element => <S.SpanOfBreaker />);
 
     const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
@@ -242,9 +226,8 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                                 {order.name}
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
-                    <S.UlOfListOfImageWrapper ref={containerOfListOfImageWrapperRef} data-columns="5">
+                    <S.UlOfListOfImageWrapper ref={containerOfListOfImageWrapperRef}>
                         {elementsOfESDocument}
-                        {elementsOfBreakerSpan}
                     </S.UlOfListOfImageWrapper>
                     {loading && <Loader type="Oval" color="#1a73e8" width={100} height={100} />}
                     <S.DivOfLoader ref={loader} />

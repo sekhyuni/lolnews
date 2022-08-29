@@ -21,8 +21,6 @@ const asideWidth = '350px';
 
 const footerWidth = '100px';
 
-const imageOfContentWidth = '120px';
-
 // layout
 export const DivOfLayoutWrapper = styled.div`
     ${vertical}
@@ -39,7 +37,7 @@ export const Main = styled.main`
 export const Section = styled.section`
     ${vertical}
     text-align: center;
-    width: 100vw;
+    width: 100%;
     height: fit-content;
     border: 0.5px solid #e1e1e1;
     border-radius: 10px;
@@ -96,9 +94,6 @@ export const UlOfListOfImageWrapper = styled.ul`
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
 `;
 
 export const LiOfImageWrapper = styled.li`
@@ -106,27 +101,9 @@ export const LiOfImageWrapper = styled.li`
         if (id) {
             return css`
                 width: calc(20% - 9.6px);
-                border-radius: 10px;
-                margin: 0 6px 12px 6px; 
+                border-radius: 10px;   
                 overflow: hidden;
                 line-height: 0;
-                :nth-of-type(5n + 1) {
-                    margin: 0 6px 12px 0; 
-                    order: 1;
-                }
-                :nth-of-type(5n + 2) {
-                    order: 2;
-                }
-                :nth-of-type(5n + 3) {
-                    order: 3;
-                }
-                :nth-of-type(5n + 4) {
-                    order: 4;
-                }
-                :nth-of-type(5n) {
-                    margin: 0 0 12px 6px; 
-                    order: 5;
-                }
             `;
         } else {
             return css`
@@ -199,28 +176,6 @@ export const ImgOfContent = styled.img`
         -ms-transform: scale(1.2); // IE 9
         -webkit-transform: scale(1.2); // Safari 3-8
         transform: scale(1.2); 
-    }
-`;
-
-export const SpanOfBreaker = styled.span`
-    flex-basis: 100%;
-    width: 0 0 0 0;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
-    :nth-of-type(5n + 1) {
-        order: 1;
-    }
-    :nth-of-type(5n + 2) {
-        order: 2;
-    }
-    :nth-of-type(5n + 3) {
-        order: 3;
-    }
-    :nth-of-type(5n + 4) {
-        order: 4;
-    }
-    :nth-of-type(5n) {
-        order: 5;
     }
 `;
 

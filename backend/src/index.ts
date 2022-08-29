@@ -22,7 +22,7 @@ app.use(express.json());
 
 // MongoDB Connection
 const NODE_PORT: number = 8081;
-const MONGODB_URL: string = 'mongodb://root:B3JS8YWV5O@172.24.24.84:31806/lolnews?authSource=admin&authMechanism=SCRAM-SHA-1';
+const MONGODB_URL: string = 'mongodb://root:vagrant@172.24.24.84:31806/lolnews?authSource=admin&authMechanism=SCRAM-SHA-1';
 // const MONGODB_URL: string = 'mongodb://localhost:27017/lolnews';
 const connection = mongoose.connect(MONGODB_URL);
 connection
@@ -40,7 +40,7 @@ const client = new Client({
     node: 'https://172.24.24.84:32311',
     auth: {
         username: 'elastic',
-        password: '82xplpfhp796slkbzx55csbl',
+        password: 'jp5r4fwmhfz2mz72k2k42lmz',
     },
     ssl: {
         rejectUnauthorized: false,
@@ -52,8 +52,8 @@ const run = async ({ query, page, order, isImageRequest }: any): Promise<any> =>
         index: 'news_index',
         body: {
             track_total_hits: true,
-            from: JSON.parse(isImageRequest) ? (Number(page) - 1) * 30 : (Number(page) - 1) * 10,
-            size: JSON.parse(isImageRequest) ? 30 : 10,
+            from: JSON.parse(isImageRequest) ? (Number(page) - 1) * 50 : (Number(page) - 1) * 10,
+            size: JSON.parse(isImageRequest) ? 50 : 10,
             query: {
                 match: {
                     content: query
@@ -65,7 +65,10 @@ const run = async ({ query, page, order, isImageRequest }: any): Promise<any> =>
 
     return client.search(params)
         .then((result: ApiResponse) => ({ meta: { count: result.body.hits.total.value }, data: result.body.hits.hits }))
-        .catch((err: Error) => err);
+        .catch((err: Error) => {
+            console.error(err);
+            return err;
+        });
 };
 
 // 키워드 검색
