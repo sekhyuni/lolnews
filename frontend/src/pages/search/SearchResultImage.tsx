@@ -138,7 +138,9 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                     setModalIsOpen(resultData.data.data.map((): boolean => false));
                     if (resultData.data.data.length === 0) {
                         setLoading(false);
-                        containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
+                        if (result.data.length === 0) { // 첫 요청 시에는 렌더링 전이므로 무조건 초깃값으로 0이지만, 이후 요청 시에는 0인 경우가 존재하지 않음
+                            containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
+                        }
                     }
                 }).catch((err: any): void => {
                     setLoading(false);
