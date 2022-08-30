@@ -11,7 +11,7 @@ import Dropdown from '../../components/dropdown/Dropdown';
 import * as S from './SearchResultImage.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
+const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, isChangedType }: any) => {
     const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     // for location
@@ -26,6 +26,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
     const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
     const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
+    const isChangedKeyword = useRef<boolean>(false);
     const openModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = true;
@@ -106,6 +107,11 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
 
         setOrder('score');
         setOrderIsActive([true, false, false]);
+
+        if (!isChangedType.current) {
+            isChangedKeyword.current = true;
+        }
+        isChangedType.current = false;
     }, [search]);
 
     useEffect(() => {
@@ -139,12 +145,15 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                     containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
                     console.error(err);
                 });
-            const paramsOfInsert = {
-                word: decodeURI(search.split('query=')[1])
-            };
-            doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
-                console.log(resultData);
-            });
+            if (isChangedKeyword.current) {
+                const paramsOfInsert = {
+                    word: decodeURI(search.split('query=')[1])
+                };
+                doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
+                    console.log(resultData);
+                });
+                isChangedKeyword.current = false;
+            }
         };
 
         fetchData();
@@ -178,7 +187,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
 
     const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
-            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id}>
+            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => { if (resultDataTypeMenu.id !== 3) { isChangedType.current = true; } }}>
                 <S.Span>
                     {resultDataTypeMenu.svg}
                 </S.Span>

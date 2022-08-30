@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactModal from 'react-modal';
 import doAxiosRequest from '../../functions/doAxiosRequest';
@@ -10,7 +10,7 @@ import Pagination from '../../components/pagination/Pagination';
 import * as S from './SearchResultDocument.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, type }: any) => {
+const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, type, isChangedType }: any) => {
     const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     // for location
@@ -25,6 +25,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
     const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
     const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
+    const isChangedKeyword = useRef<boolean>(false);
     const openModal = (idx: number): void => {
         const newModalIsOpen = [...modalIsOpen];
         newModalIsOpen[idx] = true;
@@ -67,6 +68,11 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
 
         setOrder('score');
         setOrderIsActive([true, false, false]);
+
+        if (!isChangedType.current) {
+            isChangedKeyword.current = true;
+        }
+        isChangedType.current = false;
     }, [search]);
 
     useEffect(() => { // for set page, when keyword or order is changed
@@ -89,12 +95,15 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
                 setResult(resultData.data);
                 setModalIsOpen(resultData.data.data.map((): boolean => false));
             });
-            const paramsOfInsert = {
-                word: decodeURI(search.split('query=')[1])
-            };
-            doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
-                console.log(resultData);
-            });
+            if (isChangedKeyword.current) {
+                const paramsOfInsert = {
+                    word: decodeURI(search.split('query=')[1])
+                };
+                doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
+                    console.log(resultData);
+                });
+                isChangedKeyword.current = false;
+            }
         };
 
         fetchData();
@@ -134,7 +143,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
 
     const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
-            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id}>
+            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => { if (resultDataTypeMenu.id !== 2) { isChangedType.current = true; } }}>
                 <S.Span>
                     {resultDataTypeMenu.svg}
                 </S.Span>
