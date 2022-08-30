@@ -47,13 +47,13 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
 
     // for sort
     const listOfOrder = [
-        { name: '유사도순', value: 'score' },
         { name: '최신순', value: 'desc' },
         { name: '과거순', value: 'asc' },
+        { name: '유사도순', value: 'score' },
     ];
-    const [order, setOrder] = useState<string>('score');
+    const [order, setOrder] = useState<string>('desc');
     const [orderIsActive, setOrderIsActive] = useState<Array<boolean>>([true, false, false]);
-    const [orderForDetectOfFetchEffect, setOrderForDetectOfFetchEffect] = useState<string>('score');
+    const [orderForDetectOfFetchEffect, setOrderForDetectOfFetchEffect] = useState<string>('desc');
 
     // for type
     const listOfResultDataTypeMenu = [
@@ -105,7 +105,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         setKeyword(decodeURI(search.split('query=')[1]));
         setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
 
-        setOrder('score');
+        setOrder('desc');
         setOrderIsActive([true, false, false]);
 
         if (!isChangedType.current) {
