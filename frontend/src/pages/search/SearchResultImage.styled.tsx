@@ -36,6 +36,7 @@ export const Main = styled.main`
 
 export const Section = styled.section`
     ${vertical}
+    align-items: center;
     text-align: center;
     width: 100%;
     height: fit-content;
