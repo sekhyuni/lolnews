@@ -92,6 +92,7 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
 `;
 
 export const UlOfListOfImageWrapper = styled.ul`
+    width: inherit;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
