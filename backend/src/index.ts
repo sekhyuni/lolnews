@@ -1,11 +1,13 @@
 import express from 'express';
 import cors from 'cors';
+import { runSearchArticle, runSearchListOfPopularArticle } from './elasticsearch/run';
 import mongoose from 'mongoose';
 import { UserModel } from './mongodb/user/user';
 import { QueryOfUser } from './mongodb/user/user-query';
 import { WordModel } from './mongodb/word/word';
 import { QueryOfWord } from './mongodb/word/word-query';
-import { Client, ApiResponse, RequestParams } from '@elastic/elasticsearch';
+import { ArticleModel } from './mongodb/article/article';
+import { QueryOfArticle } from './mongodb/article/article-query';
 import moment from 'moment';
 
 const app = express();
@@ -35,47 +37,11 @@ connection
         process.exit();
     });
 
-// Elasticsearch Connection
-const client = new Client({
-    node: 'https://172.24.24.84:32311',
-    auth: {
-        username: 'elastic',
-        password: 'jp5r4fwmhfz2mz72k2k42lmz',
-    },
-    ssl: {
-        rejectUnauthorized: false,
-    },
-});
-
-const run = async ({ query, page, order, isImageRequest }: any): Promise<any> => {
-    const params: RequestParams.Search = {
-        index: 'news_index',
-        body: {
-            track_total_hits: true,
-            from: JSON.parse(isImageRequest) ? (Number(page) - 1) * 50 : (Number(page) - 1) * 10,
-            size: JSON.parse(isImageRequest) ? 50 : 10,
-            query: {
-                match: {
-                    content: query
-                }
-            },
-            sort: [order !== 'score' ? { createdAt: { order } } : {}]
-        }
-    };
-
-    return client.search(params)
-        .then((result: ApiResponse) => ({ meta: { count: result.body.hits.total.value }, data: result.body.hits.hits }))
-        .catch((err: Error) => {
-            console.error(err);
-            return err;
-        });
-};
-
 // 키워드 검색
 app.get('/search/keyword', async (req: express.Request, res: express.Response) => {
     const { query } = req;
 
-    const result = await run(query);
+    const result = await runSearchArticle(query);
 
     res.send(result);
 });
@@ -172,6 +138,63 @@ app.post('/word', (req: express.Request, res: express.Response) => {
         .then(({ id }) => {
             queryOfWord.read({ id }).then(([{ word }]) => {
                 res.send(word);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            res.send(err);
+        });
+});
+
+// 기사 Select
+app.get('/article', (req: express.Request, res: express.Response) => {
+    const queryOfArticle = new QueryOfArticle();
+    connection
+        .then(() => queryOfArticle.aggregate([
+            {
+                $match: {
+                    date: {
+                        $gte: moment().subtract(1, 'days').add(9, 'hours').toDate(),
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: "$article_id",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $sort: {
+                    count: -1
+                }
+            }
+        ]))
+        .then(async articles => {
+            const listOfPopularArticle = articles.filter((_, idx) => idx < 5).map(article => article._id);
+
+            const result = await runSearchListOfPopularArticle(listOfPopularArticle);
+
+            res.send(result);
+        })
+        .catch(err => {
+            console.error(err);
+            res.send(err);
+        });
+});
+
+// 기사 Insert
+app.post('/article', (req: express.Request, res: express.Response) => {
+    const { article_id } = req.body;
+    console.log(article_id);
+
+    const queryOfArticle = new QueryOfArticle();
+    const newArticle = new ArticleModel({ article_id });
+    connection
+        .then(() => queryOfArticle.create(newArticle))
+        .then(({ id }) => {
+            queryOfArticle.read({ id }).then(([{ article_id }]) => {
+                res.send(article_id);
             });
         })
         .catch(err => {
