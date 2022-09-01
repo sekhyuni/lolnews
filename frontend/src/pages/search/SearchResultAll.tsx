@@ -62,6 +62,18 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
         // { id: 4, link: `/search/video?query=${decodeURI(search.split('query=')[1])}`, name: '영상', svg: <Svg.Video active={false} /> },
     ];
 
+    const [listOfResultOfPopularArticle, setListOfResultOfPopularArticle] = useState<Array<any>>([]);
+
+    useEffect(() => {
+        const fetchData = (): void => {
+            doAxiosRequest('GET', `${BASE_URL}/article`).then((resultData: any): void => {
+                setListOfResultOfPopularArticle(resultData.data);
+            });
+        }
+
+        fetchData();
+    }, []);
+
     useEffect(() => { // for set order, when keyword is changed
         setKeyword(decodeURI(search.split('query=')[1]));
         setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
@@ -109,11 +121,12 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
         fetchData();
     }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
 
-    const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number): JSX.Element =>
-        <S.LiOfDocumentWrapper key={document._id} id={document._id}>
-            <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
-            <S.DivOfTitleContentWrapper>
-                <S.DivOfTitle onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+    // result elements
+    const listOfElementOfArticle = result.data.length !== 0 ? result.data.map((document: any, idx: number): JSX.Element =>
+        <S.LiOfArticleWrapper contentType="normal" key={document._id} id={document._id}>
+            <S.ImgOfContent contentType="normal" src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
+            <S.DivOfTitleContentWrapper contentType="normal">
+                <S.DivOfTitle contentType="normal" onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                     pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfTitle>
                 <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
@@ -135,13 +148,14 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
                     <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
                 </S.DivOfModalWrapper>
             </ReactModal>
-        </S.LiOfDocumentWrapper>)
+        </S.LiOfArticleWrapper>)
         :
-        <S.LiOfDocumentWrapper>
+        <S.LiOfArticleWrapper>
             <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>
-        </S.LiOfDocumentWrapper>;
+        </S.LiOfArticleWrapper>;
 
-    const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
+    // result data type menus
+    const listOfElementOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
             <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => { if (resultDataTypeMenu.id !== 1) { isChangedType.current = true; } }}>
                 <S.Span>
@@ -150,6 +164,32 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
                 {resultDataTypeMenu.name}
             </S.LinkOfResultDataTypeMenu>
         </S.DivOfResultDataTypeMenuWrapper>);
+
+    // popular article result elements
+    const ListOfElementOfPopularArticle = listOfResultOfPopularArticle.map((document: any, idx: number): JSX.Element =>
+        <S.LiOfArticleWrapper contentType="popular" key={document._id} id={document._id}>
+            <S.ImgOfContent contentType="popular" src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
+            <S.DivOfTitleContentWrapper contentType="popular">
+                <S.DivOfTitle contentType="popular" onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
+                </S.DivOfTitle>
+            </S.DivOfTitleContentWrapper>
+            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
+                <S.DivOfModalWrapper>
+                    <S.DivOfSpanModalCloseWrapper>
+                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                    </S.DivOfSpanModalCloseWrapper>
+                    <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
+                    </S.DivOfModalTitle>
+                    <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
+                        pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
+                    </S.DivOfModalContent>
+                    <S.ImgOfModalContent src={document._source.thumbnail} />
+                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
+                </S.DivOfModalWrapper>
+            </ReactModal>
+        </S.LiOfArticleWrapper>);
 
     return (
         <S.DivOfLayoutWrapper>
@@ -173,7 +213,7 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
                     </S.Nav>
                 </S.HeaderOfTop>
                 <S.HeaderOfBottom>
-                    {elementsOfResultDataTypeMenu}
+                    {listOfElementOfResultDataTypeMenu}
                 </S.HeaderOfBottom>
             </S.Header>
             <S.Main>
@@ -193,9 +233,9 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
                                 {order.name}
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
-                    <S.UlOfListOfDocumentWrapper>
-                        {elementsOfESDocument}
-                    </S.UlOfListOfDocumentWrapper>
+                    <S.UlOfListOfArticleWrapper>
+                        {listOfElementOfArticle}
+                    </S.UlOfListOfArticleWrapper>
                     {result.data.length !== 0 ?
                         <Pagination total={result.meta.count} page={page} setPage={setPage} /> : <></>}
                 </S.Section>
@@ -216,11 +256,14 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
                             </S.LinkOfRelatedSearchTerm>
                         </S.DivOfRelatedSearchTermWrapper>
                     </S.AsideOfContent>
-                    {/* <S.AsideOfContent contentType="photo">
-                        <strong>
-                            포토
-                        </strong>
-                    </S.AsideOfContent> */}
+                    <S.AsideOfContent contentType="popular">
+                        <S.Strong>
+                            많이 본 기사
+                        </S.Strong>
+                        <S.UlOfListOfArticleWrapper>
+                            {ListOfElementOfPopularArticle}
+                        </S.UlOfListOfArticleWrapper>
+                    </S.AsideOfContent>
                 </S.Aside>
             </S.Main>
             <Footer layoutName="search" />

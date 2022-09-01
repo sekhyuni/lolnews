@@ -51,18 +51,18 @@ export const runSearchListOfPopularArticle = async (listOfPopularArticle: Array<
 
     return client.search(params)
         .then((result: ApiResponse) => {
-            const resultOfListOfPopularArticle: Array<any> = [];
+            const listOfResultOfPopularArticle: Array<any> = [];
 
             listOfPopularArticle.forEach((popularArticle: string) => {
                 result.body.hits.hits.forEach((document: any) => {
                     if (popularArticle === document._id) {
-                        resultOfListOfPopularArticle.push(document);
+                        listOfResultOfPopularArticle.push(document);
                         return;
                     }
                 });
             });
 
-            return resultOfListOfPopularArticle;
+            return listOfResultOfPopularArticle;
         })
         .catch((err: Error) => {
             console.error(err);

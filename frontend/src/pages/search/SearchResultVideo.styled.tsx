@@ -142,7 +142,13 @@ export const LiOfDocumentWrapper = styled.li`
     flex-direction: row;
     justify-content: center;
     padding: 20px 0 20px 0;
-    border-bottom: ${({ id }: any) => id ? '1px solid #e5e5e5' : 'none'};
+    ${({ id }: any) => {
+        if (id) {
+            return css`
+                border-bottom: 1px solid #e5e5e5;
+            `;
+        }
+    }}
     :first-child {
         border-top: 1px solid #e5e5e5;
     }
