@@ -68,16 +68,23 @@ export const AsideOfContent = styled.div`
     border-radius: 10px;
     padding: 20px 20px 20px 20px;
     background-color: #fff;
+    ${({ contentType }: any) => {
+        if (contentType === 'related') {
+            return css`
+                margin: 0 0 20px 0;
+            `;
+        }
+    }}
 `;
 
 export const Strong = styled.strong`
+    margin: 0 0 20px 0;
     font-size: 16px;
 `;
 
 export const DivOfRelatedSearchTermWrapper = styled.div`
     display: flex;
     flex-direction: row;
-    margin: 18px 0 0 0;
 `;
 
 export const LinkOfRelatedSearchTerm = styled(Link_)`
@@ -131,27 +138,39 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
     }
 `;
 
-export const UlOfListOfDocumentWrapper = styled.ul`
+export const UlOfListOfArticleWrapper = styled.ul`
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
 `;
 
-export const LiOfDocumentWrapper = styled.li`
+export const LiOfArticleWrapper = styled.li`
     display: flex;
     flex-direction: row;
-    justify-content: center;
     padding: 20px 0 20px 0;
-    ${({ id }: any) => {
+    ${({ id, contentType }: any) => {
         if (id) {
             return css`
                 border-bottom: 1px solid #e5e5e5;
+            `;
+        } else {
+            return css`
+                justify-content: center;
             `;
         }
     }}
     :first-child {
         border-top: 1px solid #e5e5e5;
     }
+    ${({ contentType }: any) => {
+        if (contentType === 'popular') {
+            return css`
+                :last-child {
+                    border-bottom: none;
+                }
+            `;
+        }
+    }}
 `;
 
 export const Nav = styled.nav`
@@ -208,16 +227,32 @@ export const Span = styled.span`
 export const DivOfTitleContentWrapper = styled.div`
     ${vertical}
     justify-content: center;
-    width: calc(100% - (${imageOfContentWidth} + 20px));
+    ${({ contentType }: any) => {
+        if (contentType === 'normal') {
+            return css`
+                width: calc(100% - (${imageOfContentWidth} + 20px));
+            `;
+        }
+    }}  
 `
 
 export const DivOfTitle = styled.div`
-    margin: 0 0 8px 0;
+    ${({ contentType }: any) => {
+        if (contentType === 'normal') {
+            return css`
+                margin: 0 0 8px 0;
+                font-size: 18px;
+            `;
+        } else {
+            return css`
+                font-size: 14px;
+            `;
+        }
+    }}
     cursor: pointer;
     :hover {
         text-decoration: underline;
     }
-    font-size: 18px;
     font-weight: bold;
 `;
 
@@ -233,9 +268,21 @@ export const DivOfContent = styled.div`
 `;
 
 export const ImgOfContent = styled.img`
-    width: ${imageOfContentWidth};
-    height: 80px;
-    border: 1px solid rgba(0,0,0,0.1);
+    ${({ contentType }: any) => {
+        if (contentType === 'normal') {
+            return css`
+                width: ${imageOfContentWidth};
+                height: 80px;
+                border-radius: 6px;
+            `;
+        } else {
+            return css`
+                width: 90px;
+                height: 60px;
+                border-radius: 4px;
+            `;
+        }
+    }}
     margin: 0 20px 0 0;
     cursor: pointer;
 `;
@@ -338,12 +385,12 @@ export const LinkOfUser = styled(Link_)`
     margin: 23.5px 20px 23.5px 20px;
 `;
 
-export const SpanfCountOfResultWrapper = styled.span`  
+export const SpanOfAllCountOfArticleWrapper = styled.span`  
     text-align: center;
     margin: 20px 0 0 0;
 `;
 
-export const StrongOfCountOfResult = styled.strong`    
+export const StrongOfAllCountOfArticle = styled.strong`    
 `;
 
 export const H3OfNoneResult = styled.h3`  

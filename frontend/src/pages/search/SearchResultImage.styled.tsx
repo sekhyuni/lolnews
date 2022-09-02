@@ -54,10 +54,6 @@ export const DivOfLnb = styled.div`
     margin: 20px 0 20px 0;
 `;
 
-export const Strong = styled.strong`
-    font-size: 16px;
-`;
-
 export const Div = styled.div`
 `;
 
@@ -277,14 +273,6 @@ export const LinkOfLoginPage = styled(Link_)`
 export const LinkOfUser = styled(Link_)`
     height: 43px;
     margin: 23.5px 20px 23.5px 20px;
-`;
-
-export const POfLoading = styled.p`
-    font-size: 20px;
-`;
-
-export const POfError = styled.p`
-    font-size: 20px;
 `;
 
 export const DivOfLoader = styled.div`

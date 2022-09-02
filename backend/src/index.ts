@@ -135,8 +135,8 @@ app.post('/word', (req: express.Request, res: express.Response) => {
     const newWord = new WordModel({ word });
     connection
         .then(() => queryOfWord.create(newWord))
-        .then(({ id }) => {
-            queryOfWord.read({ id }).then(([{ word }]) => {
+        .then(({ _id }) => {
+            queryOfWord.read({ _id }).then(([{ word }]) => {
                 res.send(word);
             });
         })
@@ -192,8 +192,8 @@ app.post('/article', (req: express.Request, res: express.Response) => {
     const newArticle = new ArticleModel({ article_id });
     connection
         .then(() => queryOfArticle.create(newArticle))
-        .then(({ id }) => {
-            queryOfArticle.read({ id }).then(([{ article_id }]) => {
+        .then(({ _id }) => {
+            queryOfArticle.read({ _id }).then(([{ article_id }]) => {
                 res.send(article_id);
             });
         })

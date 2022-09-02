@@ -246,7 +246,7 @@ export const DivOfTitle = styled.div`
         } else {
             return css`
                 font-size: 14px;
-            `
+            `;
         }
     }}
     cursor: pointer;
@@ -385,12 +385,12 @@ export const LinkOfUser = styled(Link_)`
     margin: 23.5px 20px 23.5px 20px;
 `;
 
-export const SpanfCountOfResultWrapper = styled.span`  
+export const SpanOfAllCountOfArticleWrapper = styled.span`  
     text-align: center;
     margin: 20px 0 0 0;
 `;
 
-export const StrongOfCountOfResult = styled.strong`    
+export const StrongOfAllCountOfArticle = styled.strong`    
 `;
 
 export const H3OfNoneResult = styled.h3`  

@@ -13,7 +13,7 @@ const Search = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => 
             <Route path="" element={<SearchResultAll isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} type="" isChangedType={isChangedType} />} />
             <Route path="/document" element={<SearchResultDocument isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} type="document" isChangedType={isChangedType} />} />
             <Route path="/image" element={<SearchResultImage isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} isChangedType={isChangedType} />} />
-            {/* <Route path="/video" element={<SearchResultVideo isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} type="video" isChangedKeyword={isChangedKeyword} />} /> */}
+            {/* <Route path="/video" element={<SearchResultVideo isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} type="video" isChangedType={isChangedType} />} /> */}
         </Routes>
     );
 };

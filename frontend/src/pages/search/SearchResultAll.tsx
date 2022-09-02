@@ -16,12 +16,12 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
     // for location
     const { search } = useLocation();
 
-    // for result
-    interface Result {
+    // for article
+    interface Article {
         meta: any;
         data: any;
     }
-    const [result, setResult] = useState<Result>({ meta: {}, data: [] });
+    const [listOfArticle, setListOfArticle] = useState<Article>({ meta: {}, data: [] });
     const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
     const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
@@ -40,6 +40,37 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
 
         document.body.style.overflow = '';
     };
+    const listOfElementOfArticle = listOfArticle.data.length !== 0 ? listOfArticle.data.map((document: any, idx: number): JSX.Element =>
+        <S.LiOfArticleWrapper contentType="normal" key={document._id} id={document._id}>
+            <S.ImgOfContent contentType="normal" src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
+            <S.DivOfTitleContentWrapper contentType="normal">
+                <S.DivOfTitle contentType="normal" onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
+                </S.DivOfTitle>
+                <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
+                    pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
+                </S.DivOfContent>
+            </S.DivOfTitleContentWrapper>
+            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
+                <S.DivOfModalWrapper>
+                    <S.DivOfSpanModalCloseWrapper>
+                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                    </S.DivOfSpanModalCloseWrapper>
+                    <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
+                    </S.DivOfModalTitle>
+                    <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
+                        pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
+                    </S.DivOfModalContent>
+                    <S.ImgOfModalContent src={document._source.thumbnail} />
+                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
+                </S.DivOfModalWrapper>
+            </ReactModal>
+        </S.LiOfArticleWrapper>)
+        :
+        <S.LiOfArticleWrapper>
+            <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>
+        </S.LiOfArticleWrapper>;
 
     // for pagination
     const [page, setPage] = useState<number>(1);
@@ -61,13 +92,47 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
         { id: 3, link: `/search/image?query=${decodeURI(search.split('query=')[1])}`, name: '포토', svg: <Svg.Image active={false} /> },
         // { id: 4, link: `/search/video?query=${decodeURI(search.split('query=')[1])}`, name: '영상', svg: <Svg.Video active={false} /> },
     ];
+    const listOfElementOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
+        <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
+            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => { if (resultDataTypeMenu.id !== 1) { isChangedType.current = true; } }}>
+                <S.Span>
+                    {resultDataTypeMenu.svg}
+                </S.Span>
+                {resultDataTypeMenu.name}
+            </S.LinkOfResultDataTypeMenu>
+        </S.DivOfResultDataTypeMenuWrapper>);
 
-    const [listOfResultOfPopularArticle, setListOfResultOfPopularArticle] = useState<Array<any>>([]);
+    // for polular article
+    const [listOfPopularArticle, setListOfPopularArticle] = useState<Array<any>>([]);
+    const ListOfElementOfPopularArticle = listOfPopularArticle.map((document: any, idx: number): JSX.Element =>
+        <S.LiOfArticleWrapper contentType="popular" key={document._id} id={document._id}>
+            <S.ImgOfContent contentType="popular" src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
+            <S.DivOfTitleContentWrapper contentType="popular">
+                <S.DivOfTitle contentType="popular" onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
+                </S.DivOfTitle>
+            </S.DivOfTitleContentWrapper>
+            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
+                <S.DivOfModalWrapper>
+                    <S.DivOfSpanModalCloseWrapper>
+                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                    </S.DivOfSpanModalCloseWrapper>
+                    <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
+                    </S.DivOfModalTitle>
+                    <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
+                        pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
+                    </S.DivOfModalContent>
+                    <S.ImgOfModalContent src={document._source.thumbnail} />
+                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
+                </S.DivOfModalWrapper>
+            </ReactModal>
+        </S.LiOfArticleWrapper>);
 
     useEffect(() => {
         const fetchData = (): void => {
             doAxiosRequest('GET', `${BASE_URL}/article`).then((resultData: any): void => {
-                setListOfResultOfPopularArticle(resultData.data);
+                setListOfPopularArticle(resultData.data);
             });
         }
 
@@ -104,7 +169,7 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
                 isImageRequest: false,
             };
             doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch).then((resultData: any): void => {
-                setResult(resultData.data);
+                setListOfArticle(resultData.data);
                 setModalIsOpen(resultData.data.data.map((): boolean => false));
             });
             if (isChangedKeyword.current) {
@@ -120,76 +185,6 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
 
         fetchData();
     }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
-
-    // result elements
-    const listOfElementOfArticle = result.data.length !== 0 ? result.data.map((document: any, idx: number): JSX.Element =>
-        <S.LiOfArticleWrapper contentType="normal" key={document._id} id={document._id}>
-            <S.ImgOfContent contentType="normal" src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
-            <S.DivOfTitleContentWrapper contentType="normal">
-                <S.DivOfTitle contentType="normal" onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
-                </S.DivOfTitle>
-                <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
-                    pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
-                </S.DivOfContent>
-            </S.DivOfTitleContentWrapper>
-            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
-                <S.DivOfModalWrapper>
-                    <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
-                    </S.DivOfSpanModalCloseWrapper>
-                    <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
-                    </S.DivOfModalTitle>
-                    <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
-                        pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
-                    </S.DivOfModalContent>
-                    <S.ImgOfModalContent src={document._source.thumbnail} />
-                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
-                </S.DivOfModalWrapper>
-            </ReactModal>
-        </S.LiOfArticleWrapper>)
-        :
-        <S.LiOfArticleWrapper>
-            <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>
-        </S.LiOfArticleWrapper>;
-
-    // result data type menus
-    const listOfElementOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
-        <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
-            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => { if (resultDataTypeMenu.id !== 1) { isChangedType.current = true; } }}>
-                <S.Span>
-                    {resultDataTypeMenu.svg}
-                </S.Span>
-                {resultDataTypeMenu.name}
-            </S.LinkOfResultDataTypeMenu>
-        </S.DivOfResultDataTypeMenuWrapper>);
-
-    // popular article result elements
-    const ListOfElementOfPopularArticle = listOfResultOfPopularArticle.map((document: any, idx: number): JSX.Element =>
-        <S.LiOfArticleWrapper contentType="popular" key={document._id} id={document._id}>
-            <S.ImgOfContent contentType="popular" src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
-            <S.DivOfTitleContentWrapper contentType="popular">
-                <S.DivOfTitle contentType="popular" onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                    pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
-                </S.DivOfTitle>
-            </S.DivOfTitleContentWrapper>
-            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
-                <S.DivOfModalWrapper>
-                    <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
-                    </S.DivOfSpanModalCloseWrapper>
-                    <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
-                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
-                    </S.DivOfModalTitle>
-                    <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
-                        pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
-                    </S.DivOfModalContent>
-                    <S.ImgOfModalContent src={document._source.thumbnail} />
-                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
-                </S.DivOfModalWrapper>
-            </ReactModal>
-        </S.LiOfArticleWrapper>);
 
     return (
         <S.DivOfLayoutWrapper>
@@ -218,8 +213,8 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <S.SpanfCountOfResultWrapper>검색결과 : 총 <S.StrongOfCountOfResult>{String(result.meta.count)
-                        .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</S.StrongOfCountOfResult>건</S.SpanfCountOfResultWrapper>
+                    <S.SpanOfAllCountOfArticleWrapper>검색결과 : 총 <S.StrongOfAllCountOfArticle>{String(listOfArticle.meta.count)
+                        .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</S.StrongOfAllCountOfArticle>건</S.SpanOfAllCountOfArticleWrapper>
                     <S.DivOfLnb>
                         {listOfOrder.map((order: any, idx: number): JSX.Element =>
                             <S.ButtonOfSort
@@ -236,8 +231,8 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
                     <S.UlOfListOfArticleWrapper>
                         {listOfElementOfArticle}
                     </S.UlOfListOfArticleWrapper>
-                    {result.data.length !== 0 ?
-                        <Pagination total={result.meta.count} page={page} setPage={setPage} /> : <></>}
+                    {listOfArticle.data.length !== 0 ?
+                        <Pagination total={listOfArticle.meta.count} page={page} setPage={setPage} /> : <></>}
                 </S.Section>
                 <S.Aside>
                     <S.AsideOfContent contentType="related">

@@ -17,12 +17,12 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
     // for location
     const { search } = useLocation();
 
-    // for result
-    interface Result {
+    // for article
+    interface Article {
         meta: any;
         data: any;
     }
-    const [result, setResult] = useState<Result>({ meta: {}, data: [] });
+    const [listOfArticle, setListOfArticle] = useState<Article>({ meta: {}, data: [] });
     const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
     const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
@@ -62,6 +62,15 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         { id: 3, link: `/search/image?query=${decodeURI(search.split('query=')[1])}`, name: '포토', svg: <Svg.Image active={true} /> },
         // { id: 4, link: `/search/video?query=${decodeURI(search.split('query=')[1])}`, name: '영상', svg: <Svg.Video active={false} /> },
     ];
+    const listOfElementOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
+        <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
+            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => { if (resultDataTypeMenu.id !== 3) { isChangedType.current = true; } }}>
+                <S.Span>
+                    {resultDataTypeMenu.svg}
+                </S.Span>
+                {resultDataTypeMenu.name}
+            </S.LinkOfResultDataTypeMenu>
+        </S.DivOfResultDataTypeMenuWrapper>);
 
     // for loading
     const [loading, setLoading] = useState<boolean>(true);
@@ -100,68 +109,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        setKeyword(decodeURI(search.split('query=')[1]));
-        setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
-
-        setOrder('desc');
-        setOrderIsActive([true, false, false]);
-
-        if (!isChangedType.current) {
-            isChangedKeyword.current = true;
-        }
-        isChangedType.current = false;
-    }, [search]);
-
-    useEffect(() => {
-        setResult({ meta: {}, data: [] });
-        setKeywordForDetectOfFetchEffect(decodeURI(search.split('query=')[1]));
-
-        setOrderForDetectOfFetchEffect(order);
-
-        setPage(1);
-    }, [order, keywordForDetectOfSetPageEffect]);
-
-    useEffect(() => {
-        const fetchData = (): void => { // 나중에 useCallback으로 바꿀까?
-            const paramsOfSearch = {
-                query: decodeURI(search.split('query=')[1]),
-                page,
-                order,
-                isImageRequest: true,
-            };
-            setLoading(true);
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch)
-                .then((resultData: any): void => {
-                    setResult((prev: Result): Result => ({ meta: resultData.data.meta, data: [...prev.data, ...resultData.data.data] }));
-                    setModalIsOpen(resultData.data.data.map((): boolean => false));
-                    if (resultData.data.data.length === 0) {
-                        setLoading(false);
-                        if (result.data.length === 0) { // 첫 요청 시에는 렌더링 전이므로 무조건 초깃값으로 0이지만, 이후 요청 시에는 0인 경우가 존재하지 않음
-                            containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
-                        }
-                    }
-                }).catch((err: any): void => {
-                    setLoading(false);
-                    containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
-                    console.error(err);
-                });
-            if (isChangedKeyword.current) {
-                const paramsOfInsert = {
-                    word: decodeURI(search.split('query=')[1])
-                };
-                doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
-                    console.log(resultData);
-                });
-                isChangedKeyword.current = false;
-            }
-        };
-
-        fetchData();
-    }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
-
-    const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number, arr: any): JSX.Element =>
+    const listOfElementOfArticle = listOfArticle.data.length !== 0 ? listOfArticle.data.map((document: any, idx: number, arr: any): JSX.Element =>
         <S.LiOfImageWrapper onLoad={(): void => { imageOnloaded(idx, arr); }} ref={(element: HTMLLIElement): void => {
             listOfImageWrapperRef.current[idx] = element;
         }} key={document._id} id={document._id} >
@@ -187,15 +135,65 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
             {loading ? <></> : <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>}
         </S.LiOfImageWrapper>;
 
-    const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
-        <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
-            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => { if (resultDataTypeMenu.id !== 3) { isChangedType.current = true; } }}>
-                <S.Span>
-                    {resultDataTypeMenu.svg}
-                </S.Span>
-                {resultDataTypeMenu.name}
-            </S.LinkOfResultDataTypeMenu>
-        </S.DivOfResultDataTypeMenuWrapper>);
+    useEffect(() => {
+        setKeyword(decodeURI(search.split('query=')[1]));
+        setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
+
+        setOrder('desc');
+        setOrderIsActive([true, false, false]);
+
+        if (!isChangedType.current) {
+            isChangedKeyword.current = true;
+        }
+        isChangedType.current = false;
+    }, [search]);
+
+    useEffect(() => {
+        setListOfArticle({ meta: {}, data: [] });
+        setKeywordForDetectOfFetchEffect(decodeURI(search.split('query=')[1]));
+
+        setOrderForDetectOfFetchEffect(order);
+
+        setPage(1);
+    }, [order, keywordForDetectOfSetPageEffect]);
+
+    useEffect(() => {
+        const fetchData = (): void => { // 나중에 useCallback으로 바꿀까?
+            const paramsOfSearch = {
+                query: decodeURI(search.split('query=')[1]),
+                page,
+                order,
+                isImageRequest: true,
+            };
+            setLoading(true);
+            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch)
+                .then((resultData: any): void => {
+                    setListOfArticle((prev: Article): Article => ({ meta: resultData.data.meta, data: [...prev.data, ...resultData.data.data] }));
+                    setModalIsOpen(resultData.data.data.map((): boolean => false));
+                    if (resultData.data.data.length === 0) {
+                        setLoading(false);
+                        if (listOfArticle.data.length === 0) { // 첫 요청 시에는 렌더링 전이므로 무조건 초깃값으로 0이지만, 이후 요청 시에는 0인 경우가 존재하지 않음
+                            containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
+                        }
+                    }
+                }).catch((err: any): void => {
+                    setLoading(false);
+                    containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
+                    console.error(err);
+                });
+            if (isChangedKeyword.current) {
+                const paramsOfInsert = {
+                    word: decodeURI(search.split('query=')[1])
+                };
+                doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
+                    console.log(resultData);
+                });
+                isChangedKeyword.current = false;
+            }
+        };
+
+        fetchData();
+    }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
 
     return (
         <S.DivOfLayoutWrapper>
@@ -219,7 +217,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                     </S.Nav>
                 </S.HeaderOfTop>
                 <S.HeaderOfBottom>
-                    {elementsOfResultDataTypeMenu}
+                    {listOfElementOfResultDataTypeMenu}
                 </S.HeaderOfBottom>
             </S.Header>
             <S.Main>
@@ -238,7 +236,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
                     <S.UlOfListOfImageWrapper ref={containerOfListOfImageWrapperRef}>
-                        {elementsOfESDocument}
+                        {listOfElementOfArticle}
                     </S.UlOfListOfImageWrapper>
                     {loading && <Loader type="Oval" color="#1a73e8" width={100} height={100} />}
                     <S.DivOfLoader ref={loader} />

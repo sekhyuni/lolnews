@@ -13,11 +13,11 @@ export class QueryOfArticle {
     }
 
     update(article: Article) {
-        return ArticleModel.updateOne({ id: article.id }, { ...article });
+        return ArticleModel.updateOne({ _id: article._id }, { ...article });
     }
 
     delete(article: Article) {
-        return ArticleModel.remove({ id: article.id });
+        return ArticleModel.remove({ _id: article._id });
     }
 
     aggregate(query: any) {
