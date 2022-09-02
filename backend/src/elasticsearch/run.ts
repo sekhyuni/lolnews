@@ -36,13 +36,13 @@ export const runSearchArticle = async ({ query, page, order, isImageRequest }: a
         });
 };
 
-export const runSearchListOfPopularArticle = async (listOfPopularArticle: Array<string>): Promise<any> => {
+export const runSearchListOfPopularArticle = async (listOfIdOfPopularArticle: Array<string>): Promise<any> => {
     const params: RequestParams.Search = {
         index: 'news_index',
         body: {
             query: {
                 terms: {
-                    _id: listOfPopularArticle
+                    _id: listOfIdOfPopularArticle
                 }
 
             }
@@ -51,18 +51,18 @@ export const runSearchListOfPopularArticle = async (listOfPopularArticle: Array<
 
     return client.search(params)
         .then((result: ApiResponse) => {
-            const listOfResultOfPopularArticle: Array<any> = [];
+            const listOfPopularArticle: Array<any> = [];
 
-            listOfPopularArticle.forEach((popularArticle: string) => {
+            listOfIdOfPopularArticle.forEach((idOfPopularArticle: string) => {
                 result.body.hits.hits.forEach((document: any) => {
-                    if (popularArticle === document._id) {
-                        listOfResultOfPopularArticle.push(document);
+                    if (idOfPopularArticle === document._id) {
+                        listOfPopularArticle.push(document);
                         return;
                     }
                 });
             });
 
-            return listOfResultOfPopularArticle;
+            return listOfPopularArticle;
         })
         .catch((err: Error) => {
             console.error(err);

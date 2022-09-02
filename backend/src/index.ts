@@ -171,9 +171,9 @@ app.get('/article', (req: express.Request, res: express.Response) => {
             }
         ]))
         .then(async articles => {
-            const listOfPopularArticle = articles.filter((_, idx) => idx < 5).map(article => article._id);
+            const listOfIdOfPopularArticle = articles.filter((_, idx) => idx < 5).map(article => article._id);
 
-            const result = await runSearchListOfPopularArticle(listOfPopularArticle);
+            const result = await runSearchListOfPopularArticle(listOfIdOfPopularArticle);
 
             res.send(result);
         })
