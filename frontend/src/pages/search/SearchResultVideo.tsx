@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactModal from 'react-modal';
 import doAxiosRequest from '../../functions/doAxiosRequest';
@@ -40,11 +40,25 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
 
         document.body.style.overflow = '';
     };
+    const insertArticleId = useCallback((articleId: string) => {
+        const paramsOfInsert = {
+            articleId
+        };
+        doAxiosRequest('POST', `${BASE_URL}/article`, paramsOfInsert).then((resultData: any): void => {
+            console.log(resultData);
+        });
+    }, []);
     const listOfElementOfArticle = listOfArticle.data.length !== 0 ? listOfArticle.data.map((document: any, idx: number): JSX.Element =>
         <S.LiOfArticleWrapper contentType="normal" key={document._id} id={document._id}>
-            <S.ImgOfContent contentType="normal" src={document._source.thumbnail} onClick={(): void => { openModalOfArticle(idx); }} />
+            <S.ImgOfContent contentType="normal" src={document._source.thumbnail} onClick={(): void => {
+                openModalOfArticle(idx);
+                insertArticleId(document._id);
+            }} />
             <S.DivOfTitleContentWrapper contentType="normal">
-                <S.DivOfTitle contentType="normal" onClick={(): void => { openModalOfArticle(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                <S.DivOfTitle contentType="normal" onClick={(): void => {
+                    openModalOfArticle(idx);
+                    insertArticleId(document._id);
+                }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                     pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfTitle>
                 <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
@@ -121,9 +135,15 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
     };
     const listOfElementOfPopularArticle = listOfPopularArticle.map((document: any, idx: number): JSX.Element =>
         <S.LiOfArticleWrapper contentType="popular" key={document._id} id={document._id}>
-            <S.ImgOfContent contentType="popular" src={document._source.thumbnail} onClick={(): void => { openModalOfPopularArticle(idx); }} />
+            <S.ImgOfContent contentType="popular" src={document._source.thumbnail} onClick={(): void => {
+                openModalOfPopularArticle(idx);
+                insertArticleId(document._id);
+            }} />
             <S.DivOfTitleContentWrapper contentType="popular">
-                <S.DivOfTitle contentType="popular" onClick={(): void => { openModalOfPopularArticle(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                <S.DivOfTitle contentType="popular" onClick={(): void => {
+                    openModalOfPopularArticle(idx);
+                    insertArticleId(document._id);
+                }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                     pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfTitle>
             </S.DivOfTitleContentWrapper>

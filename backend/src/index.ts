@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { runSearchArticle, runSearchListOfPopularArticle } from './elasticsearch/run';
+import { searchListOfArticle, searchListOfPopularArticle } from './elasticsearch/run';
 import mongoose from 'mongoose';
 import { UserModel } from './mongodb/user/user';
 import { QueryOfUser } from './mongodb/user/user-query';
@@ -41,7 +41,7 @@ connection
 app.get('/search/keyword', async (req: express.Request, res: express.Response) => {
     const { query } = req;
 
-    const result = await runSearchArticle(query);
+    const result = await searchListOfArticle(query);
 
     res.send(result);
 });
@@ -119,7 +119,10 @@ app.get('/word', (req: express.Request, res: express.Response) => {
             }
         ]))
         .then(words => {
-            res.send(words.filter((_, idx) => idx < 5).map(word => word._id));
+            const listOfPopularWord = words.filter((_, idx) => idx < 5).map(word => word._id);
+
+            console.log(listOfPopularWord);
+            res.send(listOfPopularWord);
         })
         .catch(err => {
             console.error(err);
@@ -137,6 +140,7 @@ app.post('/word', (req: express.Request, res: express.Response) => {
         .then(() => queryOfWord.create(newWord))
         .then(({ _id }) => {
             queryOfWord.read({ _id }).then(([{ word }]) => {
+                console.log(word);
                 res.send(word);
             });
         })
@@ -160,7 +164,7 @@ app.get('/article', (req: express.Request, res: express.Response) => {
             },
             {
                 $group: {
-                    _id: "$article_id",
+                    _id: "$articleId",
                     count: { $sum: 1 }
                 }
             },
@@ -171,9 +175,11 @@ app.get('/article', (req: express.Request, res: express.Response) => {
             }
         ]))
         .then(async articles => {
-            const listOfIdOfPopularArticle = articles.filter((_, idx) => idx < 10).map(article => article._id);
+            const listOfPopularArticleId = articles.filter((_, idx) => idx < 10).map(article => article._id);
 
-            const result = await runSearchListOfPopularArticle(listOfIdOfPopularArticle);
+            console.log(listOfPopularArticleId);
+
+            const result = await searchListOfPopularArticle(listOfPopularArticleId);
 
             res.send(result);
         })
@@ -185,15 +191,16 @@ app.get('/article', (req: express.Request, res: express.Response) => {
 
 // 기사 Insert
 app.post('/article', (req: express.Request, res: express.Response) => {
-    const { article_id } = req.body;
+    const { articleId } = req.body;
 
     const queryOfArticle = new QueryOfArticle();
-    const newArticle = new ArticleModel({ article_id });
+    const newArticle = new ArticleModel({ articleId });
     connection
         .then(() => queryOfArticle.create(newArticle))
         .then(({ _id }) => {
-            queryOfArticle.read({ _id }).then(([{ article_id }]) => {
-                res.send(article_id);
+            queryOfArticle.read({ _id }).then(([{ articleId }]) => {
+                console.log(articleId);
+                res.send(articleId);
             });
         })
         .catch(err => {

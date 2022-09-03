@@ -41,6 +41,14 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
 
         document.body.style.overflow = '';
     };
+    const insertArticleId = useCallback((articleId: string) => {
+        const paramsOfInsert = {
+            articleId
+        };
+        doAxiosRequest('POST', `${BASE_URL}/article`, paramsOfInsert).then((resultData: any): void => {
+            console.log(resultData);
+        });
+    }, []);
 
     // for pagination
     const [page, setPage] = useState<number>(1);
@@ -113,7 +121,10 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         <S.LiOfImageWrapper onLoad={(): void => { imageOnloaded(idx, arr); }} ref={(element: HTMLLIElement): void => {
             listOfImageWrapperRef.current[idx] = element;
         }} key={document._id} id={document._id} >
-            <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => { openModalOfArticle(idx); }} />
+            <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => {
+                openModalOfArticle(idx);
+                insertArticleId(document._id);
+            }} />
             <ReactModal isOpen={modalOfArticleIsOpen[idx]} onRequestClose={(): void => { closeModalOfArticle(idx); }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
