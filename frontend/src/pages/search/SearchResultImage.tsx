@@ -23,21 +23,21 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         data: any;
     }
     const [listOfArticle, setListOfArticle] = useState<Article>({ meta: {}, data: [] });
-    const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
+    const [modalOfArticleIsOpen, setModalOfArticleIsOpen] = useState<Array<boolean>>([]);
     const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const isChangedKeyword = useRef<boolean>(false);
-    const openModal = (idx: number): void => {
-        const newModalIsOpen = [...modalIsOpen];
-        newModalIsOpen[idx] = true;
-        setModalIsOpen(newModalIsOpen);
+    const openModalOfArticle = (idx: number): void => {
+        const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
+        newModalOfArticleIsOpen[idx] = true;
+        setModalOfArticleIsOpen(newModalOfArticleIsOpen);
 
         document.body.style.overflow = 'hidden';
     };
-    const closeModal = (idx: number): void => {
-        const newModalIsOpen = [...modalIsOpen];
-        newModalIsOpen[idx] = false;
-        setModalIsOpen(newModalIsOpen);
+    const closeModalOfArticle = (idx: number): void => {
+        const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
+        newModalOfArticleIsOpen[idx] = false;
+        setModalOfArticleIsOpen(newModalOfArticleIsOpen);
 
         document.body.style.overflow = '';
     };
@@ -113,11 +113,11 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         <S.LiOfImageWrapper onLoad={(): void => { imageOnloaded(idx, arr); }} ref={(element: HTMLLIElement): void => {
             listOfImageWrapperRef.current[idx] = element;
         }} key={document._id} id={document._id} >
-            <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
-            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
+            <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => { openModalOfArticle(idx); }} />
+            <ReactModal isOpen={modalOfArticleIsOpen[idx]} onRequestClose={(): void => { closeModalOfArticle(idx); }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                        <S.SpanOfModalClose onClick={(): void => { closeModalOfArticle(idx); }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
@@ -169,7 +169,7 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
             doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch)
                 .then((resultData: any): void => {
                     setListOfArticle((prev: Article): Article => ({ meta: resultData.data.meta, data: [...prev.data, ...resultData.data.data] }));
-                    setModalIsOpen(resultData.data.data.map((): boolean => false));
+                    setModalOfArticleIsOpen(resultData.data.data.map((): boolean => false));
                     if (resultData.data.data.length === 0) {
                         setLoading(false);
                         if (listOfArticle.data.length === 0) { // 첫 요청 시에는 렌더링 전이므로 무조건 초깃값으로 0이지만, 이후 요청 시에는 0인 경우가 존재하지 않음

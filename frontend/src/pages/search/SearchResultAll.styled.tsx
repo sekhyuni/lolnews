@@ -21,7 +21,9 @@ const asideWidth = '350px';
 
 const footerWidth = '100px';
 
-const imageOfContentWidth = '120px';
+const imgOfNormalWidth = '120px';
+
+const imgOfPopularWidth = '90px';
 
 // layout
 export const DivOfLayoutWrapper = styled.div`
@@ -66,15 +68,9 @@ export const AsideOfContent = styled.div`
     min-height: 100px;
     border: 0.5px solid #e1e1e1;
     border-radius: 10px;
-    padding: 20px 20px 20px 20px;
+    padding: ${({ contentType }: any) => contentType === 'related' ? '20px 20px 20px 20px' : '20px 20px 0 20px'};
+    margin: 0 0 20px 0;
     background-color: #fff;
-    ${({ contentType }: any) => {
-        if (contentType === 'related') {
-            return css`
-                margin: 0 0 20px 0;
-            `;
-        }
-    }}
 `;
 
 export const Strong = styled.strong`
@@ -150,9 +146,18 @@ export const LiOfArticleWrapper = styled.li`
     padding: 20px 0 20px 0;
     ${({ id, contentType }: any) => {
         if (id) {
-            return css`
-                border-bottom: 1px solid #e5e5e5;
-            `;
+            if (contentType === 'normal') {
+                return css`
+                    border-bottom: 1px solid #e5e5e5;
+                `;
+            } else {
+                return css`
+                    border-bottom: 1px solid #e5e5e5;
+                    :last-child {
+                        border-bottom: none;
+                    }
+                `;
+            }
         } else {
             return css`
                 justify-content: center;
@@ -162,15 +167,6 @@ export const LiOfArticleWrapper = styled.li`
     :first-child {
         border-top: 1px solid #e5e5e5;
     }
-    ${({ contentType }: any) => {
-        if (contentType === 'popular') {
-            return css`
-                :last-child {
-                    border-bottom: none;
-                }
-            `;
-        }
-    }}
 `;
 
 export const Nav = styled.nav`
@@ -230,11 +226,15 @@ export const DivOfTitleContentWrapper = styled.div`
     ${({ contentType }: any) => {
         if (contentType === 'normal') {
             return css`
-                width: calc(100% - (${imageOfContentWidth} + 20px));
+                width: calc(100% - (${imgOfNormalWidth} + 20px));
+            `;
+        } else {
+            return css`
+                width: calc(100% - (${imgOfPopularWidth} + 20px));
             `;
         }
     }}    
-`
+`;
 
 export const DivOfTitle = styled.div`
     ${({ contentType }: any) => {
@@ -271,15 +271,15 @@ export const ImgOfContent = styled.img`
     ${({ contentType }: any) => {
         if (contentType === 'normal') {
             return css`
-                width: ${imageOfContentWidth};
+                width: ${imgOfNormalWidth};
                 height: 80px;
-                border-radius: 6px;
+                border-radius: 8px;
             `;
         } else {
             return css`
-                width: 90px;
+                width: ${imgOfPopularWidth};
                 height: 60px;
-                border-radius: 4px;
+                border-radius: 6px;
             `;
         }
     }}

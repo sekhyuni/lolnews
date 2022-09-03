@@ -22,39 +22,39 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
         data: any;
     }
     const [listOfArticle, setListOfArticle] = useState<Article>({ meta: {}, data: [] });
-    const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
+    const [modalOfArticleIsOpen, setModalOfArticleIsOpen] = useState<Array<boolean>>([]);
     const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const isChangedKeyword = useRef<boolean>(false);
-    const openModal = (idx: number): void => {
-        const newModalIsOpen = [...modalIsOpen];
-        newModalIsOpen[idx] = true;
-        setModalIsOpen(newModalIsOpen);
+    const openModalOfArticle = (idx: number): void => {
+        const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
+        newModalOfArticleIsOpen[idx] = true;
+        setModalOfArticleIsOpen(newModalOfArticleIsOpen);
 
         document.body.style.overflow = 'hidden';
     };
-    const closeModal = (idx: number): void => {
-        const newModalIsOpen = [...modalIsOpen];
-        newModalIsOpen[idx] = false;
-        setModalIsOpen(newModalIsOpen);
+    const closeModalOfArticle = (idx: number): void => {
+        const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
+        newModalOfArticleIsOpen[idx] = false;
+        setModalOfArticleIsOpen(newModalOfArticleIsOpen);
 
         document.body.style.overflow = '';
     };
     const listOfElementOfArticle = listOfArticle.data.length !== 0 ? listOfArticle.data.map((document: any, idx: number): JSX.Element =>
         <S.LiOfArticleWrapper contentType="normal" key={document._id} id={document._id}>
-            <S.ImgOfContent contentType="normal" src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
+            <S.ImgOfContent contentType="normal" src={document._source.thumbnail} onClick={(): void => { openModalOfArticle(idx); }} />
             <S.DivOfTitleContentWrapper contentType="normal">
-                <S.DivOfTitle contentType="normal" onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                <S.DivOfTitle contentType="normal" onClick={(): void => { openModalOfArticle(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                     pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfTitle>
                 <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
                     pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
                 </S.DivOfContent>
             </S.DivOfTitleContentWrapper>
-            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
+            <ReactModal isOpen={modalOfArticleIsOpen[idx]} onRequestClose={(): void => { closeModalOfArticle(idx); }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                        <S.SpanOfModalClose onClick={(): void => { closeModalOfArticle(idx); }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
@@ -104,18 +104,33 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
 
     // for polular article
     const [listOfPopularArticle, setListOfPopularArticle] = useState<Array<any>>([]);
-    const ListOfElementOfPopularArticle = listOfPopularArticle.map((document: any, idx: number): JSX.Element =>
+    const [modalOfPopularArticleIsOpen, setModalOfPopularArticleIsOpen] = useState<Array<boolean>>([]);
+    const openModalOfPopularArticle = (idx: number): void => {
+        const newModalOfPopularArticleIsOpen = [...modalOfPopularArticleIsOpen];
+        newModalOfPopularArticleIsOpen[idx] = true;
+        setModalOfPopularArticleIsOpen(newModalOfPopularArticleIsOpen);
+
+        document.body.style.overflow = 'hidden';
+    };
+    const closeModalOfPopularArticle = (idx: number): void => {
+        const newModalOfPopularArticleIsOpen = [...modalOfPopularArticleIsOpen];
+        newModalOfPopularArticleIsOpen[idx] = false;
+        setModalOfPopularArticleIsOpen(newModalOfPopularArticleIsOpen);
+
+        document.body.style.overflow = '';
+    };
+    const listOfElementOfPopularArticle = listOfPopularArticle.map((document: any, idx: number): JSX.Element =>
         <S.LiOfArticleWrapper contentType="popular" key={document._id} id={document._id}>
-            <S.ImgOfContent contentType="popular" src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
+            <S.ImgOfContent contentType="popular" src={document._source.thumbnail} onClick={(): void => { openModalOfPopularArticle(idx); }} />
             <S.DivOfTitleContentWrapper contentType="popular">
-                <S.DivOfTitle contentType="popular" onClick={(): void => { openModal(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                <S.DivOfTitle contentType="popular" onClick={(): void => { openModalOfPopularArticle(idx); }}>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                     pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfTitle>
             </S.DivOfTitleContentWrapper>
-            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
+            <ReactModal isOpen={modalOfPopularArticleIsOpen[idx]} onRequestClose={(): void => { closeModalOfPopularArticle(idx); }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                        <S.SpanOfModalClose onClick={(): void => { closeModalOfPopularArticle(idx); }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
@@ -133,6 +148,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
         const fetchData = (): void => {
             doAxiosRequest('GET', `${BASE_URL}/article`).then((resultData: any): void => {
                 setListOfPopularArticle(resultData.data);
+                setModalOfPopularArticleIsOpen(resultData.data.map((): boolean => false));
             });
         }
 
@@ -170,7 +186,7 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
             };
             doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch).then((resultData: any): void => {
                 setListOfArticle(resultData.data);
-                setModalIsOpen(resultData.data.data.map((): boolean => false));
+                setModalOfArticleIsOpen(resultData.data.data.map((): boolean => false));
             });
             if (isChangedKeyword.current) {
                 const paramsOfInsert = {
@@ -251,14 +267,15 @@ const SearchResultDocument = ({ isAuthorized, setIsAuthorized, keyword, setKeywo
                             </S.LinkOfRelatedSearchTerm>
                         </S.DivOfRelatedSearchTermWrapper>
                     </S.AsideOfContent>
-                    <S.AsideOfContent contentType="popular">
-                        <S.Strong>
-                            많이 본 기사
-                        </S.Strong>
-                        <S.UlOfListOfArticleWrapper>
-                            {ListOfElementOfPopularArticle}
-                        </S.UlOfListOfArticleWrapper>
-                    </S.AsideOfContent>
+                    {listOfPopularArticle.length !== 0 ?
+                        <S.AsideOfContent contentType="popular">
+                            <S.Strong>
+                                많이 본 기사
+                            </S.Strong>
+                            <S.UlOfListOfArticleWrapper>
+                                {listOfElementOfPopularArticle}
+                            </S.UlOfListOfArticleWrapper>
+                        </S.AsideOfContent> : <></>}
                 </S.Aside>
             </S.Main>
             <Footer layoutName="search" />

@@ -171,7 +171,7 @@ app.get('/article', (req: express.Request, res: express.Response) => {
             }
         ]))
         .then(async articles => {
-            const listOfIdOfPopularArticle = articles.filter((_, idx) => idx < 5).map(article => article._id);
+            const listOfIdOfPopularArticle = articles.filter((_, idx) => idx < 10).map(article => article._id);
 
             const result = await runSearchListOfPopularArticle(listOfIdOfPopularArticle);
 
@@ -186,7 +186,6 @@ app.get('/article', (req: express.Request, res: express.Response) => {
 // 기사 Insert
 app.post('/article', (req: express.Request, res: express.Response) => {
     const { article_id } = req.body;
-    console.log(article_id);
 
     const queryOfArticle = new QueryOfArticle();
     const newArticle = new ArticleModel({ article_id });
