@@ -143,6 +143,7 @@ export const UlOfListOfArticleWrapper = styled.ul`
 export const LiOfArticleWrapper = styled.li`
     display: flex;
     flex-direction: row;
+    align-items: center;
     padding: 20px 0 20px 0;
     ${({ id, contentType }: any) => {
         if (id) {
@@ -257,6 +258,7 @@ export const DivOfTitle = styled.div`
 `;
 
 export const DivOfContent = styled.div`
+    margin: 0 0 10px 0;
     /* display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical; */
@@ -394,4 +396,19 @@ export const StrongOfAllCountOfArticle = styled.strong`
 `;
 
 export const H3OfNoneResult = styled.h3`  
+`;
+
+export const DivOfSourceDateWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const DivOfSource = styled.div`
+    margin: 0 12px 0 0;
+    font-size: 15px;
+`;
+
+export const DivOfDate = styled.div`
+    font-size: 15px;
+    color: #666;
 `;

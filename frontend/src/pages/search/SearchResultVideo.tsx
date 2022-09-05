@@ -7,6 +7,7 @@ import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import Dropdown from '../../components/dropdown/Dropdown';
 import Pagination from '../../components/pagination/Pagination';
+import moment from 'moment';
 import * as S from './SearchResultVideo.styled';
 import * as Svg from '../../components/svg/Svg';
 
@@ -64,6 +65,14 @@ const SearchResultVideo = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                 <S.DivOfContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
                     pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
                 </S.DivOfContent>
+                <S.DivOfSourceDateWrapper>
+                    <S.DivOfSource>
+                        {document._source.officeName}
+                    </S.DivOfSource>
+                    <S.DivOfDate>
+                        {moment(document._source.createdAt).add(9, 'hours').format('YYYY.MM.DD. A hh:mm').replace(/AM|PM/, (el: string): string => ({ AM: '오전', PM: '오후' }[el]) || '')}
+                    </S.DivOfDate>
+                </S.DivOfSourceDateWrapper>
             </S.DivOfTitleContentWrapper>
             <ReactModal isOpen={modalOfArticleIsOpen[idx]} onRequestClose={(): void => { closeModalOfArticle(idx); }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
