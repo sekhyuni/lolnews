@@ -24,7 +24,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Main keyword={keyword} setKeyword={setKeyword} />} />
-        <Route path="/join" element={<Join />} />
+        <Route path="/join" element={<Join setKeyword={setKeyword} />} />
         <Route path="/login" element={<Login keyword={keyword} setKeyword={setKeyword} />} />
         <Route path="/search/*" element={<Search keyword={keyword} setKeyword={setKeyword} />} />
         <Route path="/community" element={<Community />} />
