@@ -43,7 +43,8 @@ const SearchResultVideo = ({ keyword, setKeyword, type, isChangedType }: any) =>
     };
     const insertArticleId = useCallback((articleId: string) => {
         const paramsOfInsert = {
-            articleId
+            userId: localStorage.getItem('id') || '',
+            articleId,
         };
         doAxiosRequest('POST', `${BASE_URL}/article`, paramsOfInsert).then((resultData: any): void => {
             console.log(resultData);

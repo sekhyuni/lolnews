@@ -192,10 +192,10 @@ app.get('/article', (req: express.Request, res: express.Response) => {
 
 // 기사 Insert
 app.post('/article', (req: express.Request, res: express.Response) => {
-    const { articleId } = req.body;
+    const { userId, articleId, } = req.body;
 
     const queryOfArticle = new QueryOfArticle();
-    const newArticle = new ArticleModel({ articleId });
+    const newArticle = new ArticleModel({ userId, articleId, });
     connection
         .then(() => queryOfArticle.create(newArticle))
         .then(({ _id }) => {
