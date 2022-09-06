@@ -8,6 +8,8 @@ import { WordModel } from './mongodb/word/word';
 import { QueryOfWord } from './mongodb/word/word-query';
 import { ArticleModel } from './mongodb/article/article';
 import { QueryOfArticle } from './mongodb/article/article-query';
+import { ForRecommendArticleModel } from './mongodb/article/for-recommend-article';
+import { QueryOfForRecommendArticle } from './mongodb/article/for-recommend-article-query';
 import moment from 'moment';
 
 const app = express();
@@ -192,14 +194,34 @@ app.get('/article', (req: express.Request, res: express.Response) => {
 
 // 기사 Insert
 app.post('/article', (req: express.Request, res: express.Response) => {
-    const { userId, articleId, } = req.body;
+    const { articleId } = req.body;
 
     const queryOfArticle = new QueryOfArticle();
-    const newArticle = new ArticleModel({ userId, articleId, });
+    const newArticle = new ArticleModel({ articleId });
     connection
         .then(() => queryOfArticle.create(newArticle))
         .then(({ _id }) => {
             queryOfArticle.read({ _id }).then(([{ articleId }]) => {
+                console.log(articleId);
+                res.send(articleId);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            res.send(err);
+        });
+});
+
+// 추천을 위한 기사 Insert
+app.post('/article/recommend', (req: express.Request, res: express.Response) => {
+    const { userId, articleId, residenceTime, } = req.body;
+
+    const queryOfForRecommendArticle = new QueryOfForRecommendArticle();
+    const newForRecommendArticle = new ForRecommendArticleModel({ userId, articleId, residenceTime, });
+    connection
+        .then(() => queryOfForRecommendArticle.create(newForRecommendArticle))
+        .then(({ _id }) => {
+            queryOfForRecommendArticle.read({ _id }).then(([{ articleId }]) => {
                 console.log(articleId);
                 res.send(articleId);
             });

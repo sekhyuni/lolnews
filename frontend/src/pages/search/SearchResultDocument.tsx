@@ -22,12 +22,19 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
         meta: any;
         data: any;
     }
+    interface ResidenceTime {
+        start: Date;
+        result: number;
+    }
     const [listOfArticle, setListOfArticle] = useState<Article>({ meta: {}, data: [] });
     const [modalOfArticleIsOpen, setModalOfArticleIsOpen] = useState<Array<boolean>>([]);
     const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const isChangedKeyword = useRef<boolean>(false);
+    const residenceTime = useRef<ResidenceTime>({ start: new Date(0), result: 0 });
     const openModalOfArticle = (idx: number): void => {
+        residenceTime.current.start = new Date();
+
         const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
         newModalOfArticleIsOpen[idx] = true;
         setModalOfArticleIsOpen(newModalOfArticleIsOpen);
@@ -35,6 +42,8 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
         document.body.style.overflow = 'hidden';
     };
     const closeModalOfArticle = (idx: number): void => {
+        residenceTime.current.result = +new Date() - +residenceTime.current.start;
+
         const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
         newModalOfArticleIsOpen[idx] = false;
         setModalOfArticleIsOpen(newModalOfArticleIsOpen);
@@ -43,10 +52,19 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
     };
     const insertArticleId = useCallback((articleId: string) => {
         const paramsOfInsert = {
-            userId: localStorage.getItem('id') || '',
-            articleId,
+            articleId
         };
         doAxiosRequest('POST', `${BASE_URL}/article`, paramsOfInsert).then((resultData: any): void => {
+            console.log(resultData);
+        });
+    }, []);
+    const insertForRecommendArticleId = useCallback((articleId: string) => {
+        const paramsOfInsert = {
+            userId: localStorage.getItem('id') || '',
+            articleId,
+            residenceTime: residenceTime.current.result,
+        };
+        doAxiosRequest('POST', `${BASE_URL}/article/recommend`, paramsOfInsert).then((resultData: any): void => {
             console.log(resultData);
         });
     }, []);
@@ -75,10 +93,16 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
                     </S.DivOfDate>
                 </S.DivOfSourceDateWrapper>
             </S.DivOfTitleContentWrapper>
-            <ReactModal isOpen={modalOfArticleIsOpen[idx]} onRequestClose={(): void => { closeModalOfArticle(idx); }} preventScroll={false} ariaHideApp={false}>
+            <ReactModal isOpen={modalOfArticleIsOpen[idx]} onRequestClose={(): void => {
+                closeModalOfArticle(idx);
+                insertForRecommendArticleId(document._id);
+            }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={(): void => { closeModalOfArticle(idx); }}>&times;</S.SpanOfModalClose>
+                        <S.SpanOfModalClose onClick={(): void => {
+                            closeModalOfArticle(idx);
+                            insertForRecommendArticleId(document._id);
+                        }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
@@ -130,6 +154,8 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
     const [listOfPopularArticle, setListOfPopularArticle] = useState<Array<any>>([]);
     const [modalOfPopularArticleIsOpen, setModalOfPopularArticleIsOpen] = useState<Array<boolean>>([]);
     const openModalOfPopularArticle = (idx: number): void => {
+        residenceTime.current.start = new Date();
+
         const newModalOfPopularArticleIsOpen = [...modalOfPopularArticleIsOpen];
         newModalOfPopularArticleIsOpen[idx] = true;
         setModalOfPopularArticleIsOpen(newModalOfPopularArticleIsOpen);
@@ -137,6 +163,8 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
         document.body.style.overflow = 'hidden';
     };
     const closeModalOfPopularArticle = (idx: number): void => {
+        residenceTime.current.result = +new Date() - +residenceTime.current.start;
+
         const newModalOfPopularArticleIsOpen = [...modalOfPopularArticleIsOpen];
         newModalOfPopularArticleIsOpen[idx] = false;
         setModalOfPopularArticleIsOpen(newModalOfPopularArticleIsOpen);
@@ -157,10 +185,16 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
                     pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
                 </S.DivOfTitle>
             </S.DivOfTitleContentWrapper>
-            <ReactModal isOpen={modalOfPopularArticleIsOpen[idx]} onRequestClose={(): void => { closeModalOfPopularArticle(idx); }} preventScroll={false} ariaHideApp={false}>
+            <ReactModal isOpen={modalOfPopularArticleIsOpen[idx]} onRequestClose={(): void => {
+                closeModalOfPopularArticle(idx);
+                insertForRecommendArticleId(document._id);
+            }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={(): void => { closeModalOfPopularArticle(idx); }}>&times;</S.SpanOfModalClose>
+                        <S.SpanOfModalClose onClick={(): void => {
+                            closeModalOfPopularArticle(idx);
+                            insertForRecommendArticleId(document._id);
+                        }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
