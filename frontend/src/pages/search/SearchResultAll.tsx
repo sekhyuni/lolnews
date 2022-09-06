@@ -11,7 +11,7 @@ import moment from 'moment';
 import * as S from './SearchResultAll.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, type, isChangedType }: any) => {
+const SearchResultAll = ({ keyword, setKeyword, type, isChangedType }: any) => {
     const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     // for location
@@ -242,8 +242,8 @@ const SearchResultAll = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, t
                         <Input keyword={keyword} setKeyword={setKeyword} layoutName="search" type="" />
                     </S.Div>
                     <S.Nav>
-                        {isAuthorized ?
-                            <Dropdown layoutName="search" search={search} setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
+                        {localStorage.getItem('id') ?
+                            <Dropdown layoutName="search" search={search} setKeyword={setKeyword} />
                             :
                             <S.LinkOfLoginPage to="/login" onClick={(): void => {
                                 setKeyword(decodeURI(search.split('query=')[1]));

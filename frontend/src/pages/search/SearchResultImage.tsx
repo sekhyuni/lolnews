@@ -11,7 +11,7 @@ import Dropdown from '../../components/dropdown/Dropdown';
 import * as S from './SearchResultImage.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword, isChangedType }: any) => {
+const SearchResultImage = ({ keyword, setKeyword, isChangedType }: any) => {
     const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     // for location
@@ -224,8 +224,8 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
                         <Input keyword={keyword} setKeyword={setKeyword} layoutName="search" type="image" />
                     </S.Div>
                     <S.Nav>
-                        {isAuthorized ?
-                            <Dropdown layoutName="search" search={search} setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
+                        {localStorage.getItem('id') ?
+                            <Dropdown layoutName="search" search={search} setKeyword={setKeyword} />
                             :
                             <S.LinkOfLoginPage to="/login" onClick={(): void => {
                                 setKeyword(decodeURI(search.split('query=')[1]));

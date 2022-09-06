@@ -4,7 +4,7 @@ import Footer from '../../layouts/footer/Footer';
 import doAxiosRequest from '../../functions/doAxiosRequest';
 import * as S from './Login.styled';
 
-const Login = ({ setIsAuthorized, keyword, setKeyword }: any) => {
+const Login = ({ keyword, setKeyword }: any) => {
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
@@ -13,7 +13,7 @@ const Login = ({ setIsAuthorized, keyword, setKeyword }: any) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <Form setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />
+                    <Form keyword={keyword} setKeyword={setKeyword} />
                 </S.Section>
             </S.Main>
             <Footer layoutName="login" />
@@ -21,7 +21,7 @@ const Login = ({ setIsAuthorized, keyword, setKeyword }: any) => {
     );
 };
 
-const Form = ({ setIsAuthorized, keyword, setKeyword }: any) => {
+const Form = ({ keyword, setKeyword }: any) => {
     const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     const [id, setId] = useState('');
@@ -42,7 +42,7 @@ const Form = ({ setIsAuthorized, keyword, setKeyword }: any) => {
                     doAxiosRequest('POST', `${BASE_URL}/accounts/signin`, params)
                         .then((result: any) => {
                             if (result.data.result.isPermitted) {
-                                setIsAuthorized(true);
+                                localStorage.setItem('id', result.data.result.id);
                                 alert(`${result.data.result.id}님 정상적으로 로그인되었어요!`);
 
                                 keyword ? navigate(`/search/?query=${keyword}`) : navigate('/');

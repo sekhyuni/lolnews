@@ -1,7 +1,7 @@
 import * as S from './Dropdown.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const Dropdown = ({ layoutName, search, setKeyword, setIsAuthorized }: any) => {
+const Dropdown = ({ layoutName, search, setKeyword }: any) => {
     return (
         <S.DivOfDropdownWrapper>
             <S.DivOfUser>
@@ -11,7 +11,7 @@ const Dropdown = ({ layoutName, search, setKeyword, setIsAuthorized }: any) => {
                 <S.LinkOfDropdownMenu to="/community" layoutName={layoutName}>커뮤니티</S.LinkOfDropdownMenu>
                 <S.LinkOfDropdownMenu to="/login" layoutName={layoutName} onClick={() => {
                     layoutName === 'main' ? setKeyword('') : setKeyword(decodeURI(search.split('query=')[1]))
-                    setIsAuthorized(false);
+                    localStorage.clear();
                 }}>로그아웃</S.LinkOfDropdownMenu>
             </S.DivOfDropdownMenuWrapper>
         </S.DivOfDropdownWrapper>

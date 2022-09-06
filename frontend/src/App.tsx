@@ -18,16 +18,15 @@ declare module 'react' {
 }
 
 const App = () => {
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [keyword, setKeyword] = useState<string>('');
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Main isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />} />
+        <Route path="/" element={<Main keyword={keyword} setKeyword={setKeyword} />} />
         <Route path="/join" element={<Join />} />
-        <Route path="/login" element={<Login setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />} />
-        <Route path="/search/*" element={<Search isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} keyword={keyword} setKeyword={setKeyword} />} />
+        <Route path="/login" element={<Login keyword={keyword} setKeyword={setKeyword} />} />
+        <Route path="/search/*" element={<Search keyword={keyword} setKeyword={setKeyword} />} />
         <Route path="/community" element={<Community />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>

@@ -5,7 +5,7 @@ import Input from '../../components/input/Input';
 import Dropdown from '../../components/dropdown/Dropdown';
 import * as S from './Main.styled';
 
-const Main = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
+const Main = ({ keyword, setKeyword }: any) => {
     const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
 
     const [listOfPopularWord, setListOfPopularWord] = useState<Array<string>>([]);
@@ -25,8 +25,8 @@ const Main = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
             <S.Header>
                 <S.HeaderOfTop>
                     <S.Nav>
-                        {isAuthorized ?
-                            <Dropdown layoutName="main" setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
+                        {localStorage.getItem('id') ?
+                            <Dropdown layoutName="main" setKeyword={setKeyword} />
                             :
                             <S.LinkOfLoginPage to="/login" onClick={(): void => {
                                 setKeyword('');
