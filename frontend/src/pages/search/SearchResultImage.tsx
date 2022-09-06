@@ -83,12 +83,16 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
     // for loading
     const [loading, setLoading] = useState<boolean>(true);
     const loader = useRef<HTMLDivElement>(null);
+    const [isFirstRequest, setIsFirstRequest] = useState<boolean>(true);
     const handleObserver = useCallback((entries: any): void => {
+        if (isFirstRequest) {
+            return;
+        }
         const target = entries[0];
         if (target.isIntersecting) {
             setPage((prev: number): number => prev + 1);
         }
-    }, []);
+    }, [isFirstRequest]);
     useEffect(() => {
         const option = {
             root: null,
@@ -115,6 +119,9 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword,
         }).resize(true).pack();
         if (idxOfImage === arrOfImage.length - 1) {
             setLoading(false);
+            if (isFirstRequest) {
+                setIsFirstRequest(false);
+            }
         }
     };
     const listOfElementOfArticle = listOfArticle.data.length !== 0 ? listOfArticle.data.map((document: any, idx: number, arr: any): JSX.Element =>
