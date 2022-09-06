@@ -4,6 +4,15 @@
 
 body {
   margin: 0 0 0 0;
+  font-family: "KNPSKkomi";
+}
+
+input {
+  font-family: "KNPSKkomi";
+}
+
+button {
+  font-family: "KNPSKkomi";
 }
 
 #root {
