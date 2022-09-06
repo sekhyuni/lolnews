@@ -13,6 +13,7 @@ import moment from 'moment';
 const app = express();
 const allowedOrigins = [
     'http://172.24.24.84',
+    'http://172.24.24.84:31707',
     'http://www.lolnews.com',
     'http://lolnews.project.co.kr',
 ];
