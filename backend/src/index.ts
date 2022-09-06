@@ -135,10 +135,10 @@ app.get('/word', (req: express.Request, res: express.Response) => {
 
 // 검색어 Insert
 app.post('/word', (req: express.Request, res: express.Response) => {
-    const { word } = req.body;
+    const { word, date } = req.body;
 
     const queryOfWord = new QueryOfWord();
-    const newWord = new WordModel({ word });
+    const newWord = new WordModel({ word, date });
     connection
         .then(() => queryOfWord.create(newWord))
         .then(({ _id }) => {
@@ -194,10 +194,10 @@ app.get('/article', (req: express.Request, res: express.Response) => {
 
 // 기사 Insert
 app.post('/article', (req: express.Request, res: express.Response) => {
-    const { articleId } = req.body;
+    const { articleId, date } = req.body;
 
     const queryOfArticle = new QueryOfArticle();
-    const newArticle = new ArticleModel({ articleId });
+    const newArticle = new ArticleModel({ articleId, date });
     connection
         .then(() => queryOfArticle.create(newArticle))
         .then(({ _id }) => {
@@ -214,10 +214,10 @@ app.post('/article', (req: express.Request, res: express.Response) => {
 
 // 추천을 위한 기사 Insert
 app.post('/article/recommend', (req: express.Request, res: express.Response) => {
-    const { userId, articleId, residenceTime, } = req.body;
+    const { userId, articleId, date, residenceTime, } = req.body;
 
     const queryOfForRecommendArticle = new QueryOfForRecommendArticle();
-    const newForRecommendArticle = new ForRecommendArticleModel({ userId, articleId, residenceTime, });
+    const newForRecommendArticle = new ForRecommendArticleModel({ userId, articleId, date, residenceTime, });
     connection
         .then(() => queryOfForRecommendArticle.create(newForRecommendArticle))
         .then(({ _id }) => {

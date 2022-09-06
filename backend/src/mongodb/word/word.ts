@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import moment from 'moment';
 
 export interface Word extends mongoose.Document {
     word: string;
@@ -8,7 +7,7 @@ export interface Word extends mongoose.Document {
 
 const wordSchema = new mongoose.Schema({
     word: { type: String, required: true, },
-    date: { type: Date, required: true, default: () => moment().add(9, 'hours'), },
+    date: { type: Date, required: true, },
 });
 
 export const WordModel = mongoose.model<Word>('Word', wordSchema);

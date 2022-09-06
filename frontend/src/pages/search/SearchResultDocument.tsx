@@ -42,7 +42,7 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
         document.body.style.overflow = 'hidden';
     };
     const closeModalOfArticle = (idx: number): void => {
-        residenceTime.current.result = +new Date() - +residenceTime.current.start;
+        residenceTime.current.result = Number(new Date()) - Number(residenceTime.current.start);
 
         const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
         newModalOfArticleIsOpen[idx] = false;
@@ -52,7 +52,8 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
     };
     const insertArticleId = useCallback((articleId: string) => {
         const paramsOfInsert = {
-            articleId
+            articleId,
+            date: moment(residenceTime.current.start).add(9, 'hours')
         };
         doAxiosRequest('POST', `${BASE_URL}/article`, paramsOfInsert).then((resultData: any): void => {
             console.log(resultData);
@@ -62,6 +63,7 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
         const paramsOfInsert = {
             userId: localStorage.getItem('id') || '',
             articleId,
+            date: moment(residenceTime.current.start).add(9, 'hours'),
             residenceTime: residenceTime.current.result,
         };
         doAxiosRequest('POST', `${BASE_URL}/article/recommend`, paramsOfInsert).then((resultData: any): void => {
@@ -163,7 +165,7 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
         document.body.style.overflow = 'hidden';
     };
     const closeModalOfPopularArticle = (idx: number): void => {
-        residenceTime.current.result = +new Date() - +residenceTime.current.start;
+        residenceTime.current.result = Number(new Date()) - Number(residenceTime.current.start);
 
         const newModalOfPopularArticleIsOpen = [...modalOfPopularArticleIsOpen];
         newModalOfPopularArticleIsOpen[idx] = false;
@@ -254,7 +256,8 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
             });
             if (isChangedKeyword.current) {
                 const paramsOfInsert = {
-                    word: decodeURI(search.split('query=')[1])
+                    word: decodeURI(search.split('query=')[1]),
+                    date: moment().add(9, 'hours')
                 };
                 doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
                     console.log(resultData);

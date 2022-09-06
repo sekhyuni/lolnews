@@ -8,6 +8,7 @@ import { re } from '../../functions/re-template-tag';
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import Dropdown from '../../components/dropdown/Dropdown';
+import moment from 'moment';
 import * as S from './SearchResultImage.styled';
 import * as Svg from '../../components/svg/Svg';
 
@@ -42,7 +43,7 @@ const SearchResultImage = ({ keyword, setKeyword, isChangedType }: any) => {
         document.body.style.overflow = 'hidden';
     };
     const closeModalOfArticle = (idx: number): void => {
-        residenceTime.current.result = +new Date() - +residenceTime.current.start;
+        residenceTime.current.result = Number(new Date()) - Number(residenceTime.current.start);
 
         const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
         newModalOfArticleIsOpen[idx] = false;
@@ -52,7 +53,8 @@ const SearchResultImage = ({ keyword, setKeyword, isChangedType }: any) => {
     };
     const insertArticleId = useCallback((articleId: string) => {
         const paramsOfInsert = {
-            articleId
+            articleId,
+            date: moment(residenceTime.current.start).add(9, 'hours')
         };
         doAxiosRequest('POST', `${BASE_URL}/article`, paramsOfInsert).then((resultData: any): void => {
             console.log(resultData);
@@ -62,6 +64,7 @@ const SearchResultImage = ({ keyword, setKeyword, isChangedType }: any) => {
         const paramsOfInsert = {
             userId: localStorage.getItem('id') || '',
             articleId,
+            date: moment(residenceTime.current.start).add(9, 'hours'),
             residenceTime: residenceTime.current.result,
         };
         doAxiosRequest('POST', `${BASE_URL}/article/recommend`, paramsOfInsert).then((resultData: any): void => {
@@ -226,7 +229,8 @@ const SearchResultImage = ({ keyword, setKeyword, isChangedType }: any) => {
                 });
             if (isChangedKeyword.current) {
                 const paramsOfInsert = {
-                    word: decodeURI(search.split('query=')[1])
+                    word: decodeURI(search.split('query=')[1]),
+                    date: moment().add(9, 'hours')
                 };
                 doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
                     console.log(resultData);
