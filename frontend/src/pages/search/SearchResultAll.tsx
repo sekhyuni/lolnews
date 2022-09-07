@@ -314,8 +314,8 @@ const SearchResultAll = ({ keyword, setKeyword, type, isChangedType }: any) => {
                     <S.UlOfListOfArticleWrapper>
                         {listOfElementOfArticle}
                     </S.UlOfListOfArticleWrapper>
-                    {listOfArticle.data.length !== 0 ?
-                        <Pagination total={listOfArticle.meta.count} page={page} setPage={setPage} /> : <></>}
+                    {listOfArticle.data.length !== 0 &&
+                        <Pagination total={listOfArticle.meta.count} page={page} setPage={setPage} />}
                 </S.Section>
                 <S.Aside>
                     <S.AsideOfContent contentType="related">
@@ -334,7 +334,7 @@ const SearchResultAll = ({ keyword, setKeyword, type, isChangedType }: any) => {
                             </S.LinkOfRelatedSearchTerm>
                         </S.DivOfRelatedSearchTermWrapper>
                     </S.AsideOfContent>
-                    {listOfPopularArticle.length !== 0 ?
+                    {listOfPopularArticle.length !== 0 &&
                         <S.AsideOfContent contentType="popular">
                             <S.Strong>
                                 많이 본 기사
@@ -342,7 +342,7 @@ const SearchResultAll = ({ keyword, setKeyword, type, isChangedType }: any) => {
                             <S.UlOfListOfArticleWrapper>
                                 {listOfElementOfPopularArticle}
                             </S.UlOfListOfArticleWrapper>
-                        </S.AsideOfContent> : <></>}
+                        </S.AsideOfContent>}
                 </S.Aside>
             </S.Main>
             <Footer layoutName="search" />

@@ -41,9 +41,10 @@ const Main = ({ keyword, setKeyword }: any) => {
                     <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     <S.Div>
                         <Input layoutName="main" keyword={keyword} setKeyword={setKeyword} />
-                        <S.DivOfPopularWordWrapper>
-                            {listOfPopularWord.map((popularWord: string): JSX.Element => <S.LinkOfPopularWord to={`/search/?query=${popularWord}`}>{`#${popularWord}`}</S.LinkOfPopularWord>)}
-                        </S.DivOfPopularWordWrapper>
+                        {listOfPopularWord.length !== 0 &&
+                            <S.DivOfPopularWordWrapper>
+                                {listOfPopularWord.map((popularWord: string): JSX.Element => <S.LinkOfPopularWord to={`/search/?query=${popularWord}`}>{`#${popularWord}`}</S.LinkOfPopularWord>)}
+                            </S.DivOfPopularWordWrapper>}
                     </S.Div>
                 </S.Section>
             </S.Main>
