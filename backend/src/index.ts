@@ -105,7 +105,7 @@ app.get('/word', (req: express.Request, res: express.Response) => {
             {
                 $match: {
                     date: {
-                        $gte: moment().subtract(1, 'days').add(9, 'hours').toDate(),
+                        $gte: moment().subtract(3, 'hours').add(9, 'hours').toDate(),
                     }
                 }
             },
@@ -161,7 +161,7 @@ app.get('/article', (req: express.Request, res: express.Response) => {
             {
                 $match: {
                     date: {
-                        $gte: moment().subtract(1, 'days').add(9, 'hours').toDate(),
+                        $gte: moment().subtract(3, 'hours').add(9, 'hours').toDate(),
                     }
                 }
             },

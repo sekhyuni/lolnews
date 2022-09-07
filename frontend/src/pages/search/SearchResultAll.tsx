@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactModal from 'react-modal';
+import ReactTooltip from 'react-tooltip';
 import doAxiosRequest from '../../functions/doAxiosRequest';
 import { re } from '../../functions/re-template-tag';
 import Footer from '../../layouts/footer/Footer';
@@ -319,9 +320,11 @@ const SearchResultAll = ({ keyword, setKeyword, type, isChangedType }: any) => {
                 </S.Section>
                 <S.Aside>
                     <S.AsideOfContent contentType="related">
-                        <S.Strong>
-                            연관 검색어
-                        </S.Strong>
+                        <S.DivOfSubjectTitleWrapper>
+                            <S.StrongOfSubjectTitle>연관 검색어</S.StrongOfSubjectTitle>
+                            <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
+                            <ReactTooltip id="related" getContent={() => ''} />
+                        </S.DivOfSubjectTitleWrapper>
                         <S.DivOfRelatedSearchTermWrapper>
                             <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
                                 페이커
@@ -336,9 +339,11 @@ const SearchResultAll = ({ keyword, setKeyword, type, isChangedType }: any) => {
                     </S.AsideOfContent>
                     {listOfPopularArticle.length !== 0 &&
                         <S.AsideOfContent contentType="popular">
-                            <S.Strong>
-                                많이 본 기사
-                            </S.Strong>
+                            <S.DivOfSubjectTitleWrapper>
+                                <S.StrongOfSubjectTitle>많이 본 기사</S.StrongOfSubjectTitle>
+                                <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip />
+                                <ReactTooltip id="popular" getContent={() => '최근 3시간 집계 결과입니다.'} />
+                            </S.DivOfSubjectTitleWrapper>
                             <S.UlOfListOfArticleWrapper>
                                 {listOfElementOfPopularArticle}
                             </S.UlOfListOfArticleWrapper>

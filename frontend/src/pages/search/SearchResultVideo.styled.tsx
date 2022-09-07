@@ -73,9 +73,22 @@ export const AsideOfContent = styled.div`
     background-color: #fff;
 `;
 
-export const Strong = styled.strong`
+export const DivOfSubjectTitleWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     margin: 0 0 20px 0;
+`;
+
+export const StrongOfSubjectTitle = styled.strong`
+    width: fit-content;
     font-size: 16px;
+`;
+
+export const ImgOfHelpOfSubjectTitle = styled.img`
+    width: 16px;
+    height: 16px;
+    margin: 0 0 0 4px;
 `;
 
 export const DivOfRelatedSearchTermWrapper = styled.div`
