@@ -323,7 +323,7 @@ const SearchResultVideo = ({ keyword, setKeyword, type, isChangedType }: any) =>
                         <S.DivOfSubjectTitleWrapper>
                             <S.StrongOfSubjectTitle>연관 검색어</S.StrongOfSubjectTitle>
                             <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
-                            <ReactTooltip id="related" getContent={() => ''} />
+                            <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />
                         </S.DivOfSubjectTitleWrapper>
                         <S.DivOfRelatedSearchTermWrapper>
                             <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
