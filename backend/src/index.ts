@@ -105,7 +105,7 @@ app.get('/word', (req: express.Request, res: express.Response) => {
             {
                 $match: {
                     date: {
-                        $gte: moment().subtract(3, 'hours').add(9, 'hours').toDate(),
+                        $gte: moment().subtract(12, 'hours').add(9, 'hours').toDate(),
                     }
                 }
             },
@@ -122,7 +122,7 @@ app.get('/word', (req: express.Request, res: express.Response) => {
             }
         ]))
         .then(words => {
-            const listOfPopularWord = words.filter((_, idx) => idx < 5).map(word => word._id);
+            const listOfPopularWord = words.slice(0, 5).map(word => word._id);
 
             console.log(listOfPopularWord);
             res.send(listOfPopularWord);
@@ -161,7 +161,7 @@ app.get('/article', (req: express.Request, res: express.Response) => {
             {
                 $match: {
                     date: {
-                        $gte: moment().subtract(3, 'hours').add(9, 'hours').toDate(),
+                        $gte: moment().subtract(12, 'hours').add(9, 'hours').toDate(),
                     }
                 }
             },
@@ -178,7 +178,7 @@ app.get('/article', (req: express.Request, res: express.Response) => {
             }
         ]))
         .then(async articles => {
-            const listOfPopularArticleId = articles.filter((_, idx) => idx < 10).map(article => article._id);
+            const listOfPopularArticleId = articles.slice(0, 10).map(article => article._id);
 
             console.log(listOfPopularArticleId);
 

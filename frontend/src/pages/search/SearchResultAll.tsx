@@ -342,7 +342,7 @@ const SearchResultAll = ({ keyword, setKeyword, type, isChangedType }: any) => {
                             <S.DivOfSubjectTitleWrapper>
                                 <S.StrongOfSubjectTitle>많이 본 기사</S.StrongOfSubjectTitle>
                                 <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip />
-                                <ReactTooltip id="popular" getContent={() => '최근 3시간 집계 결과입니다.'} />
+                                <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} />
                             </S.DivOfSubjectTitleWrapper>
                             <S.UlOfListOfArticleWrapper>
                                 {listOfElementOfPopularArticle}
