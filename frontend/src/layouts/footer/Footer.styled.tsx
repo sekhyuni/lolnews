@@ -8,7 +8,7 @@ const vertical = css`
 
 const mainLeftDistance = '200px';
 
-const sectionWidth = '600px';
+const sectionWidth = '690px';
 
 const asideWidth = '350px';
 

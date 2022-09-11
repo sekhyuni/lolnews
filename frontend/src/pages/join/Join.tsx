@@ -16,7 +16,7 @@ const Join = ({ setKeyword }: any) => {
                     <Form setKeyword={setKeyword} />
                 </S.Section>
             </S.Main>
-            <Footer layoutName="Join" />
+            <Footer layoutName="join" />
         </S.DivOfLayoutWrapper>
     );
 };
