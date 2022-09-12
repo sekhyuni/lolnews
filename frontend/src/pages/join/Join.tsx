@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
+import { setId, setPassword, setPasswordCheck, setEmail, clearState, } from '../../redux/features/user/userSlice';
+import { signupUser } from '../../redux/features/user/userSlice';
 import Footer from '../../layouts/footer/Footer';
-import doAxiosRequest from '../../functions/doAxiosRequest';
 import * as S from './Join.styled';
 
 const Join = ({ setKeyword }: any) => {
@@ -22,13 +23,9 @@ const Join = ({ setKeyword }: any) => {
 };
 
 const Form = ({ setKeyword }: any) => {
-    const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
-
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordCheck, setPasswordCheck] = useState('');
-    const [email, setEmail] = useState('');
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { id, password, passwordCheck, email, } = useAppSelector(state => state.user);
 
     return (
         <>
@@ -54,46 +51,47 @@ const Form = ({ setKeyword }: any) => {
                         return;
                     }
 
-                    const params = {
+                    const paramsOfInsert = {
                         id,
                         password,
                         email,
-                    };
-                    doAxiosRequest('POST', `${BASE_URL}/accounts/signup`, params)
-                        .then((result: any) => {
-                            if (!result.data.result.isDuplicated) {
-                                alert(`${result.data.result.id}님 정상적으로 가입되었어요!`);
+                    }
+                    dispatch(signupUser(paramsOfInsert)).unwrap().then((response: any): void => {
+                        const { result } = response;
+                        if (!result.isDuplicated) {
+                            alert(`${result.id}님 정상적으로 가입되었어요!`);
+                            dispatch(clearState());
 
-                                navigate('/login');
-                            } else {
-                                alert(result.data.result.reason);
-                            }
-                        }).catch((error: any) => {
-                            alert(`Join ${error}`);
-                            console.error(error);
-                        });
+                            navigate('/login');
+                        } else {
+                            alert(result.reason);
+                        }
+                    }).catch((err: any): void => {
+                        alert(`Join ${err}`);
+                        console.error(err);
+                    });
                 }}>
                     <S.Label>
                         <S.Span>아이디</S.Span>
-                        <S.Input type="text" value={id} onChange={event => { setId(event.target.value); }} />
+                        <S.Input type="text" value={id} onChange={event => { dispatch(setId(event.target.value)); }} />
                     </S.Label>
                     <S.Label>
                         <S.Span>비밀번호</S.Span>
-                        <S.Input type="password" value={password} onChange={event => { setPassword(event.target.value); }} />
+                        <S.Input type="password" value={password} onChange={event => { dispatch(setPassword(event.target.value)); }} />
                     </S.Label>
                     <S.Label>
                         <S.Span>비밀번호 확인</S.Span>
-                        <S.Input type="password" value={passwordCheck} onChange={event => { setPasswordCheck(event.target.value); }} />
+                        <S.Input type="password" value={passwordCheck} onChange={event => { dispatch(setPasswordCheck(event.target.value)); }} />
                     </S.Label>
                     <S.Label>
                         <S.Span>이메일</S.Span>
-                        <S.Input type="text" value={email} onChange={event => { setEmail(event.target.value); }} />
+                        <S.Input type="text" value={email} onChange={event => { dispatch(setEmail(event.target.value)); }} />
                     </S.Label>
                     <S.ButtonOfSubmit type="submit">가입</S.ButtonOfSubmit>
                 </S.Form>
             </S.DivOfJoinForm>
             <S.DivOfToLoginForm>
-                <S.P>계정이 있으신가요? <S.LinkOfToLogin to="/login">로그인</S.LinkOfToLogin></S.P>
+                <S.P>계정이 있으신가요? <S.LinkOfToLogin to="/login" onClick={() => { dispatch(clearState()); }}>로그인</S.LinkOfToLogin></S.P>
             </S.DivOfToLoginForm>
         </>
     );

@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
+import { setId, setPassword, clearState, } from '../../redux/features/user/userSlice';
+import { signinUser } from '../../redux/features/user/userSlice';
 import Footer from '../../layouts/footer/Footer';
-import doAxiosRequest from '../../functions/doAxiosRequest';
 import * as S from './Login.styled';
 
 const Login = ({ keyword, setKeyword }: any) => {
@@ -22,11 +23,9 @@ const Login = ({ keyword, setKeyword }: any) => {
 };
 
 const Form = ({ keyword, setKeyword }: any) => {
-    const BASE_URL = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
-
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { id, password } = useAppSelector(state => state.user);
 
     return (
         <>
@@ -35,38 +34,39 @@ const Form = ({ keyword, setKeyword }: any) => {
                 <S.Form onSubmit={event => {
                     event.preventDefault();
 
-                    const params = {
+                    const paramsOfSearch = {
                         id,
-                        password,
+                        password
                     };
-                    doAxiosRequest('POST', `${BASE_URL}/accounts/signin`, params)
-                        .then((result: any) => {
-                            if (result.data.result.isPermitted) {
-                                localStorage.setItem('id', result.data.result.id);
-                                alert(`${result.data.result.id}님 정상적으로 로그인되었어요!`);
+                    dispatch(signinUser(paramsOfSearch)).unwrap().then((response: any): void => {
+                        const { result } = response;
+                        if (result.isPermitted) {
+                            localStorage.setItem('id', result.id);
+                            alert(`${result.id}님 정상적으로 로그인되었어요!`);
+                            dispatch(clearState());
 
-                                keyword ? navigate(`/search/?query=${keyword}`) : navigate('/');
-                            } else {
-                                alert(result.data.result.reason);
-                            }
-                        }).catch((error: any) => {
-                            alert(`Login ${error}`);
-                            console.error(error);
-                        });
+                            keyword ? navigate(`/search/?query=${keyword}`) : navigate('/');
+                        } else {
+                            alert(result.reason);
+                        }
+                    }).catch((err: any): void => {
+                        alert(`Login ${err}`);
+                        console.error(err);
+                    });
                 }}>
                     <S.Label>
                         <S.Span>아이디</S.Span>
-                        <S.Input type="text" value={id} onChange={event => { setId(event.target.value); }} />
+                        <S.Input type="text" value={id} onChange={event => { dispatch(setId(event.target.value)); }} />
                     </S.Label>
                     <S.Label>
                         <S.Span>비밀번호</S.Span>
-                        <S.Input type="password" value={password} onChange={event => { setPassword(event.target.value); }} />
+                        <S.Input type="password" value={password} onChange={event => { dispatch(setPassword(event.target.value)); }} />
                     </S.Label>
                     <S.ButtonOfSubmit type="submit">로그인</S.ButtonOfSubmit>
                 </S.Form>
             </S.DivOfLoginForm>
             <S.DivOfToJoinForm>
-                <S.P>계정이 없으신가요? <S.LinkOfToJoin to="/join">가입하기</S.LinkOfToJoin></S.P>
+                <S.P>계정이 없으신가요? <S.LinkOfToJoin to="/join" onClick={() => { dispatch(clearState()); }}>가입하기</S.LinkOfToJoin></S.P>
             </S.DivOfToJoinForm>
         </>
     );
