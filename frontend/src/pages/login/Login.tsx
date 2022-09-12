@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
 import { setId, setPassword, clearState, } from '../../redux/features/user/userSlice';
-import { signinUser } from '../../redux/features/user/userSlice';
+import { signin } from '../../redux/features/user/userSlice';
 import Footer from '../../layouts/footer/Footer';
 import * as S from './Login.styled';
 
@@ -38,7 +38,7 @@ const Form = ({ keyword, setKeyword }: any) => {
                         id,
                         password
                     };
-                    dispatch(signinUser(paramsOfSearch)).unwrap().then((response: any): void => {
+                    dispatch(signin(paramsOfSearch)).unwrap().then((response: any): void => {
                         const { result } = response;
                         if (result.isPermitted) {
                             localStorage.setItem('id', result.id);

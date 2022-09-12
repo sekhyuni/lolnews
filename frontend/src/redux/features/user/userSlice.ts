@@ -15,7 +15,7 @@ const initialState: UserAttributes = {
     email: '',
 };
 
-export const signupUser = createAsyncThunk("userSlice/signupUser", async (paramsOfInsert: any, thunkAPI) => {
+export const signup = createAsyncThunk("userSlice/signup", async (paramsOfInsert: any, thunkAPI) => {
     try {
         const response: any = await doAxiosRequest('POST', '/accounts/signup', paramsOfInsert);
         return response.data;
@@ -24,7 +24,7 @@ export const signupUser = createAsyncThunk("userSlice/signupUser", async (params
     }
 });
 
-export const signinUser = createAsyncThunk("userSlice/signinUser", async (paramsOfSearch: any, thunkAPI) => {
+export const signin = createAsyncThunk("userSlice/signin", async (paramsOfSearch: any, thunkAPI) => {
     try {
         const response: any = await doAxiosRequest('POST', '/accounts/signin', paramsOfSearch);
         return response.data;

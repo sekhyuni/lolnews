@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
 import { setId, setPassword, setPasswordCheck, setEmail, clearState, } from '../../redux/features/user/userSlice';
-import { signupUser } from '../../redux/features/user/userSlice';
+import { signup } from '../../redux/features/user/userSlice';
 import Footer from '../../layouts/footer/Footer';
 import * as S from './Join.styled';
 
@@ -56,7 +56,7 @@ const Form = ({ setKeyword }: any) => {
                         password,
                         email,
                     }
-                    dispatch(signupUser(paramsOfInsert)).unwrap().then((response: any): void => {
+                    dispatch(signup(paramsOfInsert)).unwrap().then((response: any): void => {
                         const { result } = response;
                         if (!result.isDuplicated) {
                             alert(`${result.id}님 정상적으로 가입되었어요!`);
