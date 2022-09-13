@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Main from './pages/main/Main';
 import Join from './pages/join/Join';
@@ -18,15 +17,13 @@ declare module 'react' {
 }
 
 const App = () => {
-  const [keyword, setKeyword] = useState<string>('');
-
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Main keyword={keyword} setKeyword={setKeyword} />} />
-        <Route path="/join" element={<Join setKeyword={setKeyword} />} />
-        <Route path="/login" element={<Login keyword={keyword} setKeyword={setKeyword} />} />
-        <Route path="/search/*" element={<Search keyword={keyword} setKeyword={setKeyword} />} />
+        <Route path="/" element={<Main />} />
+        <Route path="/join" element={<Join />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/search/*" element={<Search />} />
         <Route path="/community" element={<Community />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>

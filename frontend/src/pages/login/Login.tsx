@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
-import { setId, setPassword, clearState, } from '../../redux/features/user/userSlice';
-import { signin } from '../../redux/features/user/userSlice';
+import { setId, setPassword, clearState } from '../../redux/features/userSlice';
+import { signinAPICall } from '../../redux/features/userSlice';
+import { setKeyword } from '../../redux/features/articleSlice';
 import Footer from '../../layouts/footer/Footer';
 import * as S from './Login.styled';
 
-const Login = ({ keyword, setKeyword }: any) => {
+const Login = () => {
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
@@ -14,7 +15,7 @@ const Login = ({ keyword, setKeyword }: any) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <Form keyword={keyword} setKeyword={setKeyword} />
+                    <Form />
                 </S.Section>
             </S.Main>
             <Footer layoutName="login" />
@@ -22,15 +23,16 @@ const Login = ({ keyword, setKeyword }: any) => {
     );
 };
 
-const Form = ({ keyword, setKeyword }: any) => {
+const Form = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { id, password } = useAppSelector(state => state.user);
+    const { keyword } = useAppSelector(state => state.article);
 
     return (
         <>
             <S.DivOfLoginForm>
-                <S.LinkOfLogo to="/" onClick={() => { setKeyword(''); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
+                <S.LinkOfLogo to="/" onClick={() => { dispatch(setKeyword('')); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
                 <S.Form onSubmit={event => {
                     event.preventDefault();
 
@@ -38,7 +40,7 @@ const Form = ({ keyword, setKeyword }: any) => {
                         id,
                         password
                     };
-                    dispatch(signin(paramsOfSearch)).unwrap().then((response: any): void => {
+                    dispatch(signinAPICall(paramsOfSearch)).unwrap().then((response: any): void => {
                         const { result } = response;
                         if (result.isPermitted) {
                             localStorage.setItem('id', result.id);

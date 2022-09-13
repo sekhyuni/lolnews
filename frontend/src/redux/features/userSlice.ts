@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import doAxiosRequest from "../../../functions/doAxiosRequest";
+import doAxiosRequest from "../../functions/doAxiosRequest";
 
 interface UserAttributes {
     id: string;
@@ -15,7 +15,7 @@ const initialState: UserAttributes = {
     email: '',
 };
 
-export const signup = createAsyncThunk("userSlice/signup", async (paramsOfInsert: any, thunkAPI) => {
+export const signupAPICall = createAsyncThunk('userSlice/signupAPICall', async (paramsOfInsert: any, thunkAPI) => {
     try {
         const response: any = await doAxiosRequest('POST', '/accounts/signup', paramsOfInsert);
         return response.data;
@@ -24,7 +24,7 @@ export const signup = createAsyncThunk("userSlice/signup", async (paramsOfInsert
     }
 });
 
-export const signin = createAsyncThunk("userSlice/signin", async (paramsOfSearch: any, thunkAPI) => {
+export const signinAPICall = createAsyncThunk('userSlice/signinAPICall', async (paramsOfSearch: any, thunkAPI) => {
     try {
         const response: any = await doAxiosRequest('POST', '/accounts/signin', paramsOfSearch);
         return response.data;
@@ -54,5 +54,5 @@ const userSlice = createSlice({
 });
 
 const { actions, reducer } = userSlice;
-export const { setId, setPassword, setPasswordCheck, setEmail, clearState, } = actions;
+export const { setId, setPassword, setPasswordCheck, setEmail, clearState } = actions;
 export default reducer;
