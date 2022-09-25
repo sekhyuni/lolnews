@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
+import { setKeyword, setPage, setOrder, setOrderIsActive, setOrderForDetectOfFetchEffect, setListOfArticle, setListOfPopularArticle, setModalOfArticleIsOpen, setModalOfPopularArticleIsOpen, clearArticleState } from '../../redux/features/articleSlice';
+import { searchListOfArticleAPICall, searchListOfPopularArticleAPICall, insertArticleIdAPICall, insertForRecommendArticleIdAPICall } from '../../redux/features/articleSlice';
+import { insertWordAPICall } from '../../redux/features/wordSlice';
 import ReactModal from 'react-modal';
 import ReactTooltip from 'react-tooltip';
-import doAxiosRequest from '../../functions/doAxiosRequest';
 import { re } from '../../functions/re-template-tag';
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
@@ -12,25 +15,19 @@ import moment from 'moment';
 import * as S from './SearchResultDocument.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any) => {
-    const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
-
-    // for location
+const SearchResultDocument = ({ type, isChangedType }: any) => {
     const { search } = useLocation();
 
-    // for article
-    interface Article {
-        meta: any;
-        data: any;
-    }
+    const dispatch = useAppDispatch();
+    const { page, order, orderIsActive, orderForDetectOfFetchEffect, listOfArticle, listOfPopularArticle, modalOfArticleIsOpen, modalOfPopularArticleIsOpen } = useAppSelector(state => state.article);
+
+    const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
+    const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
+
     interface ResidenceTime {
         start: Date;
         result: number;
     }
-    const [listOfArticle, setListOfArticle] = useState<Article>({ meta: {}, data: [] });
-    const [modalOfArticleIsOpen, setModalOfArticleIsOpen] = useState<Array<boolean>>([]);
-    const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
-    const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const isChangedKeyword = useRef<boolean>(false);
     const residenceTime = useRef<ResidenceTime>({ start: new Date(0), result: 0 });
     const openModalOfArticle = (idx: number): void => {
@@ -38,7 +35,7 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
 
         const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
         newModalOfArticleIsOpen[idx] = true;
-        setModalOfArticleIsOpen(newModalOfArticleIsOpen);
+        dispatch(setModalOfArticleIsOpen(newModalOfArticleIsOpen));
 
         document.body.style.overflow = 'hidden';
     };
@@ -47,7 +44,7 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
 
         const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
         newModalOfArticleIsOpen[idx] = false;
-        setModalOfArticleIsOpen(newModalOfArticleIsOpen);
+        dispatch(setModalOfArticleIsOpen(newModalOfArticleIsOpen));
 
         document.body.style.overflow = '';
     };
@@ -56,10 +53,12 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
             articleId,
             date: moment(residenceTime.current.start).add(9, 'hours')
         };
-        doAxiosRequest('POST', `${BASE_URL}/article`, paramsOfInsert).then((resultData: any): void => {
-            console.log(resultData);
+        dispatch(insertArticleIdAPICall(paramsOfInsert)).unwrap().then((response: any) => {
+            console.log(response);
+        }).catch((err: any) => {
+            console.error(err);
         });
-    }, []);
+    }, [dispatch]);
     const insertForRecommendArticleId = useCallback((articleId: string) => {
         const paramsOfInsert = {
             userId: localStorage.getItem('id') || '',
@@ -67,10 +66,12 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
             date: moment(residenceTime.current.start).add(9, 'hours'),
             residenceTime: residenceTime.current.result,
         };
-        doAxiosRequest('POST', `${BASE_URL}/article/recommend`, paramsOfInsert).then((resultData: any): void => {
-            console.log(resultData);
+        dispatch(insertForRecommendArticleIdAPICall(paramsOfInsert)).unwrap().then((response: any) => {
+            console.log(response);
+        }).catch((err: any) => {
+            console.error(err);
         });
-    }, []);
+    }, [dispatch]);
     const listOfElementOfArticle = listOfArticle.data.length !== 0 ? listOfArticle.data.map((document: any, idx: number): JSX.Element =>
         <S.LiOfArticleWrapper contentType="normal" key={document._id} id={document._id}>
             <S.ImgOfContent contentType="normal" src={document._source.thumbnail} onClick={(): void => {
@@ -123,29 +124,24 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
             <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>
         </S.LiOfArticleWrapper>;
 
-    // for pagination
-    const [page, setPage] = useState<number>(1);
-
-    // for sort
     const listOfOrder = [
         { name: '최신순', value: 'desc' },
         { name: '과거순', value: 'asc' },
         { name: '유사도순', value: 'score' },
     ];
-    const [order, setOrder] = useState<string>('desc');
-    const [orderIsActive, setOrderIsActive] = useState<Array<boolean>>([true, false, false]);
-    const [orderForDetectOfFetchEffect, setOrderForDetectOfFetchEffect] = useState<string>('desc');
-
-    // for type
     const listOfResultDataTypeMenu = [
         { id: 1, link: `/search/?query=${decodeURI(search.split('query=')[1])}`, name: '전체', svg: <Svg.All active={false} /> },
         { id: 2, link: `/search/document?query=${decodeURI(search.split('query=')[1])}`, name: '문서', svg: <Svg.Document active={true} /> },
         { id: 3, link: `/search/image?query=${decodeURI(search.split('query=')[1])}`, name: '포토', svg: <Svg.Image active={false} /> },
-        // { id: 4, link: `/search/video?query=${decodeURI(search.split('query=')[1])}`, name: '영상', svg: <Svg.Video active={false} /> },
     ];
     const listOfElementOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
-            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => { if (resultDataTypeMenu.id !== 2) { isChangedType.current = true; } }}>
+            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => {
+                if (resultDataTypeMenu.id !== 2) {
+                    dispatch(clearArticleState());
+                    isChangedType.current = true;
+                }
+            }}>
                 <S.Span>
                     {resultDataTypeMenu.svg}
                 </S.Span>
@@ -153,15 +149,12 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
             </S.LinkOfResultDataTypeMenu>
         </S.DivOfResultDataTypeMenuWrapper>);
 
-    // for polular article
-    const [listOfPopularArticle, setListOfPopularArticle] = useState<Array<any>>([]);
-    const [modalOfPopularArticleIsOpen, setModalOfPopularArticleIsOpen] = useState<Array<boolean>>([]);
     const openModalOfPopularArticle = (idx: number): void => {
         residenceTime.current.start = new Date();
 
         const newModalOfPopularArticleIsOpen = [...modalOfPopularArticleIsOpen];
         newModalOfPopularArticleIsOpen[idx] = true;
-        setModalOfPopularArticleIsOpen(newModalOfPopularArticleIsOpen);
+        dispatch(setModalOfPopularArticleIsOpen(newModalOfPopularArticleIsOpen));
 
         document.body.style.overflow = 'hidden';
     };
@@ -170,7 +163,7 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
 
         const newModalOfPopularArticleIsOpen = [...modalOfPopularArticleIsOpen];
         newModalOfPopularArticleIsOpen[idx] = false;
-        setModalOfPopularArticleIsOpen(newModalOfPopularArticleIsOpen);
+        dispatch(setModalOfPopularArticleIsOpen(newModalOfPopularArticleIsOpen));
 
         document.body.style.overflow = '';
     };
@@ -212,80 +205,78 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
         </S.LiOfArticleWrapper>);
 
     useEffect(() => {
-        const fetchData = (): void => {
-            doAxiosRequest('GET', `${BASE_URL}/article`).then((resultData: any): void => {
-                setListOfPopularArticle(resultData.data);
-                setModalOfPopularArticleIsOpen(resultData.data.map((): boolean => false));
-            });
-        }
+        dispatch(searchListOfPopularArticleAPICall()).unwrap().then((response: any) => {
+            dispatch(setListOfPopularArticle(response));
+            dispatch(setModalOfPopularArticleIsOpen(response.map((): boolean => false)));
+        }).catch((err: any) => {
+            console.error(err);
+        });
+    }, [dispatch]);
 
-        fetchData();
-    }, []);
-
-    useEffect(() => { // for set order, when keyword is changed
-        setKeyword(decodeURI(search.split('query=')[1]));
+    useEffect(() => {
+        dispatch(setKeyword(decodeURI(search.split('query=')[1])));
         setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
 
-        setOrder('desc');
-        setOrderIsActive([true, false, false]);
+        dispatch(setOrder('desc'));
+        dispatch(setOrderIsActive([true, false, false]));
 
         if (!isChangedType.current) {
             isChangedKeyword.current = true;
         }
         isChangedType.current = false;
-    }, [search]);
+    }, [search, dispatch]);
 
-    useEffect(() => { // for set page, when keyword or order is changed
+    useEffect(() => {
         setKeywordForDetectOfFetchEffect(decodeURI(search.split('query=')[1]));
 
-        setOrderForDetectOfFetchEffect(order);
+        dispatch(setOrderForDetectOfFetchEffect(order));
 
-        setPage(1);
-    }, [order, keywordForDetectOfSetPageEffect]);
+        dispatch(setPage(1));
+    }, [order, keywordForDetectOfSetPageEffect, dispatch]);
 
-    useEffect(() => { // for fetch, when keyword or order or page is changed
-        const fetchData = (): void => { // 나중에 useCallback으로 바꿀까?
-            const paramsOfSearch = {
-                query: decodeURI(search.split('query=')[1]),
-                page,
-                order,
-                isImageRequest: false,
-            };
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch).then((resultData: any): void => {
-                setListOfArticle(resultData.data);
-                setModalOfArticleIsOpen(resultData.data.data.map((): boolean => false));
-            });
-            if (isChangedKeyword.current) {
-                const paramsOfInsert = {
-                    word: decodeURI(search.split('query=')[1]),
-                    date: moment().add(9, 'hours')
-                };
-                doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
-                    console.log(resultData);
-                });
-                isChangedKeyword.current = false;
-            }
+    useEffect(() => {
+        const paramsOfSearch = {
+            query: decodeURI(search.split('query=')[1]),
+            page,
+            order,
+            isImageRequest: false,
         };
-
-        fetchData();
-    }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
+        dispatch(searchListOfArticleAPICall(paramsOfSearch)).unwrap().then((response: any) => {
+            dispatch(setListOfArticle(response));
+            dispatch(setModalOfArticleIsOpen(response.data.map((): boolean => false)));
+        }).catch((err: any) => {
+            console.error(err);
+        });
+        if (isChangedKeyword.current) {
+            const paramsOfInsert = {
+                word: decodeURI(search.split('query=')[1]),
+                date: moment().add(9, 'hours')
+            };
+            dispatch(insertWordAPICall(paramsOfInsert)).unwrap().then((response: any) => {
+                console.log(response);
+            }).catch((err: any) => {
+                console.error(err);
+            });
+            isChangedKeyword.current = false;
+        }
+    }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page, dispatch]);
 
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
                 <S.HeaderOfTop>
-                    <S.LinkOfLogo to="/" onClick={(): void => { setKeyword(''); }}>
+                    <S.LinkOfLogo to="/" onClick={(): void => { dispatch(clearArticleState()); }}>
                         <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkOfLogo>
                     <S.Div>
-                        <Input keyword={keyword} setKeyword={setKeyword} layoutName="search" type="document" />
+                        <Input layoutName="search" type="" />
                     </S.Div>
                     <S.Nav>
                         {localStorage.getItem('id') ?
-                            <Dropdown layoutName="search" search={search} setKeyword={setKeyword} />
+                            <Dropdown layoutName="search" search={search} />
                             :
                             <S.LinkOfLoginPage to="/login" onClick={(): void => {
-                                setKeyword(decodeURI(search.split('query=')[1]));
+                                dispatch(setKeyword(decodeURI(search.split('query=')[1])));
                             }}>
                                 로그인
                             </S.LinkOfLoginPage>}
@@ -303,11 +294,11 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
                         {listOfOrder.map((order: any, idx: number): JSX.Element =>
                             <S.ButtonOfSort
                                 orderIsActive={orderIsActive[idx]} onClick={(): void => {
-                                    setOrder(order.value);
+                                    dispatch(setOrder(order.value));
 
                                     const newOrderIsActive = listOfOrder.map((): boolean => false);
                                     newOrderIsActive[idx] = true;
-                                    setOrderIsActive(newOrderIsActive);
+                                    dispatch(setOrderIsActive(newOrderIsActive));
                                 }}>
                                 {order.name}
                             </S.ButtonOfSort>)}
@@ -316,7 +307,7 @@ const SearchResultDocument = ({ keyword, setKeyword, type, isChangedType }: any)
                         {listOfElementOfArticle}
                     </S.UlOfListOfArticleWrapper>
                     {listOfArticle.data.length !== 0 &&
-                        <Pagination total={listOfArticle.meta.count} page={page} setPage={setPage} />}
+                        <Pagination total={listOfArticle.meta.count} />}
                 </S.Section>
                 <S.Aside>
                     <S.AsideOfContent contentType="related">

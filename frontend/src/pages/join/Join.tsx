@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
-import { setId, setPassword, setPasswordCheck, setEmail, clearState } from '../../redux/features/userSlice';
+import { setId, setPassword, setPasswordCheck, setEmail, clearUserState } from '../../redux/features/userSlice';
 import { signupAPICall } from '../../redux/features/userSlice';
-import { setKeyword } from '../../redux/features/articleSlice';
+import { setKeyword, clearArticleState } from '../../redux/features/articleSlice';
 import Footer from '../../layouts/footer/Footer';
 import * as S from './Join.styled';
 
@@ -31,7 +31,7 @@ const Form = () => {
     return (
         <>
             <S.DivOfJoinForm>
-                <S.LinkOfLogo to="/" onClick={() => { dispatch(setKeyword('')); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
+                <S.LinkOfLogo to="/" onClick={() => { dispatch(clearArticleState()); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
                 <S.Form onSubmit={event => {
                     event.preventDefault();
 
@@ -61,7 +61,7 @@ const Form = () => {
                         const { result } = response;
                         if (!result.isDuplicated) {
                             alert(`${result.id}님 정상적으로 가입되었어요!`);
-                            dispatch(clearState());
+                            dispatch(clearUserState());
 
                             navigate('/login');
                         } else {
@@ -92,7 +92,7 @@ const Form = () => {
                 </S.Form>
             </S.DivOfJoinForm>
             <S.DivOfToLoginForm>
-                <S.P>계정이 있으신가요? <S.LinkOfToLogin to="/login" onClick={() => { dispatch(clearState()); }}>로그인</S.LinkOfToLogin></S.P>
+                <S.P>계정이 있으신가요? <S.LinkOfToLogin to="/login" onClick={() => { dispatch(clearUserState()); }}>로그인</S.LinkOfToLogin></S.P>
             </S.DivOfToLoginForm>
         </>
     );

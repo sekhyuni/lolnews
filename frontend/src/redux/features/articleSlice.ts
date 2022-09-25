@@ -11,6 +11,7 @@ interface ArticleAttributes {
     page: number;
     order: string;
     orderIsActive: Array<boolean>;
+    orderForDetectOfFetchEffect: string;
     listOfArticle: Article;
     modalOfArticleIsOpen: Array<boolean>;
     listOfPopularArticle: Array<any>;
@@ -22,6 +23,7 @@ const initialState: ArticleAttributes = {
     page: 1,
     order: 'desc',
     orderIsActive: [true, false, false],
+    orderForDetectOfFetchEffect: 'desc',
     listOfArticle: { meta: {}, data: [] },
     modalOfArticleIsOpen: [],
     listOfPopularArticle: [],
@@ -86,8 +88,15 @@ const articleSlice = createSlice({
         setOrderIsActive: (state, action: PayloadAction<Array<boolean>>) => {
             state.orderIsActive = action.payload;
         },
+        setOrderForDetectOfFetchEffect: (state, action: PayloadAction<string>) => {
+            state.orderForDetectOfFetchEffect = action.payload;
+        },
         setListOfArticle: (state, action: PayloadAction<Article>) => {
             state.listOfArticle = action.payload;
+        },
+        addListOfArticle: (state, action: PayloadAction<Article>) => {
+            state.listOfArticle.meta = action.payload.meta;
+            state.listOfArticle.data.push(...action.payload.data);
         },
         setListOfPopularArticle: (state, action: PayloadAction<Array<any>>) => {
             state.listOfPopularArticle = action.payload;
@@ -96,12 +105,12 @@ const articleSlice = createSlice({
             state.modalOfArticleIsOpen = action.payload;
         },
         setModalOfPopularArticleIsOpen: (state, action: PayloadAction<Array<boolean>>) => {
-            state.modalOfArticleIsOpen = action.payload;
+            state.modalOfPopularArticleIsOpen = action.payload;
         },
-        clearState: (): ArticleAttributes => initialState,
+        clearArticleState: (): ArticleAttributes => initialState,
     },
 });
 
 const { actions, reducer } = articleSlice;
-export const { setKeyword, setPage, incrementPage, decrementPage, setOrder, setOrderIsActive, setListOfArticle, setListOfPopularArticle, setModalOfArticleIsOpen, setModalOfPopularArticleIsOpen, clearState } = actions;
+export const { setKeyword, setPage, incrementPage, decrementPage, setOrder, setOrderIsActive, setOrderForDetectOfFetchEffect, setListOfArticle, addListOfArticle, setListOfPopularArticle, setModalOfArticleIsOpen, setModalOfPopularArticleIsOpen, clearArticleState } = actions;
 export default reducer;

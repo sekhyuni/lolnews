@@ -3,7 +3,6 @@ import Main from './pages/main/Main';
 import Join from './pages/join/Join';
 import Login from './pages/login/Login';
 import Search from './pages/search/index';
-import Community from './pages/community/Community';
 import NotFound from './pages/notfound/Notfound';
 
 declare module 'react' {
@@ -24,7 +23,6 @@ const App = () => {
         <Route path="/join" element={<Join />} />
         <Route path="/login" element={<Login />} />
         <Route path="/search/*" element={<Search />} />
-        <Route path="/community" element={<Community />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </Router>

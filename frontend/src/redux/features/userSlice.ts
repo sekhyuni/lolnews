@@ -49,10 +49,10 @@ const userSlice = createSlice({
         setEmail: (state, action: PayloadAction<string>): void => {
             state.email = action.payload;
         },
-        clearState: (): UserAttributes => initialState,
+        clearUserState: (): UserAttributes => initialState,
     },
 });
 
 const { actions, reducer } = userSlice;
-export const { setId, setPassword, setPasswordCheck, setEmail, clearState } = actions;
+export const { setId, setPassword, setPasswordCheck, setEmail, clearUserState } = actions;
 export default reducer;

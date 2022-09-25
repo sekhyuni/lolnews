@@ -34,10 +34,10 @@ const wordSlice = createSlice({
         setListOfPopularWord: (state, action: PayloadAction<Array<string>>) => {
             state.listOfPopularWord = action.payload;
         },
-        clearState: (): WordAttributes => initialState,
+        clearWordState: (): WordAttributes => initialState,
     },
 });
 
 const { actions, reducer } = wordSlice;
-export const { setListOfPopularWord, clearState } = actions;
+export const { setListOfPopularWord, clearWordState } = actions;
 export default reducer;

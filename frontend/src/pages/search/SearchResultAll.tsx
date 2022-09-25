@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
-import { setKeyword, setPage, setOrder, setOrderIsActive, setListOfArticle, setListOfPopularArticle, setModalOfArticleIsOpen, setModalOfPopularArticleIsOpen } from '../../redux/features/articleSlice';
+import { setKeyword, setPage, setOrder, setOrderIsActive, setOrderForDetectOfFetchEffect, setListOfArticle, setListOfPopularArticle, setModalOfArticleIsOpen, setModalOfPopularArticleIsOpen, clearArticleState } from '../../redux/features/articleSlice';
 import { searchListOfArticleAPICall, searchListOfPopularArticleAPICall, insertArticleIdAPICall, insertForRecommendArticleIdAPICall } from '../../redux/features/articleSlice';
 import { insertWordAPICall } from '../../redux/features/wordSlice';
 import ReactModal from 'react-modal';
@@ -19,7 +19,7 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
     const { search } = useLocation();
 
     const dispatch = useAppDispatch();
-    const { page, order, orderIsActive, listOfArticle, listOfPopularArticle, modalOfArticleIsOpen, modalOfPopularArticleIsOpen } = useAppSelector(state => state.article);
+    const { page, order, orderIsActive, orderForDetectOfFetchEffect, listOfArticle, listOfPopularArticle, modalOfArticleIsOpen, modalOfPopularArticleIsOpen } = useAppSelector(state => state.article);
 
     const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
@@ -129,17 +129,19 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
         { name: '과거순', value: 'asc' },
         { name: '유사도순', value: 'score' },
     ];
-    const [orderForDetectOfFetchEffect, setOrderForDetectOfFetchEffect] = useState<string>('desc');
-
     const listOfResultDataTypeMenu = [
         { id: 1, link: `/search/?query=${decodeURI(search.split('query=')[1])}`, name: '전체', svg: <Svg.All active={true} /> },
         { id: 2, link: `/search/document?query=${decodeURI(search.split('query=')[1])}`, name: '문서', svg: <Svg.Document active={false} /> },
         { id: 3, link: `/search/image?query=${decodeURI(search.split('query=')[1])}`, name: '포토', svg: <Svg.Image active={false} /> },
-        // { id: 4, link: `/search/video?query=${decodeURI(search.split('query=')[1])}`, name: '영상', svg: <Svg.Video active={false} /> },
     ];
     const listOfElementOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
         <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
-            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => { if (resultDataTypeMenu.id !== 1) { isChangedType.current = true; } }}>
+            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => {
+                if (resultDataTypeMenu.id !== 1) {
+                    dispatch(clearArticleState());
+                    isChangedType.current = true;
+                }
+            }}>
                 <S.Span>
                     {resultDataTypeMenu.svg}
                 </S.Span>
@@ -211,7 +213,7 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
         });
     }, [dispatch]);
 
-    useEffect(() => { // for set order, when keyword is changed
+    useEffect(() => {
         dispatch(setKeyword(decodeURI(search.split('query=')[1])));
         setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
 
@@ -224,15 +226,15 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
         isChangedType.current = false;
     }, [search, dispatch]);
 
-    useEffect(() => { // for set page, when keyword or order is changed
+    useEffect(() => {
         setKeywordForDetectOfFetchEffect(decodeURI(search.split('query=')[1]));
 
-        setOrderForDetectOfFetchEffect(order);
+        dispatch(setOrderForDetectOfFetchEffect(order));
 
         dispatch(setPage(1));
     }, [order, keywordForDetectOfSetPageEffect, dispatch]);
 
-    useEffect(() => { // for fetch, when keyword or order or page is changed
+    useEffect(() => {
         const paramsOfSearch = {
             query: decodeURI(search.split('query=')[1]),
             page,
@@ -263,7 +265,7 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
         <S.DivOfLayoutWrapper>
             <S.Header>
                 <S.HeaderOfTop>
-                    <S.LinkOfLogo to="/" onClick={(): void => { dispatch(setKeyword('')); }}>
+                    <S.LinkOfLogo to="/" onClick={(): void => { dispatch(clearArticleState()); }}>
                         <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkOfLogo>
                     <S.Div>
