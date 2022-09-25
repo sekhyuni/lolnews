@@ -19,6 +19,8 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: pwd
       - run: cd /home/runner/work/toy_project/toy_project/frontend
+      - run: pwd
+      - run: ls -al
       - run: npm install
       - run: npm run build --if-present
       - run: npm test
