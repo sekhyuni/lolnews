@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
 import { setId, setPassword, clearUserState } from '../../redux/features/userSlice';
 import { signinAPICall } from '../../redux/features/userSlice';
-import { setKeyword, clearArticleState } from '../../redux/features/articleSlice';
+import { clearArticleState } from '../../redux/features/articleSlice';
 import Footer from '../../layouts/footer/Footer';
 import * as S from './Login.styled';
 

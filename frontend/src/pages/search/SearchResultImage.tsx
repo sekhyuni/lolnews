@@ -244,13 +244,9 @@ const SearchResultImage = ({ isChangedType }: any) => {
                     </S.Div>
                     <S.Nav>
                         {localStorage.getItem('id') ?
-                            <Dropdown layoutName="search" search={search} />
+                            <Dropdown layoutName="search" />
                             :
-                            <S.LinkOfLoginPage to="/login" onClick={(): void => {
-                                dispatch(setKeyword(decodeURI(search.split('query=')[1])));
-                            }}>
-                                로그인
-                            </S.LinkOfLoginPage>}
+                            <S.LinkOfLoginPage to="/login">로그인</S.LinkOfLoginPage>}
                     </S.Nav>
                 </S.HeaderOfTop>
                 <S.HeaderOfBottom>

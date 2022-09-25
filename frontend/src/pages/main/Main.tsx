@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
-import { setKeyword } from '../../redux/features/articleSlice';
 import { setListOfPopularWord } from '../../redux/features/wordSlice';
 import { searchListOfPopularWordAPICall } from '../../redux/features/wordSlice';
 import Footer from '../../layouts/footer/Footer';
@@ -26,11 +25,7 @@ const Main = () => {
                         {localStorage.getItem('id') ?
                             <Dropdown layoutName="main" />
                             :
-                            <S.LinkOfLoginPage to="/login" onClick={(): void => {
-                                dispatch(setKeyword(''));
-                            }}>
-                                로그인
-                            </S.LinkOfLoginPage>}
+                            <S.LinkOfLoginPage to="/login">로그인</S.LinkOfLoginPage>}
                     </S.Nav>
                 </S.HeaderOfTop>
             </S.Header>
