@@ -1,24 +1,22 @@
-import { useState, useEffect } from 'react';
-import doAxiosRequest from '../../functions/doAxiosRequest';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
+import { setKeyword } from '../../redux/features/articleSlice';
+import { setListOfPopularWord } from '../../redux/features/wordSlice';
+import { searchListOfPopularWordAPICall } from '../../redux/features/wordSlice';
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import Dropdown from '../../components/dropdown/Dropdown';
 import * as S from './Main.styled';
 
-const Main = ({ keyword, setKeyword }: any) => {
-    const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
-
-    const [listOfPopularWord, setListOfPopularWord] = useState<Array<string>>([]);
+const Main = () => {
+    const dispatch = useAppDispatch();
+    const { listOfPopularWord } = useAppSelector(state => state.word);
 
     useEffect(() => {
-        const fetchData = (): void => {
-            doAxiosRequest('GET', `${BASE_URL}/word`).then((resultData: any): void => {
-                setListOfPopularWord(resultData.data);
-            });
-        }
-
-        fetchData();
-    }, []);
+        dispatch(searchListOfPopularWordAPICall()).unwrap().then((response: any) => {
+            dispatch(setListOfPopularWord(response));
+        });
+    }, [dispatch]);
 
     return (
         <S.DivOfLayoutWrapper>
@@ -26,10 +24,10 @@ const Main = ({ keyword, setKeyword }: any) => {
                 <S.HeaderOfTop>
                     <S.Nav>
                         {localStorage.getItem('id') ?
-                            <Dropdown layoutName="main" setKeyword={setKeyword} />
+                            <Dropdown layoutName="main" />
                             :
                             <S.LinkOfLoginPage to="/login" onClick={(): void => {
-                                setKeyword('');
+                                dispatch(setKeyword(''));
                             }}>
                                 로그인
                             </S.LinkOfLoginPage>}
@@ -40,7 +38,7 @@ const Main = ({ keyword, setKeyword }: any) => {
                 <S.Section>
                     <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     <S.Div>
-                        <Input layoutName="main" keyword={keyword} setKeyword={setKeyword} />
+                        <Input layoutName="main" />
                         {listOfPopularWord.length !== 0 &&
                             <S.DivOfPopularWordWrapper>
                                 {listOfPopularWord.map((popularWord: string): JSX.Element => <S.LinkOfPopularWord to={`/search/?query=${popularWord}`}>{`#${popularWord}`}</S.LinkOfPopularWord>)}

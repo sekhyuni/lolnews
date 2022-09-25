@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
-import { setId, setPassword, setPasswordCheck, setEmail, clearState, } from '../../redux/features/user/userSlice';
-import { signup } from '../../redux/features/user/userSlice';
+import { setId, setPassword, setPasswordCheck, setEmail, clearUserState } from '../../redux/features/userSlice';
+import { signupAPICall } from '../../redux/features/userSlice';
+import { setKeyword, clearArticleState } from '../../redux/features/articleSlice';
 import Footer from '../../layouts/footer/Footer';
 import * as S from './Join.styled';
 
-const Join = ({ setKeyword }: any) => {
+const Join = () => {
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
@@ -14,7 +15,7 @@ const Join = ({ setKeyword }: any) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <Form setKeyword={setKeyword} />
+                    <Form />
                 </S.Section>
             </S.Main>
             <Footer layoutName="join" />
@@ -22,15 +23,15 @@ const Join = ({ setKeyword }: any) => {
     );
 };
 
-const Form = ({ setKeyword }: any) => {
+const Form = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { id, password, passwordCheck, email, } = useAppSelector(state => state.user);
+    const { id, password, passwordCheck, email } = useAppSelector(state => state.user);
 
     return (
         <>
             <S.DivOfJoinForm>
-                <S.LinkOfLogo to="/" onClick={() => { setKeyword(''); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
+                <S.LinkOfLogo to="/" onClick={() => { dispatch(clearArticleState()); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
                 <S.Form onSubmit={event => {
                     event.preventDefault();
 
@@ -56,11 +57,11 @@ const Form = ({ setKeyword }: any) => {
                         password,
                         email,
                     }
-                    dispatch(signup(paramsOfInsert)).unwrap().then((response: any): void => {
+                    dispatch(signupAPICall(paramsOfInsert)).unwrap().then((response: any): void => {
                         const { result } = response;
                         if (!result.isDuplicated) {
                             alert(`${result.id}님 정상적으로 가입되었어요!`);
-                            dispatch(clearState());
+                            dispatch(clearUserState());
 
                             navigate('/login');
                         } else {
@@ -91,7 +92,7 @@ const Form = ({ setKeyword }: any) => {
                 </S.Form>
             </S.DivOfJoinForm>
             <S.DivOfToLoginForm>
-                <S.P>계정이 있으신가요? <S.LinkOfToLogin to="/login" onClick={() => { dispatch(clearState()); }}>로그인</S.LinkOfToLogin></S.P>
+                <S.P>계정이 있으신가요? <S.LinkOfToLogin to="/login" onClick={() => { dispatch(clearUserState()); }}>로그인</S.LinkOfToLogin></S.P>
             </S.DivOfToLoginForm>
         </>
     );
