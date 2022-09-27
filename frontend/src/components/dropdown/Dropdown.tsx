@@ -1,3 +1,4 @@
+import React from 'react';
 import * as S from './Dropdown.styled';
 import * as Svg from '../../components/svg/Svg';
 
@@ -14,4 +15,4 @@ const Dropdown = ({ layoutName }: any) => {
     );
 };
 
-export default Dropdown;
+export default React.memo(Dropdown);

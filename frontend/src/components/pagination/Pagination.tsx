@@ -3,10 +3,10 @@ import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
 import { setPage, incrementPage, decrementPage } from '../../redux/features/articleSlice';
 import * as S from './Pagination.styled';
 
-function Pagination({ total }: any) {
+const Pagination = ({ total }: any) => {
     const dispatch = useAppDispatch();
     const { page } = useAppSelector(state => state.article);
-    
+
     const numPages = Math.ceil(total / 10);
     const [pageStartIdx, setPageStartIdx] = useState<number>(1);
     const [pageEndIdx, setPageEndIdx] = useState<number>(10);
@@ -49,6 +49,6 @@ function Pagination({ total }: any) {
             </S.NavOfButtonOfPageWrapper>
         </>
     );
-}
+};
 
 export default Pagination;

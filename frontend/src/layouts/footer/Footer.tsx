@@ -1,3 +1,4 @@
+import React from 'react';
 import * as S from './Footer.styled';
 
 const Footer = ({ layoutName }: any) => {
@@ -34,4 +35,4 @@ const Footer = ({ layoutName }: any) => {
     );
 };
 
-export default Footer;
+export default React.memo(Footer);
