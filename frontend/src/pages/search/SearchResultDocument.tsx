@@ -16,6 +16,8 @@ import * as S from './SearchResultDocument.styled';
 import * as Svg from '../../components/svg/Svg';
 
 const SearchResultDocument = ({ type, isChangedType }: any) => {
+    // react-tooltip bug fix 후, 아랫줄 제거
+    const [tooltip, showTooltip] = useState(true);
     const { search } = useLocation();
 
     const dispatch = useAppDispatch();
@@ -217,10 +219,10 @@ const SearchResultDocument = ({ type, isChangedType }: any) => {
         dispatch(setKeyword(decodeURI(search.split('query=')[1])));
         setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
 
-        dispatch(setOrder('desc'));
-        dispatch(setOrderIsActive([true, false, false]));
-
-        if (!isChangedType.current) {
+        if (isChangedType.current) {
+            dispatch(setOrder('desc'));
+            dispatch(setOrderIsActive([true, false, false]));
+        } else {
             isChangedKeyword.current = true;
         }
         isChangedType.current = false;
@@ -269,7 +271,7 @@ const SearchResultDocument = ({ type, isChangedType }: any) => {
                         <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkOfLogo>
                     <S.Div>
-                        <Input layoutName="search" type="" />
+                        <Input layoutName="search" type="document" />
                     </S.Div>
                     <S.Nav>
                         {localStorage.getItem('id') ?
@@ -284,8 +286,10 @@ const SearchResultDocument = ({ type, isChangedType }: any) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <S.SpanOfAllCountOfArticleWrapper>검색결과 : 총 <S.StrongOfAllCountOfArticle>{String(listOfArticle.meta.count)
-                        .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</S.StrongOfAllCountOfArticle>건</S.SpanOfAllCountOfArticleWrapper>
+                    <S.StrongOfAllCountOfArticle>
+                        <S.SpanOfKeyword>{decodeURI(search.split('query=')[1])}</S.SpanOfKeyword>
+                        &nbsp;검색결과 :&nbsp;{String(listOfArticle.meta.count).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}건
+                    </S.StrongOfAllCountOfArticle>
                     <S.DivOfLnb>
                         {listOfOrder.map((order: any, idx: number): JSX.Element =>
                             <S.ButtonOfSort
@@ -309,8 +313,11 @@ const SearchResultDocument = ({ type, isChangedType }: any) => {
                     <S.AsideOfContent contentType="related">
                         <S.DivOfSubjectTitleWrapper>
                             <S.StrongOfSubjectTitle>연관 검색어</S.StrongOfSubjectTitle>
-                            <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
-                            <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />
+                            {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
+                            <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} /> */}
+                            {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
+                            <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
+                            {tooltip && <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />}
                         </S.DivOfSubjectTitleWrapper>
                         <S.DivOfRelatedSearchTermWrapper>
                             <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
@@ -328,8 +335,11 @@ const SearchResultDocument = ({ type, isChangedType }: any) => {
                         <S.AsideOfContent contentType="popular">
                             <S.DivOfSubjectTitleWrapper>
                                 <S.StrongOfSubjectTitle>많이 본 기사</S.StrongOfSubjectTitle>
-                                <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip />
-                                <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} />
+                                {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip />
+                                <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} /> */}
+                                {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
+                                <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
+                                {tooltip && <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} />}
                             </S.DivOfSubjectTitleWrapper>
                             <S.UlOfListOfArticleWrapper>
                                 {listOfElementOfPopularArticle}

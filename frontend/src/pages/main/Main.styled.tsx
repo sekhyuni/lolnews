@@ -58,8 +58,7 @@ export const Div = styled.div`
 `;
 
 export const Header = styled.header`
-    display: flex;
-    flex-direction: column;
+    ${vertical}
     height: 130px;
 `;
 
@@ -81,8 +80,7 @@ export const Nav = styled.nav`
 export const LinkOfLoginPage = styled(Link_)`
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    ${center}
     width: 110px;
     border: 1.5px solid #ededed;
     border-radius: 4px;

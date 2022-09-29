@@ -10,12 +10,13 @@ import { re } from '../../functions/re-template-tag';
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import Dropdown from '../../components/dropdown/Dropdown';
-import Pagination from '../../components/pagination/Pagination';
 import moment from 'moment';
 import * as S from './SearchResultAll.styled';
 import * as Svg from '../../components/svg/Svg';
 
 const SearchResultAll = ({ type, isChangedType }: any) => {
+    // react-tooltip bug fix 후, 아랫줄 제거
+    const [tooltip, showTooltip] = useState(true);
     const { search } = useLocation();
 
     const dispatch = useAppDispatch();
@@ -72,7 +73,7 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
             console.error(err);
         });
     }, [dispatch]);
-    const listOfElementOfArticle = listOfArticle.data.length !== 0 ? listOfArticle.data.map((document: any, idx: number): JSX.Element =>
+    const listOfElementOfArticle = listOfArticle.data.length !== 0 ? listOfArticle.data.slice(0, 5).map((document: any, idx: number): JSX.Element =>
         <S.LiOfArticleWrapper contentType="normal" key={document._id} id={document._id}>
             <S.ImgOfContent contentType="normal" src={document._source.thumbnail} onClick={(): void => {
                 openModalOfArticle(idx);
@@ -123,6 +124,38 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
         <S.LiOfArticleWrapper>
             <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>
         </S.LiOfArticleWrapper>;
+    const listOfElementOfImage = listOfArticle.data.length !== 0 ? listOfArticle.data.slice(0, 8).map((document: any, idx: number, arr: any): JSX.Element =>
+        <S.LiOfImageWrapper key={document._id} id={document._id} >
+            <S.ImgOfContent contentType="image" src={document._source.thumbnail} onClick={(): void => {
+                openModalOfArticle(idx);
+                insertArticleId(document._id);
+            }} />
+            <ReactModal isOpen={modalOfArticleIsOpen[idx]} onRequestClose={(): void => {
+                closeModalOfArticle(idx);
+                insertForRecommendArticleId(document._id);
+            }} preventScroll={false} ariaHideApp={false}>
+                <S.DivOfModalWrapper>
+                    <S.DivOfSpanModalCloseWrapper>
+                        <S.SpanOfModalClose onClick={(): void => {
+                            closeModalOfArticle(idx);
+                            insertForRecommendArticleId(document._id);
+                        }}>&times;</S.SpanOfModalClose>
+                    </S.DivOfSpanModalCloseWrapper>
+                    <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
+                        pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
+                    </S.DivOfModalTitle>
+                    <S.DivOfModalContent>{document._source.content.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfContent: string) =>
+                        pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
+                    </S.DivOfModalContent>
+                    <S.ImgOfModalContent src={document._source.thumbnail} />
+                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
+                </S.DivOfModalWrapper>
+            </ReactModal>
+        </S.LiOfImageWrapper>)
+        :
+        <S.LiOfImageWrapper>
+            <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>
+        </S.LiOfImageWrapper>;
 
     const listOfOrder = [
         { name: '최신순', value: 'desc' },
@@ -284,33 +317,58 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <S.SpanOfAllCountOfArticleWrapper>검색결과 : 총 <S.StrongOfAllCountOfArticle>{String(listOfArticle.meta.count)
-                        .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</S.StrongOfAllCountOfArticle>건</S.SpanOfAllCountOfArticleWrapper>
-                    <S.DivOfLnb>
-                        {listOfOrder.map((order: any, idx: number): JSX.Element =>
-                            <S.ButtonOfSort
-                                orderIsActive={orderIsActive[idx]} onClick={(): void => {
-                                    dispatch(setOrder(order.value));
+                    <S.DivOfDocumentWrapper>
+                        <S.StrongOfAllCountOfArticle>
+                            <S.SpanOfKeyword>{decodeURI(search.split('query=')[1])}</S.SpanOfKeyword>
+                            &nbsp;검색결과 :&nbsp;{String(listOfArticle.meta.count).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}건
+                        </S.StrongOfAllCountOfArticle>
+                        <S.DivOfLnb>
+                            {listOfOrder.map((order: any, idx: number): JSX.Element =>
+                                <S.ButtonOfSort
+                                    orderIsActive={orderIsActive[idx]} onClick={(): void => {
+                                        dispatch(setOrder(order.value));
 
-                                    const newOrderIsActive = listOfOrder.map((): boolean => false);
-                                    newOrderIsActive[idx] = true;
-                                    dispatch(setOrderIsActive(newOrderIsActive));
-                                }}>
-                                {order.name}
-                            </S.ButtonOfSort>)}
-                    </S.DivOfLnb>
-                    <S.UlOfListOfArticleWrapper>
-                        {listOfElementOfArticle}
-                    </S.UlOfListOfArticleWrapper>
-                    {listOfArticle.data.length !== 0 &&
-                        <Pagination total={listOfArticle.meta.count} />}
+                                        const newOrderIsActive = listOfOrder.map((): boolean => false);
+                                        newOrderIsActive[idx] = true;
+                                        dispatch(setOrderIsActive(newOrderIsActive));
+                                    }}>
+                                    {order.name}
+                                </S.ButtonOfSort>)}
+                        </S.DivOfLnb>
+                        <S.UlOfListOfArticleWrapper>
+                            {listOfElementOfArticle}
+                        </S.UlOfListOfArticleWrapper>
+                        {listOfArticle.data.length !== 0 && <S.LinkOfMoreContent to={`/search/document?query=${decodeURI(search.split('query=')[1])}`}>검색결과 더보기</S.LinkOfMoreContent>}
+                    </S.DivOfDocumentWrapper>
+                    <S.DivOfImageWrapper>
+                        <S.DivOfLnb>
+                            {listOfOrder.map((order: any, idx: number): JSX.Element =>
+                                <S.ButtonOfSort
+                                    orderIsActive={orderIsActive[idx]} onClick={(): void => {
+                                        dispatch(setOrder(order.value));
+
+                                        const newOrderIsActive = listOfOrder.map((): boolean => false);
+                                        newOrderIsActive[idx] = true;
+                                        dispatch(setOrderIsActive(newOrderIsActive));
+                                    }}>
+                                    {order.name}
+                                </S.ButtonOfSort>)}
+                        </S.DivOfLnb>
+                        <S.UlOfListOfImageWrapper>
+                            {listOfElementOfImage}
+                        </S.UlOfListOfImageWrapper>
+                        {listOfArticle.data.length !== 0 && <S.LinkOfMoreContent to={`/search/image?query=${decodeURI(search.split('query=')[1])}`}>검색결과 더보기</S.LinkOfMoreContent>}
+                    </S.DivOfImageWrapper>
                 </S.Section>
                 <S.Aside>
                     <S.AsideOfContent contentType="related">
                         <S.DivOfSubjectTitleWrapper>
                             <S.StrongOfSubjectTitle>연관 검색어</S.StrongOfSubjectTitle>
-                            <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
-                            <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />
+                            {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
+                            <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} /> */}
+                            {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
+                            <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
+                            {tooltip && <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />}
                         </S.DivOfSubjectTitleWrapper>
                         <S.DivOfRelatedSearchTermWrapper>
                             <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
@@ -328,8 +386,11 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
                         <S.AsideOfContent contentType="popular">
                             <S.DivOfSubjectTitleWrapper>
                                 <S.StrongOfSubjectTitle>많이 본 기사</S.StrongOfSubjectTitle>
-                                <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip />
-                                <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} />
+                                {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip />
+                                <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} /> */}
+                                {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
+                                <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
+                                {tooltip && <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} />}
                             </S.DivOfSubjectTitleWrapper>
                             <S.UlOfListOfArticleWrapper>
                                 {listOfElementOfPopularArticle}

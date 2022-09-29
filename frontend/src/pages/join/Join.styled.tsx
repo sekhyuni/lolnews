@@ -51,8 +51,7 @@ export const Section = styled.section`
 `;
 
 export const Header = styled.header`
-    display: flex;
-    flex-direction: column;
+    ${vertical}
     height: 130px;
 `;
 

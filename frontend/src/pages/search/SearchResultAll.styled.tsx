@@ -42,8 +42,20 @@ export const Main = styled.main`
 export const Section = styled.section`
     ${vertical}
     width: ${sectionWidth};
-    height: fit-content;
-    border: 0.5px solid #e1e1e1;
+`;
+
+export const DivOfDocumentWrapper = styled.div`
+    ${vertical}
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    padding: 0 20px 0 20px;
+    margin: 20px 0 0 0;
+    background-color: #fff;
+`;
+
+export const DivOfImageWrapper = styled.div`
+    ${vertical}
+    border: 1px solid #e1e1e1;
     border-radius: 10px;
     padding: 0 20px 0 20px;
     margin: 20px 0 20px 0;
@@ -66,7 +78,7 @@ export const Aside = styled.aside`
 export const AsideOfContent = styled.div`
     ${vertical}
     min-height: 100px;
-    border: 0.5px solid #e1e1e1;
+    border: 1px solid #e1e1e1;
     border-radius: 10px;
     padding: ${({ contentType }: any) => contentType === 'related' ? '20px 20px 20px 20px' : '20px 20px 0 20px'};
     margin: 0 0 20px 0;
@@ -128,14 +140,14 @@ export const HeaderOfTop = styled.div`
     flex-direction: row;
     align-items: center;
     height: 90px;
-    border-bottom: 0.5px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
 `;
 
 export const HeaderOfBottom = styled.div`
     display: flex;
     flex-direction: row;
     height: 40px;
-    border-bottom: 0.5px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
     padding: 0 0 0 200px;
 `;
 
@@ -148,6 +160,15 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
 `;
 
 export const UlOfListOfArticleWrapper = styled.ul`
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    list-style: none;    
+`;
+
+export const UlOfListOfImageWrapper = styled.ul`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
@@ -181,6 +202,47 @@ export const LiOfArticleWrapper = styled.li`
     :first-child {
         border-top: 1px solid #e5e5e5;
     }
+`;
+
+export const LiOfImageWrapper = styled.li`
+    ${({ id }: any) => {
+        if (id) {
+            return css`
+                display: flex;
+                flex-direction: row;
+                ${center}
+                width: 157.5px;
+                height: 105px;
+                border-radius: 10px;   
+                margin: 0 0 6px 6px;
+                overflow: hidden;
+                :nth-child(1) {
+                    margin: 0 0 0 0;
+                }
+                :nth-child(5) {
+                    margin: 0 0 0 0;
+                }
+                :nth-child(6) {
+                    margin: 0 0 0 6px;
+                }
+                :nth-child(7) {
+                    margin: 0 0 0 6px;
+                }
+                :nth-child(8) {
+                    margin: 0 0 0 6px;
+                }
+            `;
+        } else {
+            return css`
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                width: 100%;
+                border-top: 1px solid #e5e5e5;
+                padding: 20px 0 20px 0;
+            `;
+        }
+    }}
 `;
 
 export const Nav = styled.nav`
@@ -289,16 +351,27 @@ export const ImgOfContent = styled.img`
                 width: ${imgOfNormalWidth};
                 height: 80px;
                 border-radius: 8px;
+                margin: 0 20px 0 0;
+            `;
+        } else if (contentType === 'image') {
+            return css`
+                width: 250px;
+                transition: transform .1s;
+                :hover {
+                    -ms-transform: scale(1.2); // IE 9
+                    -webkit-transform: scale(1.2); // Safari 3-8
+                    transform: scale(1.2); 
+                }
             `;
         } else {
             return css`
                 width: ${imgOfPopularWidth};
                 height: 60px;
                 border-radius: 6px;
+                margin: 0 20px 0 0;
             `;
         }
     }}
-    margin: 0 20px 0 0;
     cursor: pointer;
 `;
 
@@ -313,8 +386,7 @@ export const DivOfSpanModalCloseWrapper = styled.div`
 `;
 
 export const SpanOfModalClose = styled.span`
-    display: flex;
-    flex-direction: column;
+    ${vertical}
     justify-content: center;
     height: 40px;
     font-size: 50px;
@@ -363,26 +435,28 @@ export const ButtonOfSort = styled.button`
     border-radius: 30px;
     margin: 0 10px 0 10px;
     font-size: 18px;
+    color: #7e7e7e;
     background-color: #f2f4f7;
     ${({ orderIsActive }: any) => {
         if (orderIsActive) {
             return css`
-                color: #1a73e8;
+                font-weight: bold;
+                color: #000;
             `;
         }
     }}
     cursor: pointer;
     :hover {
         text-decoration: underline;
-        color: #1a73e8;
+        font-weight: bold;
+        color: #000;
     }
 `;
 
 export const LinkOfLoginPage = styled(Link_)`
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    ${center}
     width: 110px;
     border-radius: 4px;
     margin: 23.5px 20px 23.5px 20px;
@@ -400,12 +474,13 @@ export const LinkOfUser = styled(Link_)`
     margin: 23.5px 20px 23.5px 20px;
 `;
 
-export const SpanOfAllCountOfArticleWrapper = styled.span`  
+export const StrongOfAllCountOfArticle = styled.strong`    
     text-align: center;
     margin: 20px 0 0 0;
 `;
 
-export const StrongOfAllCountOfArticle = styled.strong`    
+export const SpanOfKeyword = styled.span`
+    color: #1a73e8;  
 `;
 
 export const H3OfNoneResult = styled.h3`  
@@ -424,4 +499,16 @@ export const DivOfSource = styled.div`
 export const DivOfDate = styled.div`
     font-size: 15px;
     color: #666;
+`;
+
+export const LinkOfMoreContent = styled(Link_)`
+    display: flex;
+    flex-direction: row;
+    ${center}
+    padding: 20px 0 20px 0;
+    text-decoration: none;
+    color: #000;
+    :hover {
+        font-weight: bold;
+    }
 `;

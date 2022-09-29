@@ -6,6 +6,11 @@ const vertical = css`
     flex-direction: column;
 `;
 
+const center = css`
+    justify-content: center;
+    align-items: center;
+`;
+
 const mainLeftDistance = '200px';
 
 const sectionWidth = '690px';
@@ -14,13 +19,12 @@ const asideWidth = '350px';
 
 export const Footer = styled.footer`
     ${vertical}
-    justify-content: center;
-    align-items: center;
+    ${center}
     height: 100px;
     ${({ layoutName }: any) => {
         if (layoutName === 'search') {
             return css`
-                border-top: 0.5px solid #e1e1e1;
+                border-top: 1px solid #e1e1e1;
                 min-width: calc(${mainLeftDistance} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
             `;
         }

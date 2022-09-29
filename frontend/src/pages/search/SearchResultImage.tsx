@@ -139,7 +139,7 @@ const SearchResultImage = ({ isChangedType }: any) => {
             }
         }
     };
-    const listOfElementOfArticle = listOfArticle.data.length !== 0 ? listOfArticle.data.map((document: any, idx: number, arr: any): JSX.Element =>
+    const listOfElementOfImage = listOfArticle.data.length !== 0 ? listOfArticle.data.map((document: any, idx: number, arr: any): JSX.Element =>
         <S.LiOfImageWrapper onLoad={(): void => { imageOnloaded(idx, arr); }} ref={(element: HTMLLIElement): void => {
             listOfImageWrapperRef.current[idx] = element;
         }} key={document._id} id={document._id} >
@@ -178,10 +178,10 @@ const SearchResultImage = ({ isChangedType }: any) => {
         dispatch(setKeyword(decodeURI(search.split('query=')[1])));
         setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
 
-        dispatch(setOrder('desc'));
-        dispatch(setOrderIsActive([true, false, false]));
-
-        if (!isChangedType.current) {
+        if (isChangedType.current) {
+            dispatch(setOrder('desc'));
+            dispatch(setOrderIsActive([true, false, false]));
+        } else {
             isChangedKeyword.current = true;
         }
         isChangedType.current = false;
@@ -269,7 +269,7 @@ const SearchResultImage = ({ isChangedType }: any) => {
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
                     <S.UlOfListOfImageWrapper ref={containerOfListOfImageWrapperRef}>
-                        {listOfElementOfArticle}
+                        {listOfElementOfImage}
                     </S.UlOfListOfImageWrapper>
                     {loading && <Loader type="Oval" color="#1a73e8" width={100} height={100} />}
                     <S.DivOfLoader ref={loader} />

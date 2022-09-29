@@ -40,7 +40,7 @@ export const Section = styled.section`
     text-align: center;
     width: 100%;
     height: fit-content;
-    border: 0.5px solid #e1e1e1;
+    border: 1px solid #e1e1e1;
     border-radius: 10px;
     padding: 0 20px 0 20px;
     margin: 20px 0 20px 0;
@@ -68,14 +68,14 @@ export const HeaderOfTop = styled.div`
     flex-direction: row;
     align-items: center;
     height: 90px;
-    border-bottom: 0.5px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
 `;
 
 export const HeaderOfBottom = styled.div`
     display: flex;
     flex-direction: row;
     height: 40px;
-    border-bottom: 0.5px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
     padding: 0 0 0 200px;
 `;
 
@@ -105,7 +105,7 @@ export const LiOfImageWrapper = styled.li`
             `;
         } else {
             return css`
-                display: 'flex';
+                display: flex;
                 flex-direction: row;
                 justify-content: center;
                 border-top: 1px solid #e5e5e5;
@@ -188,8 +188,7 @@ export const DivOfSpanModalCloseWrapper = styled.div`
 `;
 
 export const SpanOfModalClose = styled.span`
-    display: flex;
-    flex-direction: column;
+    ${vertical}
     justify-content: center;
     height: 40px;
     font-size: 50px;
@@ -238,26 +237,28 @@ export const ButtonOfSort = styled.button`
     border-radius: 30px;
     margin: 0 10px 0 10px;
     font-size: 18px;
+    color: #7e7e7e;
     background-color: #f2f4f7;
     ${({ orderIsActive }: any) => {
         if (orderIsActive) {
             return css`
-                color: #1a73e8;
+                font-weight: bold;
+                color: #000;
             `;
         }
     }}
     cursor: pointer;
     :hover {
         text-decoration: underline;
-        color: #1a73e8;
+        font-weight: bold;
+        color: #000;
     }
 `;
 
 export const LinkOfLoginPage = styled(Link_)`
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    ${center}
     width: 110px;
     border-radius: 4px;
     margin: 23.5px 20px 23.5px 20px;
