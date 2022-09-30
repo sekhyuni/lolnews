@@ -1,9 +1,18 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const vertical = css`
+    display: flex;
+    flex-direction: column;
+`;
+
+const center = css`
+    justify-content: center;
+    align-items: center;
+`;
 
 export const NavOfButtonOfPageWrapper = styled.nav`
     display: flex;
-    justify-content: center;
-    align-items: center;
+    ${center}
     gap: 4px;
     margin: 20px 0 20px 0;
 `;

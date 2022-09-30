@@ -21,8 +21,6 @@ const asideWidth = '350px';
 
 const footerWidth = '100px';
 
-const imageOfContentWidth = '120px';
-
 // layout
 export const DivOfLayoutWrapper = styled.div`
     ${vertical}
@@ -38,10 +36,11 @@ export const Main = styled.main`
 
 export const Section = styled.section`
     ${vertical}
+    align-items: center;
     text-align: center;
-    width: 100vw;
+    width: 100%;
     height: fit-content;
-    border: 0.5px solid #e1e1e1;
+    border: 1px solid #e1e1e1;
     border-radius: 10px;
     padding: 0 20px 0 20px;
     margin: 20px 0 20px 0;
@@ -53,10 +52,6 @@ export const DivOfLnb = styled.div`
     flex-direction: row;
     justify-content: center;
     margin: 20px 0 20px 0;
-`;
-
-export const Strong = styled.strong`
-    font-size: 16px;
 `;
 
 export const Div = styled.div`
@@ -73,14 +68,14 @@ export const HeaderOfTop = styled.div`
     flex-direction: row;
     align-items: center;
     height: 90px;
-    border-bottom: 0.5px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
 `;
 
 export const HeaderOfBottom = styled.div`
     display: flex;
     flex-direction: row;
     height: 40px;
-    border-bottom: 0.5px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
     padding: 0 0 0 200px;
 `;
 
@@ -93,12 +88,10 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
 `;
 
 export const UlOfListOfImageWrapper = styled.ul`
+    width: inherit;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
 `;
 
 export const LiOfImageWrapper = styled.li`
@@ -106,31 +99,13 @@ export const LiOfImageWrapper = styled.li`
         if (id) {
             return css`
                 width: calc(20% - 9.6px);
-                border-radius: 10px;
-                margin: 0 6px 12px 6px; 
+                border-radius: 10px;   
                 overflow: hidden;
                 line-height: 0;
-                :nth-of-type(5n + 1) {
-                    margin: 0 6px 12px 0; 
-                    order: 1;
-                }
-                :nth-of-type(5n + 2) {
-                    order: 2;
-                }
-                :nth-of-type(5n + 3) {
-                    order: 3;
-                }
-                :nth-of-type(5n + 4) {
-                    order: 4;
-                }
-                :nth-of-type(5n) {
-                    margin: 0 0 12px 6px; 
-                    order: 5;
-                }
             `;
         } else {
             return css`
-                display: 'flex';
+                display: flex;
                 flex-direction: row;
                 justify-content: center;
                 border-top: 1px solid #e5e5e5;
@@ -202,28 +177,6 @@ export const ImgOfContent = styled.img`
     }
 `;
 
-export const SpanOfBreaker = styled.span`
-    flex-basis: 100%;
-    width: 0 0 0 0;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
-    :nth-of-type(5n + 1) {
-        order: 1;
-    }
-    :nth-of-type(5n + 2) {
-        order: 2;
-    }
-    :nth-of-type(5n + 3) {
-        order: 3;
-    }
-    :nth-of-type(5n + 4) {
-        order: 4;
-    }
-    :nth-of-type(5n) {
-        order: 5;
-    }
-`;
-
 export const DivOfModalWrapper = styled.div`
     ${vertical}
 `;
@@ -235,8 +188,7 @@ export const DivOfSpanModalCloseWrapper = styled.div`
 `;
 
 export const SpanOfModalClose = styled.span`
-    display: flex;
-    flex-direction: column;
+    ${vertical}
     justify-content: center;
     height: 40px;
     font-size: 50px;
@@ -285,26 +237,28 @@ export const ButtonOfSort = styled.button`
     border-radius: 30px;
     margin: 0 10px 0 10px;
     font-size: 18px;
+    color: #7e7e7e;
     background-color: #f2f4f7;
     ${({ orderIsActive }: any) => {
         if (orderIsActive) {
             return css`
-                color: #1a73e8;
+                font-weight: bold;
+                color: #000;
             `;
         }
     }}
     cursor: pointer;
     :hover {
         text-decoration: underline;
-        color: #1a73e8;
+        font-weight: bold;
+        color: #000;
     }
 `;
 
 export const LinkOfLoginPage = styled(Link_)`
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    ${center}
     width: 110px;
     border-radius: 4px;
     margin: 23.5px 20px 23.5px 20px;
@@ -320,14 +274,6 @@ export const LinkOfLoginPage = styled(Link_)`
 export const LinkOfUser = styled(Link_)`
     height: 43px;
     margin: 23.5px 20px 23.5px 20px;
-`;
-
-export const POfLoading = styled.p`
-    font-size: 20px;
-`;
-
-export const POfError = styled.p`
-    font-size: 20px;
 `;
 
 export const DivOfLoader = styled.div`

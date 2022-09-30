@@ -13,11 +13,11 @@ export class QueryOfWord {
     }
 
     update(word: Word) {
-        return WordModel.updateOne({ id: word.id }, { ...word });
+        return WordModel.updateOne({ _id: word._id }, { ...word });
     }
 
     delete(word: Word) {
-        return WordModel.remove({ id: word.id });
+        return WordModel.remove({ _id: word._id });
     }
 
     aggregate(query: any) {

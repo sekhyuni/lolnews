@@ -1,80 +1,118 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
+import { setKeyword, setPage, incrementPage, setOrder, setOrderIsActive, setOrderForDetectOfFetchEffect, setListOfArticle, addListOfArticle, setModalOfArticleIsOpen, clearArticleState } from '../../redux/features/articleSlice';
+import { searchListOfArticleAPICall, insertArticleIdAPICall, insertForRecommendArticleIdAPICall } from '../../redux/features/articleSlice';
+import { insertWordAPICall } from '../../redux/features/wordSlice';
 import ReactModal from 'react-modal';
+import Bricks from 'bricks.js';
 import Loader from 'react-loader-spinner';
-import doAxiosRequest from '../../functions/doAxiosRequest';
 import { re } from '../../functions/re-template-tag';
 import Footer from '../../layouts/footer/Footer';
 import Input from '../../components/input/Input';
 import Dropdown from '../../components/dropdown/Dropdown';
+import moment from 'moment';
 import * as S from './SearchResultImage.styled';
 import * as Svg from '../../components/svg/Svg';
 
-const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword }: any) => {
-    const BASE_URL: string = process.env.NODE_ENV === 'production' ? 'http://172.24.24.84:31053' : '';
-
-    // for location
+const SearchResultImage = ({ isChangedType }: any) => {
     const { search } = useLocation();
 
-    // for result
-    interface Result {
-        meta: any;
-        data: any;
-    }
-    const [result, setResult] = useState<Result>({ meta: {}, data: [] });
-    const [modalIsOpen, setModalIsOpen] = useState<Array<boolean>>([]);
+    const dispatch = useAppDispatch();
+    const { page, order, orderIsActive, orderForDetectOfFetchEffect, listOfArticle, modalOfArticleIsOpen } = useAppSelector(state => state.article);
+
     const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
-    const openModal = (idx: number): void => {
-        const newModalIsOpen = [...modalIsOpen];
-        newModalIsOpen[idx] = true;
-        setModalIsOpen(newModalIsOpen);
+
+    interface ResidenceTime {
+        start: Date;
+        result: number;
+    }
+    const isChangedKeyword = useRef<boolean>(false);
+    const residenceTime = useRef<ResidenceTime>({ start: new Date(0), result: 0 });
+    const openModalOfArticle = (idx: number): void => {
+        residenceTime.current.start = new Date();
+
+        const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
+        newModalOfArticleIsOpen[idx] = true;
+        dispatch(setModalOfArticleIsOpen(newModalOfArticleIsOpen));
 
         document.body.style.overflow = 'hidden';
     };
-    const closeModal = (idx: number): void => {
-        const newModalIsOpen = [...modalIsOpen];
-        newModalIsOpen[idx] = false;
-        setModalIsOpen(newModalIsOpen);
+    const closeModalOfArticle = (idx: number): void => {
+        residenceTime.current.result = Number(new Date()) - Number(residenceTime.current.start);
+
+        const newModalOfArticleIsOpen = [...modalOfArticleIsOpen];
+        newModalOfArticleIsOpen[idx] = false;
+        dispatch(setModalOfArticleIsOpen(newModalOfArticleIsOpen));
 
         document.body.style.overflow = '';
     };
-
-    // for pagination
-    const [page, setPage] = useState<number>(1);
-
-    // for sort
+    const insertArticleId = useCallback((articleId: string) => {
+        const paramsOfInsert = {
+            articleId,
+            date: moment(residenceTime.current.start).add(9, 'hours')
+        };
+        dispatch(insertArticleIdAPICall(paramsOfInsert)).unwrap().then((response: any) => {
+            console.log(response);
+        }).catch((err: any) => {
+            console.error(err);
+        });
+    }, [dispatch]);
+    const insertForRecommendArticleId = useCallback((articleId: string) => {
+        const paramsOfInsert = {
+            userId: localStorage.getItem('id') || '',
+            articleId,
+            date: moment(residenceTime.current.start).add(9, 'hours'),
+            residenceTime: residenceTime.current.result,
+        };
+        dispatch(insertForRecommendArticleIdAPICall(paramsOfInsert)).unwrap().then((response: any) => {
+            console.log(response);
+        }).catch((err: any) => {
+            console.error(err);
+        });
+    }, [dispatch]);
     const listOfOrder = [
-        { name: '유사도순', value: 'score' },
         { name: '최신순', value: 'desc' },
         { name: '과거순', value: 'asc' },
+        { name: '유사도순', value: 'score' },
     ];
-    const [order, setOrder] = useState<string>('score');
-    const [orderIsActive, setOrderIsActive] = useState<Array<boolean>>([true, false, false]);
-    const [orderForDetectOfFetchEffect, setOrderForDetectOfFetchEffect] = useState<string>('score');
-
-    // for type
     const listOfResultDataTypeMenu = [
         { id: 1, link: `/search/?query=${decodeURI(search.split('query=')[1])}`, name: '전체', svg: <Svg.All active={false} /> },
         { id: 2, link: `/search/document?query=${decodeURI(search.split('query=')[1])}`, name: '문서', svg: <Svg.Document active={false} /> },
         { id: 3, link: `/search/image?query=${decodeURI(search.split('query=')[1])}`, name: '포토', svg: <Svg.Image active={true} /> },
-        // { id: 4, link: `/search/video?query=${decodeURI(search.split('query=')[1])}`, name: '영상', svg: <Svg.Video active={false} /> },
     ];
+    const listOfElementOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
+        <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
+            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id} onClick={() => {
+                if (resultDataTypeMenu.id !== 3) {
+                    dispatch(clearArticleState());
+                    isChangedType.current = true;
+                }
+            }}>
+                <S.Span>
+                    {resultDataTypeMenu.svg}
+                </S.Span>
+                {resultDataTypeMenu.name}
+            </S.LinkOfResultDataTypeMenu>
+        </S.DivOfResultDataTypeMenuWrapper>);
 
-    // for loading
     const [loading, setLoading] = useState<boolean>(true);
     const loader = useRef<HTMLDivElement>(null);
+    const [isFirstRequest, setIsFirstRequest] = useState<boolean>(true);
     const handleObserver = useCallback((entries: any): void => {
+        if (isFirstRequest) {
+            return;
+        }
         const target = entries[0];
         if (target.isIntersecting) {
-            setPage((prev: number): number => prev + 1);
+            dispatch(incrementPage());
         }
-    }, []);
-
+    }, [isFirstRequest, dispatch]);
     useEffect(() => {
         const option = {
             root: null,
-            rootMargin: "500px 500px 500px 500px", // 값이 클수록 빨리 감지됨
+            rootMargin: "0px", // 값이 클수록 빨리 감지됨
             threshold: 0 // 0~1에서 1이면 추적하는 요소가 전부 보여야 감지됨
         };
         const observer = new IntersectionObserver(handleObserver, option);
@@ -83,96 +121,42 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
         }
     }, [handleObserver]);
 
-    // for image arrangement
     const containerOfListOfImageWrapperRef = useRef<any>([]);
     const listOfImageWrapperRef = useRef<Array<HTMLLIElement>>([]);
     const imageOnloaded = (idxOfImage: number, arrOfImage: any): void => {
-        const maxCountOfColumn = containerOfListOfImageWrapperRef.current.dataset.columns;
-
-        const getHeight = (ImageWrapper: any): number => { // listOfImageWrapperRef.current[idx]
-            let elmMargin = 0;
-            let elmHeight = Math.ceil(parseFloat(getComputedStyle(ImageWrapper).height));
-            elmMargin += Math.ceil(parseFloat(getComputedStyle(ImageWrapper).marginTop));
-            elmMargin += Math.ceil(parseFloat(getComputedStyle(ImageWrapper).marginBottom));
-            return elmHeight + elmMargin;
-        };
-
-        const calculateMasonryHeight = (listOfImageWrapper: any): void => { // listOfImageWrapperRef.current
-            let idxOfColumn = 0;
-            const columns: any = [];
-            listOfImageWrapper.forEach((ImageWrapper: any): void => { // listOfImageWrapperRef.current[idx]
-                if (!columns[idxOfColumn]) {
-                    columns[idxOfColumn] = getHeight(ImageWrapper);
-                } else {
-                    columns[idxOfColumn] += getHeight(ImageWrapper);
-                }
-                idxOfColumn === maxCountOfColumn - 1 ? idxOfColumn = 0 : idxOfColumn++;
-            });
-            const maxHeight = Math.max(...columns);
-            containerOfListOfImageWrapperRef.current.style.height = maxHeight + 'px';
-        };
-
+        Bricks({
+            container: containerOfListOfImageWrapperRef.current,
+            packed: 'data-packed',
+            position: true,
+            sizes: [
+                { columns: 5, gutter: 12 }, // gutter는 column 사이 간격 (px)
+            ]
+        }).resize(true).pack();
         if (idxOfImage === arrOfImage.length - 1) {
-            calculateMasonryHeight(listOfImageWrapperRef.current);
             setLoading(false);
+            if (isFirstRequest) {
+                setIsFirstRequest(false);
+            }
         }
     };
-
-    useEffect(() => {
-        setKeyword(decodeURI(search.split('query=')[1]));
-        setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
-
-        setOrder('score');
-        setOrderIsActive([true, false, false]);
-    }, [search]);
-
-    useEffect(() => {
-        setResult({ meta: {}, data: [] });
-        setKeywordForDetectOfFetchEffect(decodeURI(search.split('query=')[1]));
-
-        setOrderForDetectOfFetchEffect(order);
-
-        setPage(1);
-    }, [order, keywordForDetectOfSetPageEffect]);
-
-    useEffect(() => {
-        const fetchData = (): void => { // 나중에 useCallback으로 바꿀까?
-            const paramsOfSearch = {
-                query: decodeURI(search.split('query=')[1]),
-                page,
-                order,
-                isImageRequest: true,
-            };
-            setLoading(true);
-            doAxiosRequest('GET', `${BASE_URL}/search/keyword`, paramsOfSearch)
-                .then((resultData: any): void => {
-                    setResult((prev: Result): Result => ({ meta: resultData.data.meta, data: [...prev.data, ...resultData.data.data] }));
-                    setModalIsOpen(resultData.data.data.map((): boolean => false));
-                }).catch((err: any): void => {
-                    setLoading(false);
-                    containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
-                    console.error(err);
-                });
-            const paramsOfInsert = {
-                word: decodeURI(search.split('query=')[1])
-            };
-            doAxiosRequest('POST', `${BASE_URL}/word`, paramsOfInsert).then((resultData: any): void => {
-                console.log(resultData);
-            });
-        };
-
-        fetchData();
-    }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page]);
-
-    const elementsOfESDocument = result.data.length !== 0 ? result.data.map((document: any, idx: number, arr: any): JSX.Element =>
+    const listOfElementOfImage = listOfArticle.data.length !== 0 ? listOfArticle.data.map((document: any, idx: number, arr: any): JSX.Element =>
         <S.LiOfImageWrapper onLoad={(): void => { imageOnloaded(idx, arr); }} ref={(element: HTMLLIElement): void => {
             listOfImageWrapperRef.current[idx] = element;
         }} key={document._id} id={document._id} >
-            <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => { openModal(idx); }} />
-            <ReactModal isOpen={modalIsOpen[idx]} onRequestClose={(): void => { closeModal(idx); }} preventScroll={false} ariaHideApp={false}>
+            <S.ImgOfContent src={document._source.thumbnail} onClick={(): void => {
+                openModalOfArticle(idx);
+                insertArticleId(document._id);
+            }} />
+            <ReactModal isOpen={modalOfArticleIsOpen[idx]} onRequestClose={(): void => {
+                closeModalOfArticle(idx);
+                insertForRecommendArticleId(document._id);
+            }} preventScroll={false} ariaHideApp={false}>
                 <S.DivOfModalWrapper>
                     <S.DivOfSpanModalCloseWrapper>
-                        <S.SpanOfModalClose onClick={(): void => { closeModal(idx); }}>&times;</S.SpanOfModalClose>
+                        <S.SpanOfModalClose onClick={(): void => {
+                            closeModalOfArticle(idx);
+                            insertForRecommendArticleId(document._id);
+                        }}>&times;</S.SpanOfModalClose>
                     </S.DivOfSpanModalCloseWrapper>
                     <S.DivOfModalTitle>{document._source.title.split(re`/(${decodeURI(search.split('query=')[1])})/g`).map((pieceOfTitle: string) =>
                         pieceOfTitle === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfTitle}</S.StrongOfKeyword>) : pieceOfTitle)}
@@ -190,41 +174,83 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
             {loading ? <></> : <S.H3OfNoneResult>검색된 결과가 없습니다.</S.H3OfNoneResult>}
         </S.LiOfImageWrapper>;
 
-    const elementsOfBreakerSpan = Array(5).fill('').map((): JSX.Element => <S.SpanOfBreaker />);
+    useEffect(() => {
+        dispatch(setKeyword(decodeURI(search.split('query=')[1])));
+        setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
 
-    const elementsOfResultDataTypeMenu = listOfResultDataTypeMenu.map((resultDataTypeMenu: any): JSX.Element =>
-        <S.DivOfResultDataTypeMenuWrapper key={resultDataTypeMenu.id}>
-            <S.LinkOfResultDataTypeMenu to={resultDataTypeMenu.link} id={resultDataTypeMenu.id}>
-                <S.Span>
-                    {resultDataTypeMenu.svg}
-                </S.Span>
-                {resultDataTypeMenu.name}
-            </S.LinkOfResultDataTypeMenu>
-        </S.DivOfResultDataTypeMenuWrapper>);
+        if (isChangedType.current) {
+            dispatch(setOrder('desc'));
+            dispatch(setOrderIsActive([true, false, false]));
+        } else {
+            isChangedKeyword.current = true;
+        }
+        isChangedType.current = false;
+    }, [search, dispatch]);
+
+    useEffect(() => {
+        dispatch(setListOfArticle({ meta: {}, data: [] }));
+        setKeywordForDetectOfFetchEffect(decodeURI(search.split('query=')[1]));
+
+        dispatch(setOrderForDetectOfFetchEffect(order));
+
+        dispatch(setPage(1));
+    }, [order, keywordForDetectOfSetPageEffect, dispatch]);
+
+    useEffect(() => {
+        const paramsOfSearch = {
+            query: decodeURI(search.split('query=')[1]),
+            page,
+            order,
+            isImageRequest: true,
+        };
+        setLoading(true);
+        dispatch(searchListOfArticleAPICall(paramsOfSearch)).unwrap().then((response: any) => {
+            dispatch(addListOfArticle(response));
+            dispatch(setModalOfArticleIsOpen(response.data.map((): boolean => false)));
+            if (response.data.length === 0) {
+                setLoading(false);
+                if (listOfArticle.data.length === 0) { // 첫 요청 시에는 렌더링 전이므로 무조건 초깃값으로 0이지만, 이후 요청 시에는 0인 경우가 존재하지 않음
+                    containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
+                }
+            }
+        }).catch((err: any) => {
+            setLoading(false);
+            containerOfListOfImageWrapperRef.current.style.height = 'fit-content';
+            console.error(err);
+        });
+        if (isChangedKeyword.current) {
+            const paramsOfInsert = {
+                word: decodeURI(search.split('query=')[1]),
+                date: moment().add(9, 'hours')
+            };
+            dispatch(insertWordAPICall(paramsOfInsert)).unwrap().then((response: any) => {
+                console.log(response);
+            }).catch((err: any) => {
+                console.error(err);
+            });
+            isChangedKeyword.current = false;
+        }
+    }, [keywordForDetectOfFetchEffect, orderForDetectOfFetchEffect, page, dispatch]);
 
     return (
         <S.DivOfLayoutWrapper>
             <S.Header>
                 <S.HeaderOfTop>
-                    <S.LinkOfLogo to="/" onClick={(): void => { setKeyword(''); }}>
+                    <S.LinkOfLogo to="/" onClick={(): void => { dispatch(clearArticleState()); }}>
                         <S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} />
                     </S.LinkOfLogo>
                     <S.Div>
-                        <Input keyword={keyword} setKeyword={setKeyword} layoutName="search" type="image" />
+                        <Input layoutName="search" type="image" />
                     </S.Div>
                     <S.Nav>
-                        {isAuthorized ?
-                            <Dropdown layoutName="search" search={search} setKeyword={setKeyword} setIsAuthorized={setIsAuthorized} />
+                        {localStorage.getItem('id') ?
+                            <Dropdown layoutName="search" />
                             :
-                            <S.LinkOfLoginPage to="/login" onClick={(): void => {
-                                setKeyword(decodeURI(search.split('query=')[1]));
-                            }}>
-                                로그인
-                            </S.LinkOfLoginPage>}
+                            <S.LinkOfLoginPage to="/login">로그인</S.LinkOfLoginPage>}
                     </S.Nav>
                 </S.HeaderOfTop>
                 <S.HeaderOfBottom>
-                    {elementsOfResultDataTypeMenu}
+                    {listOfElementOfResultDataTypeMenu}
                 </S.HeaderOfBottom>
             </S.Header>
             <S.Main>
@@ -233,18 +259,17 @@ const SearchResultImage = ({ isAuthorized, setIsAuthorized, keyword, setKeyword 
                         {listOfOrder.map((order: any, idx: number): JSX.Element =>
                             <S.ButtonOfSort
                                 orderIsActive={orderIsActive[idx]} onClick={(): void => {
-                                    setOrder(order.value);
+                                    dispatch(setOrder(order.value));
 
                                     const newOrderIsActive = listOfOrder.map((): boolean => false);
                                     newOrderIsActive[idx] = true;
-                                    setOrderIsActive(newOrderIsActive);
+                                    dispatch(setOrderIsActive(newOrderIsActive));
                                 }}>
                                 {order.name}
                             </S.ButtonOfSort>)}
                     </S.DivOfLnb>
-                    <S.UlOfListOfImageWrapper ref={containerOfListOfImageWrapperRef} data-columns="5">
-                        {elementsOfESDocument}
-                        {elementsOfBreakerSpan}
+                    <S.UlOfListOfImageWrapper ref={containerOfListOfImageWrapperRef}>
+                        {listOfElementOfImage}
                     </S.UlOfListOfImageWrapper>
                     {loading && <Loader type="Oval" color="#1a73e8" width={100} height={100} />}
                     <S.DivOfLoader ref={loader} />
