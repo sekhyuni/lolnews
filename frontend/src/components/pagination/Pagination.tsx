@@ -1,15 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
 import { setPage, incrementPage, decrementPage } from '../../redux/features/articleSlice';
 import * as S from './Pagination.styled';
 
 const Pagination = ({ total }: any) => {
     const dispatch = useAppDispatch();
-    const { page } = useAppSelector(state => state.article);
+    const { page, order } = useAppSelector(state => state.article);
 
     const numPages = Math.ceil(total / 10);
     const [pageStartIdx, setPageStartIdx] = useState<number>(1);
     const [pageEndIdx, setPageEndIdx] = useState<number>(10);
+
+    useEffect(() => {
+        setPageStartIdx(1);
+        setPageEndIdx(10);
+    }, [order]);
 
     return (
         <>

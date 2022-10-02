@@ -144,9 +144,9 @@ const SearchResultDocument = ({ type, isChangedType }: any) => {
                     isChangedType.current = true;
                 }
             }}>
-                <S.Span>
+                <S.SpanOfSvgWrapper position="navigation">
                     {resultDataTypeMenu.svg}
-                </S.Span>
+                </S.SpanOfSvgWrapper>
                 {resultDataTypeMenu.name}
             </S.LinkOfResultDataTypeMenu>
         </S.DivOfResultDataTypeMenuWrapper>);
@@ -285,67 +285,77 @@ const SearchResultDocument = ({ type, isChangedType }: any) => {
                 </S.HeaderOfBottom>
             </S.Header>
             <S.Main>
-                <S.Section>
-                    <S.StrongOfAllCountOfArticle>
-                        <S.SpanOfKeyword>{decodeURI(search.split('query=')[1])}</S.SpanOfKeyword>
-                        &nbsp;검색결과 :&nbsp;{String(listOfArticle.meta.count).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}건
-                    </S.StrongOfAllCountOfArticle>
-                    <S.DivOfLnb>
-                        {listOfOrder.map((order: any, idx: number): JSX.Element =>
-                            <S.ButtonOfSort
-                                orderIsActive={orderIsActive[idx]} onClick={(): void => {
-                                    dispatch(setOrder(order.value));
+                <S.StrongOfAllCountOfArticle>
+                    <S.SpanOfKeyword>{decodeURI(search.split('query=')[1])}</S.SpanOfKeyword>
+                    &nbsp;검색결과 :&nbsp;{String(listOfArticle.meta.count).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}건
+                </S.StrongOfAllCountOfArticle>
+                <S.DivOfMainContent>
+                    <S.Section>
+                        <S.DivOfLNBWrapper>
+                            <S.DivOfResultDataTypeMenu>
+                                <S.SpanOfSvgWrapper position="content">
+                                    <Svg.Document />
+                                </S.SpanOfSvgWrapper>
+                                문서
+                            </S.DivOfResultDataTypeMenu>
+                            <S.DivOfLNB>
+                                {listOfOrder.map((order: any, idx: number): JSX.Element =>
+                                    <S.DivOfSort
+                                        orderIsActive={orderIsActive[idx]} onClick={(): void => {
+                                            dispatch(setOrder(order.value));
 
-                                    const newOrderIsActive = listOfOrder.map((): boolean => false);
-                                    newOrderIsActive[idx] = true;
-                                    dispatch(setOrderIsActive(newOrderIsActive));
-                                }}>
-                                {order.name}
-                            </S.ButtonOfSort>)}
-                    </S.DivOfLnb>
-                    <S.UlOfListOfArticleWrapper>
-                        {listOfElementOfArticle}
-                    </S.UlOfListOfArticleWrapper>
-                    {listOfArticle.data.length !== 0 &&
-                        <Pagination total={listOfArticle.meta.count} />}
-                </S.Section>
-                <S.Aside>
-                    <S.AsideOfContent contentType="related">
-                        <S.DivOfSubjectTitleWrapper>
-                            <S.StrongOfSubjectTitle>연관 검색어</S.StrongOfSubjectTitle>
-                            {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
-                            <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} /> */}
-                            {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
-                            <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
-                            {tooltip && <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />}
-                        </S.DivOfSubjectTitleWrapper>
-                        <S.DivOfRelatedSearchTermWrapper>
-                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
-                                페이커
-                            </S.LinkOfRelatedSearchTerm>
-                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=롤`}>
-                                롤
-                            </S.LinkOfRelatedSearchTerm>
-                            <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=LOL`}>
-                                LOL
-                            </S.LinkOfRelatedSearchTerm>
-                        </S.DivOfRelatedSearchTermWrapper>
-                    </S.AsideOfContent>
-                    {listOfPopularArticle.length !== 0 &&
-                        <S.AsideOfContent contentType="popular">
+                                            const newOrderIsActive = listOfOrder.map((): boolean => false);
+                                            newOrderIsActive[idx] = true;
+                                            dispatch(setOrderIsActive(newOrderIsActive));
+                                        }}>
+                                        {order.name}
+                                    </S.DivOfSort>)}
+                            </S.DivOfLNB>
+                        </S.DivOfLNBWrapper>
+                        <S.UlOfListOfArticleWrapper>
+                            {listOfElementOfArticle}
+                        </S.UlOfListOfArticleWrapper>
+                        {listOfArticle.data.length !== 0 &&
+                            <Pagination total={listOfArticle.meta.count} />}
+                    </S.Section>
+                    <S.Aside>
+                        <S.AsideOfContent contentType="related">
                             <S.DivOfSubjectTitleWrapper>
-                                <S.StrongOfSubjectTitle>많이 본 기사</S.StrongOfSubjectTitle>
-                                {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip />
-                                <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} /> */}
+                                <S.StrongOfSubjectTitle>연관 검색어</S.StrongOfSubjectTitle>
+                                {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
+                            <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} /> */}
                                 {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
-                                <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
-                                {tooltip && <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} />}
+                                <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
+                                {tooltip && <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />}
                             </S.DivOfSubjectTitleWrapper>
-                            <S.UlOfListOfArticleWrapper>
-                                {listOfElementOfPopularArticle}
-                            </S.UlOfListOfArticleWrapper>
-                        </S.AsideOfContent>}
-                </S.Aside>
+                            <S.DivOfRelatedSearchTermWrapper>
+                                <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
+                                    페이커
+                                </S.LinkOfRelatedSearchTerm>
+                                <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=롤`}>
+                                    롤
+                                </S.LinkOfRelatedSearchTerm>
+                                <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=LOL`}>
+                                    LOL
+                                </S.LinkOfRelatedSearchTerm>
+                            </S.DivOfRelatedSearchTermWrapper>
+                        </S.AsideOfContent>
+                        {listOfPopularArticle.length !== 0 &&
+                            <S.AsideOfContent contentType="popular">
+                                <S.DivOfSubjectTitleWrapper>
+                                    <S.StrongOfSubjectTitle>많이 본 기사</S.StrongOfSubjectTitle>
+                                    {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip />
+                                <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} /> */}
+                                    {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
+                                    <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
+                                    {tooltip && <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} />}
+                                </S.DivOfSubjectTitleWrapper>
+                                <S.UlOfListOfArticleWrapper>
+                                    {listOfElementOfPopularArticle}
+                                </S.UlOfListOfArticleWrapper>
+                            </S.AsideOfContent>}
+                    </S.Aside>
+                </S.DivOfMainContent>
             </S.Main>
             <Footer layoutName="search" />
         </S.DivOfLayoutWrapper>

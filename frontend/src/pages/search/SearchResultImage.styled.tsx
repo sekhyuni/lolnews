@@ -37,7 +37,6 @@ export const Main = styled.main`
 export const Section = styled.section`
     ${vertical}
     align-items: center;
-    text-align: center;
     width: 100%;
     height: fit-content;
     border: 1px solid #e1e1e1;
@@ -47,11 +46,21 @@ export const Section = styled.section`
     background-color: #fff;
 `;
 
-export const DivOfLnb = styled.div`
+export const DivOfLNBWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    width: inherit;
+    margin: 20px 0 20px 0;
+`;
+
+export const DivOfLNB = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin: 20px 0 20px 0;
+    position: absolute;
+    right: 0;
 `;
 
 export const Div = styled.div`
@@ -159,9 +168,17 @@ export const LinkOfResultDataTypeMenu = styled(Link_)`
     }
 `;
 
-export const Span = styled.span`
-    width: 25px;
-    height: 25px;
+export const DivOfResultDataTypeMenu = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+`;
+
+export const SpanOfSvgWrapper = styled.span`
+    width: ${({ position }: any) => position === 'navigation' ? '25px' : '30px'};
+    height: ${({ position }: any) => position === 'navigation' ? '25px' : '30px'};
     margin: 0 5px 0 0;
     pointer-events: none;
 `;
@@ -230,20 +247,23 @@ export const AOfPCLinkURL = styled.a`
     color: #000;
 `;
 
-export const ButtonOfSort = styled.button`
-    width: 150px;
-    height: 45px;
-    border: none;
-    border-radius: 30px;
-    margin: 0 10px 0 10px;
-    font-size: 18px;
+export const DivOfSort = styled.div`
+    margin: 0 0 0 12px;
     color: #7e7e7e;
-    background-color: #f2f4f7;
     ${({ orderIsActive }: any) => {
         if (orderIsActive) {
             return css`
                 font-weight: bold;
                 color: #000;
+                ::before {
+                    background-color: #1a73e8;
+                }
+            `;
+        } else {
+            return css`
+                ::before {
+                    background-color: #7e7e7e;
+                }
             `;
         }
     }}
@@ -252,6 +272,15 @@ export const ButtonOfSort = styled.button`
         text-decoration: underline;
         font-weight: bold;
         color: #000;
+    }
+    ::before {
+        content: '';
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        margin: 0 3px 0 0;
+        vertical-align: 3px;
     }
 `;
 

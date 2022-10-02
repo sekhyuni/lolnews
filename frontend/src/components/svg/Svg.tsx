@@ -23,7 +23,7 @@ export const All = React.memo(({ active }: any) => {
 
 export const Document = React.memo(({ active }: any) => {
     return (
-        <S.Svg>
+        <S.Svg focusable="false" viewBox="0 0 24 24">
             {active ?
                 <>
                     <path fill="#34a853" d="M22 12h-2v6.22c-.07.48-.51.82-1 .78h-7v2h7c1.59.05 2.92-1.17 3-2.76V12" />
@@ -41,7 +41,7 @@ export const Document = React.memo(({ active }: any) => {
 
 export const Image = React.memo(({ active }: any) => {
     return (
-        <S.Svg>
+        <S.Svg focusable="false" viewBox="0 0 24 24">
             {active ?
                 <>
                     <path fill="none" clipRule="evenodd" d="M0 0h24v24H0z" />
@@ -59,7 +59,7 @@ export const Image = React.memo(({ active }: any) => {
 
 export const Video = React.memo(({ active }: any) => {
     return (
-        <S.Svg>
+        <S.Svg focusable="false" viewBox="0 0 24 24">
             {active ?
                 <>
                     <path fill="#4285f4" d="M10 16.5l6-4.5-6-4.5" />

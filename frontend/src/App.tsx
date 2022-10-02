@@ -12,6 +12,7 @@ declare module 'react' {
     contentType?: string;
     type?: string;
     orderIsActive?: any;
+    position?: string;
   }
 }
 

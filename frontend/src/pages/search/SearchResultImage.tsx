@@ -90,9 +90,9 @@ const SearchResultImage = ({ isChangedType }: any) => {
                     isChangedType.current = true;
                 }
             }}>
-                <S.Span>
+                <S.SpanOfSvgWrapper position="navigation">
                     {resultDataTypeMenu.svg}
-                </S.Span>
+                </S.SpanOfSvgWrapper>
                 {resultDataTypeMenu.name}
             </S.LinkOfResultDataTypeMenu>
         </S.DivOfResultDataTypeMenuWrapper>);
@@ -255,19 +255,27 @@ const SearchResultImage = ({ isChangedType }: any) => {
             </S.Header>
             <S.Main>
                 <S.Section>
-                    <S.DivOfLnb>
-                        {listOfOrder.map((order: any, idx: number): JSX.Element =>
-                            <S.ButtonOfSort
-                                orderIsActive={orderIsActive[idx]} onClick={(): void => {
-                                    dispatch(setOrder(order.value));
+                    <S.DivOfLNBWrapper>
+                        <S.DivOfResultDataTypeMenu>
+                            <S.SpanOfSvgWrapper position="content">
+                                <Svg.Image />
+                            </S.SpanOfSvgWrapper>
+                            포토
+                        </S.DivOfResultDataTypeMenu>
+                        <S.DivOfLNB>
+                            {listOfOrder.map((order: any, idx: number): JSX.Element =>
+                                <S.DivOfSort
+                                    orderIsActive={orderIsActive[idx]} onClick={(): void => {
+                                        dispatch(setOrder(order.value));
 
-                                    const newOrderIsActive = listOfOrder.map((): boolean => false);
-                                    newOrderIsActive[idx] = true;
-                                    dispatch(setOrderIsActive(newOrderIsActive));
-                                }}>
-                                {order.name}
-                            </S.ButtonOfSort>)}
-                    </S.DivOfLnb>
+                                        const newOrderIsActive = listOfOrder.map((): boolean => false);
+                                        newOrderIsActive[idx] = true;
+                                        dispatch(setOrderIsActive(newOrderIsActive));
+                                    }}>
+                                    {order.name}
+                                </S.DivOfSort>)}
+                        </S.DivOfLNB>
+                    </S.DivOfLNBWrapper>
                     <S.UlOfListOfImageWrapper ref={containerOfListOfImageWrapperRef}>
                         {listOfElementOfImage}
                     </S.UlOfListOfImageWrapper>
