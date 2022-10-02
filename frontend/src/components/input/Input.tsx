@@ -20,8 +20,6 @@ const Input = ({ layoutName, type = '' }: any) => {
                 dispatch(setKeyword(event.target.value));
             }} />
             <S.IconOfSearch />
-            <S.IconOfKeyboard />
-            <S.IconOfMic />
         </S.Form >
     );
 };
