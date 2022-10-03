@@ -4,6 +4,15 @@
 
 body {
   margin: 0 0 0 0;
+  font-family: "KOTRA_GOTHIC";
+}
+
+input {
+  font-family: "KOTRA_GOTHIC";
+}
+
+button {
+  font-family: "KOTRA_GOTHIC";
 }
 
 #root {

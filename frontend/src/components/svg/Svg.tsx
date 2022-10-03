@@ -1,6 +1,7 @@
+import React from 'react';
 import * as S from './Svg.styled';
 
-export const All = ({ active }: any) => {
+export const All = React.memo(({ active }: any) => {
     return (
         <S.Svg focusable="false" viewBox="0 0 24 24">
             {active ?
@@ -18,9 +19,9 @@ export const All = ({ active }: any) => {
             }
         </S.Svg>
     );
-};
+});
 
-export const Document = ({ active }: any) => {
+export const Document = React.memo(({ active }: any) => {
     return (
         <S.Svg>
             {active ?
@@ -36,9 +37,9 @@ export const Document = ({ active }: any) => {
             }
         </S.Svg>
     );
-};
+});
 
-export const Image = ({ active }: any) => {
+export const Image = React.memo(({ active }: any) => {
     return (
         <S.Svg>
             {active ?
@@ -54,9 +55,9 @@ export const Image = ({ active }: any) => {
             }
         </S.Svg>
     );
-};
+});
 
-export const Video = ({ active }: any) => {
+export const Video = React.memo(({ active }: any) => {
     return (
         <S.Svg>
             {active ?
@@ -71,7 +72,7 @@ export const Video = ({ active }: any) => {
             }
         </S.Svg>
     );
-};
+});
 
 export const User = ({ layoutName }: any) => {
     return (

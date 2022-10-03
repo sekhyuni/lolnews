@@ -8,6 +8,15 @@ import pandas as pd
 import time
 from datetime import datetime, timedelta
 from config import *
+import logging
+
+logger = logging.getLogger(__name__) # log file name
+logger.setLevel(logging.INFO) # 어느 level까지 log로 남길지
+log_form_front = '[%(levelname)s][%(filename)s:%(lineno)s][%(asctime)s]'
+formatter = logging.Formatter(log_form_front + '%(message)s')
+logger.addHandler(stream_handler)
+
+
 
 class NaverNewsCrawler:
     today = datetime.now().strftime("%Y-%m-%d")
@@ -53,12 +62,15 @@ class NaverNewsCrawler:
         """
         data는 list of dicts
         """
-        fieldnames = list(data[0].keys())
-        with open(datapath, 'w', encoding='utf-8') as csvfile:
-            fieldnames = fieldnames # 위에서 정의
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval=None, lineterminator = '\n')
-            writer.writeheader()
-            writer.writerows(data)
+        if data:
+            fieldnames = list(data[0].keys())
+            with open(datapath, 'w', encoding='utf-8') as csvfile:
+                fieldnames = fieldnames # 위에서 정의
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval=None, lineterminator = '\n')
+                writer.writeheader()
+                writer.writerows(data)
+        else:
+            logger.warning(f"There's no data. Failed to create {datapath} file.")
 
     def _get_news_info(self, date):
         ua = UserAgent()

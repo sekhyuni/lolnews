@@ -21,7 +21,9 @@ const asideWidth = '350px';
 
 const footerWidth = '100px';
 
-const imageOfContentWidth = '120px';
+const imgOfNormalWidth = '120px';
+
+const imgOfPopularWidth = '90px';
 
 // layout
 export const DivOfLayoutWrapper = styled.div`
@@ -41,7 +43,7 @@ export const Section = styled.section`
     ${vertical}
     width: ${sectionWidth};
     height: fit-content;
-    border: 0.5px solid #e1e1e1;
+    border: 1px solid #e1e1e1;
     border-radius: 10px;
     padding: 0 20px 0 20px;
     margin: 20px 0 20px 0;
@@ -64,20 +66,34 @@ export const Aside = styled.aside`
 export const AsideOfContent = styled.div`
     ${vertical}
     min-height: 100px;
-    border: 0.5px solid #e1e1e1;
+    border: 1px solid #e1e1e1;
     border-radius: 10px;
-    padding: 20px 20px 20px 20px;
+    padding: ${({ contentType }: any) => contentType === 'related' ? '20px 20px 20px 20px' : '20px 20px 0 20px'};
+    margin: 0 0 20px 0;
     background-color: #fff;
 `;
 
-export const Strong = styled.strong`
+export const DivOfSubjectTitleWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 0 20px 0;
+`;
+
+export const StrongOfSubjectTitle = styled.strong`
+    width: fit-content;
     font-size: 16px;
+`;
+
+export const ImgOfHelpOfSubjectTitle = styled.img`
+    width: 16px;
+    height: 16px;
+    margin: 0 0 0 4px;
 `;
 
 export const DivOfRelatedSearchTermWrapper = styled.div`
     display: flex;
     flex-direction: row;
-    margin: 18px 0 0 0;
 `;
 
 export const LinkOfRelatedSearchTerm = styled(Link_)`
@@ -112,14 +128,14 @@ export const HeaderOfTop = styled.div`
     flex-direction: row;
     align-items: center;
     height: 90px;
-    border-bottom: 0.5px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
 `;
 
 export const HeaderOfBottom = styled.div`
     display: flex;
     flex-direction: row;
     height: 40px;
-    border-bottom: 0.5px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
     padding: 0 0 0 200px;
 `;
 
@@ -131,18 +147,37 @@ export const DivOfResultDataTypeMenuWrapper = styled.div`
     }
 `;
 
-export const UlOfListOfDocumentWrapper = styled.ul`
+export const UlOfListOfArticleWrapper = styled.ul`
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     list-style: none;    
 `;
 
-export const LiOfDocumentWrapper = styled.li`
+export const LiOfArticleWrapper = styled.li`
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    align-items: center;
     padding: 20px 0 20px 0;
-    border-bottom: ${({ id }: any) => id ? '1px solid #e5e5e5' : 'none'};
+    ${({ id, contentType }: any) => {
+        if (id) {
+            if (contentType === 'normal') {
+                return css`
+                    border-bottom: 1px solid #e5e5e5;
+                `;
+            } else {
+                return css`
+                    border-bottom: 1px solid #e5e5e5;
+                    :last-child {
+                        border-bottom: none;
+                    }
+                `;
+            }
+        } else {
+            return css`
+                justify-content: center;
+            `;
+        }
+    }}
     :first-child {
         border-top: 1px solid #e5e5e5;
     }
@@ -202,20 +237,41 @@ export const Span = styled.span`
 export const DivOfTitleContentWrapper = styled.div`
     ${vertical}
     justify-content: center;
-    width: calc(100% - (${imageOfContentWidth} + 20px));
-`
+    ${({ contentType }: any) => {
+        if (contentType === 'normal') {
+            return css`
+                width: calc(100% - (${imgOfNormalWidth} + 20px));
+            `;
+        } else {
+            return css`
+                width: calc(100% - (${imgOfPopularWidth} + 20px));
+            `;
+        }
+    }}    
+`;
 
 export const DivOfTitle = styled.div`
-    margin: 0 0 8px 0;
+    ${({ contentType }: any) => {
+        if (contentType === 'normal') {
+            return css`
+                margin: 0 0 8px 0;
+                font-size: 18px;
+            `;
+        } else {
+            return css`
+                font-size: 14px;
+            `;
+        }
+    }}
     cursor: pointer;
     :hover {
         text-decoration: underline;
     }
-    font-size: 18px;
     font-weight: bold;
 `;
 
 export const DivOfContent = styled.div`
+    margin: 0 0 10px 0;
     /* display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical; */
@@ -227,9 +283,21 @@ export const DivOfContent = styled.div`
 `;
 
 export const ImgOfContent = styled.img`
-    width: ${imageOfContentWidth};
-    height: 80px;
-    border: 1px solid rgba(0,0,0,0.1);
+    ${({ contentType }: any) => {
+        if (contentType === 'normal') {
+            return css`
+                width: ${imgOfNormalWidth};
+                height: 80px;
+                border-radius: 8px;
+            `;
+        } else {
+            return css`
+                width: ${imgOfPopularWidth};
+                height: 60px;
+                border-radius: 6px;
+            `;
+        }
+    }}
     margin: 0 20px 0 0;
     cursor: pointer;
 `;
@@ -245,8 +313,7 @@ export const DivOfSpanModalCloseWrapper = styled.div`
 `;
 
 export const SpanOfModalClose = styled.span`
-    display: flex;
-    flex-direction: column;
+    ${vertical}
     justify-content: center;
     height: 40px;
     font-size: 50px;
@@ -295,26 +362,28 @@ export const ButtonOfSort = styled.button`
     border-radius: 30px;
     margin: 0 10px 0 10px;
     font-size: 18px;
+    color: #7e7e7e;
     background-color: #f2f4f7;
     ${({ orderIsActive }: any) => {
         if (orderIsActive) {
             return css`
-                color: #1a73e8;
+                font-weight: bold;
+                color: #000;
             `;
         }
     }}
     cursor: pointer;
     :hover {
         text-decoration: underline;
-        color: #1a73e8;
+        font-weight: bold;
+        color: #000;
     }
 `;
 
 export const LinkOfLoginPage = styled(Link_)`
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    ${center}
     width: 110px;
     border-radius: 4px;
     margin: 23.5px 20px 23.5px 20px;
@@ -332,13 +401,29 @@ export const LinkOfUser = styled(Link_)`
     margin: 23.5px 20px 23.5px 20px;
 `;
 
-export const SpanfCountOfResultWrapper = styled.span`  
+export const StrongOfAllCountOfArticle = styled.strong`    
     text-align: center;
     margin: 20px 0 0 0;
 `;
 
-export const StrongOfCountOfResult = styled.strong`    
+export const SpanOfKeyword = styled.span`
+    color: #1a73e8;  
 `;
 
 export const H3OfNoneResult = styled.h3`  
+`;
+
+export const DivOfSourceDateWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const DivOfSource = styled.div`
+    margin: 0 12px 0 0;
+    font-size: 15px;
+`;
+
+export const DivOfDate = styled.div`
+    font-size: 15px;
+    color: #666;
 `;
