@@ -119,6 +119,16 @@ def define_argparser():
     args = p.parse_args()
     return args
     
+def delete_prev_model(remain_model_fname):
+    """input에 있는 모델만 남기고 다 삭제"""
+    model_list = os.listdir(mdcfg.model_dir)
+    for m in model_list:
+        if remain_model_fname not in m:
+            rm_model_fpath = os.path.join(mdcfg.model_dir, m)
+            os.remove(rm_model_fpath)
+            if '.npy' not in m:
+                logger.info(f"Delete previous model({rm_model_fpath})")
+
 
 def main(args):
     
@@ -134,8 +144,9 @@ def main(args):
     model_params = define_model_params(args)
     logger.info(f"model_params: {model_params}")
     model_name = f"ws_model_from_{start_date}_to_{end_date}_v{model_params['vector_size']}_e{model_params['epochs']}_w{model_params['window']}" 
-    model_fname = os.path.join(mdcfg.model_dir, model_name)
-    model = fasttext_train(corpus, model_params, model_fname)
+    model_fpath = os.path.join(mdcfg.model_dir, model_name)
+    model = fasttext_train(corpus, model_params, model_fpath)
+    delete_prev_model(model_name)
 
      
 if __name__ == "__main__":
