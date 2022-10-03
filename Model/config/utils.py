@@ -8,11 +8,25 @@ from datetime import datetime
 import pandas as pd
 import ast
 from elasticsearch import Elasticsearch
+import logging
 
 try:
     from config.config import ESConfig as escfg
 except ImportError:
     from config import ESConfig as escfg
+
+
+def get_stream_logger(log_mode=logging.INFO):
+    logger = logging.getLogger(__name__) # log file name
+    logger.setLevel(log_mode) # 어느 level까지 log로 남길지
+    log_form_front = '[%(levelname)s][%(filename)s:%(lineno)s][%(asctime)s]'
+    formatter = logging.Formatter(log_form_front + '%(message)s')
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.DEBUG)
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+    return logger
+
 
 class ESapi:
     """
@@ -101,7 +115,8 @@ class ESapi:
                 print('e/s connection success')
             finally:
                 RETRY_NUM += 1
-                print(f"e/s retry num >> {RETRY_NUM}")
+                if RETRY_NUM > 1:
+                    print(f"e/s retry num >> {RETRY_NUM}")
  
         return total_res
 
@@ -184,7 +199,8 @@ class ESapi:
                 print('e/s connection success')
             finally:
                 RETRY_NUM += 1
-                print(f"e/s retry num >> {RETRY_NUM}")
+                if RETRY_NUM > 1:
+                    print(f"e/s retry num >> {RETRY_NUM}")
                         
         return total_res
 
@@ -220,6 +236,7 @@ def create_query(start_date, end_date):
         }
       }
     return query
+
 
 if __name__ == "__main__":
     esapi = ESapi()

@@ -14,8 +14,10 @@ logger = logging.getLogger(__name__) # log file name
 logger.setLevel(logging.INFO) # 어느 level까지 log로 남길지
 log_form_front = '[%(levelname)s][%(filename)s:%(lineno)s][%(asctime)s]'
 formatter = logging.Formatter(log_form_front + '%(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.DEBUG)
+stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
-
 
 
 class NaverNewsCrawler:
