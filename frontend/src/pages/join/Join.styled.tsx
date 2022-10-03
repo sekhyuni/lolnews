@@ -31,7 +31,7 @@ const footerWidth = '100px';
 
 export const DivOfLayoutWrapper = styled.div`
     ${vertical}
-    height: 100vh;
+    background-position: center;
     background-image: url(${getUrlOfBackgroundImage()});
     background-repeat: no-repeat;
     background-size: cover;
@@ -42,7 +42,7 @@ export const Main = styled.main`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    height: calc(100vh - (${headerWidth} + ${footerWidth}));
+    min-height: calc(100vh - (${headerWidth} + ${footerWidth}));
 `;
 
 export const Section = styled.section`

@@ -13,11 +13,11 @@ const center = css`
 
 const headerWidth = '130px';
 
-const mainLeftDistance = '200px';
+const leftPadding = '20px';
 
-const sectionWidth = '690px';
+const sectionWidth = '772px';
 
-const asideWidth = '350px';
+const asideWidth = '448px';
 
 const footerWidth = '100px';
 
@@ -29,8 +29,9 @@ export const DivOfLayoutWrapper = styled.div`
 export const Main = styled.main`
     display: flex;
     flex-direction: row;
-    min-width: calc(${mainLeftDistance} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
+    min-width: calc(${leftPadding} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
     min-height: calc(100vh - (${headerWidth} + ${footerWidth}));
+    padding: 0 ${leftPadding} 0 ${leftPadding};
     background-color: #f2f4f7;
 `;
 
@@ -58,7 +59,6 @@ export const DivOfLNBWrapper = styled.div`
 export const DivOfLNB = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: center;
     position: absolute;
     right: 0;
 `;
@@ -68,7 +68,7 @@ export const Div = styled.div`
 
 export const Header = styled.header`
     ${vertical}
-    min-width: calc(${mainLeftDistance} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
+    min-width: calc(${leftPadding} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
     height: ${headerWidth};
 `;
 
@@ -85,7 +85,7 @@ export const HeaderOfBottom = styled.div`
     flex-direction: row;
     height: 40px;
     border-bottom: 1px solid #e1e1e1;
-    padding: 0 0 0 200px;
+    padding: 0 0 0 ${leftPadding};
 `;
 
 export const DivOfResultDataTypeMenuWrapper = styled.div`

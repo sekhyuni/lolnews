@@ -378,41 +378,43 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
                         </S.DivOfImageWrapper>
                     </S.Section>
                     <S.Aside>
-                        <S.AsideOfContent contentType="related">
-                            <S.DivOfSubjectTitleWrapper>
-                                <S.StrongOfSubjectTitle>연관 검색어</S.StrongOfSubjectTitle>
-                                {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
-                            <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} /> */}
-                                {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
-                                <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
-                                {tooltip && <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />}
-                            </S.DivOfSubjectTitleWrapper>
-                            <S.DivOfRelatedSearchTermWrapper>
-                                <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
-                                    페이커
-                                </S.LinkOfRelatedSearchTerm>
-                                <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=롤`}>
-                                    롤
-                                </S.LinkOfRelatedSearchTerm>
-                                <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=LOL`}>
-                                    LOL
-                                </S.LinkOfRelatedSearchTerm>
-                            </S.DivOfRelatedSearchTermWrapper>
-                        </S.AsideOfContent>
-                        {listOfPopularArticle.length !== 0 &&
-                            <S.AsideOfContent contentType="popular">
+                        <S.DivOfAsideOfContentWrapper>
+                            <S.AsideOfContent contentType="related">
                                 <S.DivOfSubjectTitleWrapper>
-                                    <S.StrongOfSubjectTitle>많이 본 기사</S.StrongOfSubjectTitle>
-                                    {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip />
-                                <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} /> */}
+                                    <S.StrongOfSubjectTitle>연관 검색어</S.StrongOfSubjectTitle>
+                                    {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
+                            <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} /> */}
                                     {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
-                                    <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
-                                    {tooltip && <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} />}
+                                    <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
+                                    {tooltip && <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />}
                                 </S.DivOfSubjectTitleWrapper>
-                                <S.UlOfListOfArticleWrapper>
-                                    {listOfElementOfPopularArticle}
-                                </S.UlOfListOfArticleWrapper>
-                            </S.AsideOfContent>}
+                                <S.DivOfRelatedSearchTermWrapper>
+                                    <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
+                                        페이커
+                                    </S.LinkOfRelatedSearchTerm>
+                                    <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=롤`}>
+                                        롤
+                                    </S.LinkOfRelatedSearchTerm>
+                                    <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=LOL`}>
+                                        LOL
+                                    </S.LinkOfRelatedSearchTerm>
+                                </S.DivOfRelatedSearchTermWrapper>
+                            </S.AsideOfContent>
+                            {listOfPopularArticle.length !== 0 &&
+                                <S.AsideOfContent contentType="popular">
+                                    <S.DivOfSubjectTitleWrapper>
+                                        <S.StrongOfSubjectTitle>많이 본 기사</S.StrongOfSubjectTitle>
+                                        {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip />
+                                <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} /> */}
+                                        {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
+                                        <S.ImgOfHelpOfSubjectTitle alt="helpOfPopular" src={require('../../assets/help.png')} data-for="popular" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
+                                        {tooltip && <ReactTooltip id="popular" getContent={() => '최근 12시간 집계 결과입니다.'} />}
+                                    </S.DivOfSubjectTitleWrapper>
+                                    <S.UlOfListOfArticleWrapper>
+                                        {listOfElementOfPopularArticle}
+                                    </S.UlOfListOfArticleWrapper>
+                                </S.AsideOfContent>}
+                        </S.DivOfAsideOfContentWrapper>
                     </S.Aside>
                 </S.DivOfMainContent>
             </S.Main>

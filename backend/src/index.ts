@@ -176,7 +176,7 @@ app.get('/article', (req: express.Request, res: express.Response) => {
             }
         ]))
         .then(async articles => {
-            const listOfPopularArticleId = articles.slice(0, 10).map(article => article._id);
+            const listOfPopularArticleId = articles.slice(0, 5).map(article => article._id);
 
             console.log(listOfPopularArticleId);
 

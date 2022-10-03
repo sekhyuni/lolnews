@@ -11,7 +11,7 @@ const center = css`
     align-items: center;
 `;
 
-const mainLeftDistance = '200px';
+const leftPadding = '200px';
 
 const sectionWidth = '690px';
 
@@ -25,7 +25,7 @@ export const Footer = styled.footer`
         if (layoutName === 'search') {
             return css`
                 border-top: 1px solid #e1e1e1;
-                min-width: calc(${mainLeftDistance} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
+                min-width: calc(${leftPadding} + ${sectionWidth} + 20px + ${asideWidth} + 20px);
             `;
         }
     }}
