@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
-import { setKeyword, setPage, setOrder, setOrderIsActive, setOrderForDetectOfFetchEffect, setListOfArticle, setListOfPopularArticle, setModalOfArticleIsOpen, setModalOfPopularArticleIsOpen, clearArticleState } from '../../redux/features/articleSlice';
-import { searchListOfArticleAPICall, searchListOfPopularArticleAPICall, insertArticleIdAPICall, insertForRecommendArticleIdAPICall } from '../../redux/features/articleSlice';
+import { setKeyword, setPage, setOrder, setOrderIsActive, setOrderForDetectOfFetchEffect, setListOfArticle, setListOfPopularArticle, setListOfRelatedWord, setModalOfArticleIsOpen, setModalOfPopularArticleIsOpen, clearArticleState } from '../../redux/features/articleSlice';
+import { searchListOfArticleAPICall, searchListOfPopularArticleAPICall, searchListOfRelatedWordAPICall, insertArticleIdAPICall, insertForRecommendArticleIdAPICall } from '../../redux/features/articleSlice';
 import { insertWordAPICall } from '../../redux/features/wordSlice';
 import ReactModal from 'react-modal';
 import ReactTooltip from 'react-tooltip';
@@ -15,12 +15,14 @@ import * as S from './SearchResultAll.styled';
 import * as Svg from '../../components/svg/Svg';
 
 const SearchResultAll = ({ type, isChangedType }: any) => {
-    // react-tooltip bug fix 후, 아랫줄 제거
+    // Back-End API 연동 후, 아래 1줄 제거
+    const result: any = ['페이커', '롤', 'LOL', '롤드컵', '롤챔스', '젠지', '신짜오'];
+    // react-tooltip bug fix 후, 아래 1줄 제거
     const [tooltip, showTooltip] = useState(true);
     const { search } = useLocation();
 
     const dispatch = useAppDispatch();
-    const { page, order, orderIsActive, orderForDetectOfFetchEffect, listOfArticle, listOfPopularArticle, modalOfArticleIsOpen, modalOfPopularArticleIsOpen } = useAppSelector(state => state.article);
+    const { page, order, orderIsActive, orderForDetectOfFetchEffect, listOfArticle, listOfPopularArticle, listOfRelatedWord, modalOfArticleIsOpen, modalOfPopularArticleIsOpen } = useAppSelector(state => state.article);
 
     const [keywordForDetectOfSetPageEffect, setKeywordForDetectOfSetPageEffect] = useState<string>(decodeURI(search.split('query=')[1]));
     const [keywordForDetectOfFetchEffect, setKeywordForDetectOfFetchEffect] = useState<string>(decodeURI(search.split('query=')[1]));
@@ -247,6 +249,20 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
     }, [dispatch]);
 
     useEffect(() => {
+        // Back-End API 연동 후, 아래 1줄 제거
+        dispatch(setListOfRelatedWord(result));
+
+        // const paramsOfSearch = {
+        //     query: decodeURI(search.split('query=')[1])
+        // };
+        // dispatch(searchListOfRelatedWordAPICall(paramsOfSearch)).unwrap().then((response: any) => {
+        //     dispatch(setListOfRelatedWord(response.result.related_word));
+        // }).catch((err: any) => {
+        //     console.error(err);
+        // });
+    }, [dispatch]);
+
+    useEffect(() => {
         dispatch(setKeyword(decodeURI(search.split('query=')[1])));
         setKeywordForDetectOfSetPageEffect(decodeURI(search.split('query=')[1]));
 
@@ -379,27 +395,26 @@ const SearchResultAll = ({ type, isChangedType }: any) => {
                     </S.Section>
                     <S.Aside>
                         <S.DivOfAsideOfContentWrapper>
-                            <S.AsideOfContent contentType="related">
-                                <S.DivOfSubjectTitleWrapper>
-                                    <S.StrongOfSubjectTitle>연관 검색어</S.StrongOfSubjectTitle>
-                                    {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
+                            {listOfRelatedWord.length !== 0 &&
+                                <S.AsideOfContent contentType="related">
+                                    <S.DivOfSubjectTitleWrapper>
+                                        <S.StrongOfSubjectTitle>연관 검색어</S.StrongOfSubjectTitle>
+                                        {/* <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip />
                             <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} /> */}
-                                    {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
-                                    <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
-                                    {tooltip && <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />}
-                                </S.DivOfSubjectTitleWrapper>
-                                <S.DivOfRelatedSearchTermWrapper>
-                                    <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=페이커`}>
-                                        페이커
-                                    </S.LinkOfRelatedSearchTerm>
-                                    <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=롤`}>
-                                        롤
-                                    </S.LinkOfRelatedSearchTerm>
-                                    <S.LinkOfRelatedSearchTerm to={`/search/${type}?query=LOL`}>
-                                        LOL
-                                    </S.LinkOfRelatedSearchTerm>
-                                </S.DivOfRelatedSearchTermWrapper>
-                            </S.AsideOfContent>
+                                        {/* react-tooltip bug fix 후, 아래 2줄 제거 */}
+                                        <S.ImgOfHelpOfSubjectTitle alt="helpOfRelated" src={require('../../assets/help.png')} data-for="related" data-tip onMouseEnter={() => { showTooltip(true); }} onMouseLeave={() => { showTooltip(false); }} />
+                                        {tooltip && <ReactTooltip id="related" getContent={() => '사용자가 특정 단어를 검색한 후 연이어 많이 검색한 검색어를 자동 로직에 의해 추출하여 제공합니다.'} />}
+                                    </S.DivOfSubjectTitleWrapper>
+                                    <S.UlOfRelatedWordWrapper>
+                                        {listOfRelatedWord.map((relatedWord: string): JSX.Element =>
+                                            <S.LiOfRelatedWord>
+                                                <S.LinkOfRelatedWord to={`/search/${type}?query=${relatedWord}`}>
+                                                    {relatedWord}
+                                                </S.LinkOfRelatedWord>
+                                            </S.LiOfRelatedWord>
+                                        )}
+                                    </S.UlOfRelatedWordWrapper>
+                                </S.AsideOfContent>}
                             {listOfPopularArticle.length !== 0 &&
                                 <S.AsideOfContent contentType="popular">
                                     <S.DivOfSubjectTitleWrapper>

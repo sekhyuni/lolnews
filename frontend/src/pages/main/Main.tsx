@@ -33,7 +33,7 @@ const Main = () => {
         //     end_date: '2022-10-03'
         // };
         // dispatch(searchListOfWordcloudAPICall(paramsOfSearch)).unwrap().then((response: any) => {
-        //     dispatch(setListOfWordcloud(response.result));
+        //     dispatch(setListOfWordcloud(response.result.wordfreq));
         // });
     }, [dispatch]);
 

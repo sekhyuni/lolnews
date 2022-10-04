@@ -13,8 +13,9 @@ interface ArticleAttributes {
     orderIsActive: Array<boolean>;
     orderForDetectOfFetchEffect: string;
     listOfArticle: Article;
-    modalOfArticleIsOpen: Array<boolean>;
     listOfPopularArticle: Array<any>;
+    listOfRelatedWord: Array<string>;
+    modalOfArticleIsOpen: Array<boolean>;
     modalOfPopularArticleIsOpen: Array<boolean>;
 }
 
@@ -25,8 +26,9 @@ const initialState: ArticleAttributes = {
     orderIsActive: [true, false, false],
     orderForDetectOfFetchEffect: 'desc',
     listOfArticle: { meta: {}, data: [] },
-    modalOfArticleIsOpen: [],
     listOfPopularArticle: [],
+    listOfRelatedWord: [],
+    modalOfArticleIsOpen: [],
     modalOfPopularArticleIsOpen: [],
 };
 
@@ -42,6 +44,15 @@ export const searchListOfArticleAPICall = createAsyncThunk('articleSlice/searchL
 export const searchListOfPopularArticleAPICall = createAsyncThunk('articleSlice/searchListOfPopularArticleAPICall', async (_, thunkAPI) => {
     try {
         const response: any = await doAxiosRequest('GET', '/article');
+        return response.data;
+    } catch (err: any) {
+        return thunkAPI.rejectWithValue(err);
+    }
+});
+
+export const searchListOfRelatedWordAPICall = createAsyncThunk('articleSlice/searchListOfRelatedWordAPICall', async (paramsOfSearch: any, thunkAPI) => {
+    try {
+        const response: any = await doAxiosRequest('GET', '/related-word', paramsOfSearch);
         return response.data;
     } catch (err: any) {
         return thunkAPI.rejectWithValue(err);
@@ -101,6 +112,9 @@ const articleSlice = createSlice({
         setListOfPopularArticle: (state, action: PayloadAction<Array<any>>) => {
             state.listOfPopularArticle = action.payload;
         },
+        setListOfRelatedWord: (state, action: PayloadAction<Array<string>>) => {
+            state.listOfRelatedWord = action.payload;
+        },
         setModalOfArticleIsOpen: (state, action: PayloadAction<Array<boolean>>) => {
             state.modalOfArticleIsOpen = action.payload;
         },
@@ -112,5 +126,5 @@ const articleSlice = createSlice({
 });
 
 const { actions, reducer } = articleSlice;
-export const { setKeyword, setPage, incrementPage, decrementPage, setOrder, setOrderIsActive, setOrderForDetectOfFetchEffect, setListOfArticle, addListOfArticle, setListOfPopularArticle, setModalOfArticleIsOpen, setModalOfPopularArticleIsOpen, clearArticleState } = actions;
+export const { setKeyword, setPage, incrementPage, decrementPage, setOrder, setOrderIsActive, setOrderForDetectOfFetchEffect, setListOfArticle, addListOfArticle, setListOfPopularArticle, setListOfRelatedWord, setModalOfArticleIsOpen, setModalOfPopularArticleIsOpen, clearArticleState } = actions;
 export default reducer;

@@ -85,7 +85,7 @@ export const AsideOfContent = styled.div`
     min-height: 100px;
     border: 1px solid #e1e1e1;
     border-radius: 10px;
-    padding: ${({ contentType }: any) => contentType === 'related' ? '20px 20px 20px 20px' : '20px 20px 0 20px'};
+    padding: ${({ contentType }: any) => contentType === 'related' ? '20px 20px 10px 20px' : '20px 20px 0 20px'};
     margin: 0 0 20px 0;
     background-color: #fff;
 `;
@@ -108,12 +108,19 @@ export const ImgOfHelpOfSubjectTitle = styled.img`
     margin: 0 0 0 4px;
 `;
 
-export const DivOfRelatedSearchTermWrapper = styled.div`
+export const UlOfRelatedWordWrapper = styled.ul`
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    list-style: none;    
 `;
 
-export const LinkOfRelatedSearchTerm = styled(Link_)`
+export const LiOfRelatedWord = styled.li`  
+`;
+
+export const LinkOfRelatedWord = styled(Link_)`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -121,14 +128,14 @@ export const LinkOfRelatedSearchTerm = styled(Link_)`
     border: 1px solid #eaeced;
     border-radius: 3px;
     padding: 0 12px 0 12px;
-    margin: 0 0 0 10px;
-    :first-child {
-        margin: 0 0 0 0;
-    }
+    margin: 0 10px 10px 0;
     font-size: 14px;
     text-decoration: none;
     color: inherit;
     background-color: #fff;
+    :hover {
+        font-weight: bold;
+    }
 `;
 
 export const Div = styled.div`
