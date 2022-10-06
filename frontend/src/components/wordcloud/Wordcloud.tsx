@@ -1,8 +1,10 @@
+/** @jsxImportSource @emotion/react */
 import { useAppSelector } from '../../redux/app/hooks';
 import ReactWordcloud from 'react-wordcloud';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
-import * as S from './Wordcloud.styled';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 const Wordcloud = () => {
     const { listOfWordcloud } = useAppSelector(state => state.wordcloud);
@@ -19,14 +21,24 @@ const Wordcloud = () => {
         spiral: 'archimedean',
         transitionDuration: 1000,
     };
-
-    const size: any = [1200, 300];
+    const size: any = [850, 600];
 
     return (
-        <S.DivOfWordcloudWrapper>
+        <DivOfWordcloudWrapper>
             <ReactWordcloud words={listOfWordcloud} options={options} size={size} />
-        </S.DivOfWordcloudWrapper>
+        </DivOfWordcloudWrapper>
     );
 };
 
 export default Wordcloud;
+
+const vertical = css`
+    display: flex;
+    flex-direction: column;
+`;
+
+const DivOfWordcloudWrapper = styled.div`
+    ${vertical}
+    align-items: center;
+    margin: 20px 0 0 0;    
+`;

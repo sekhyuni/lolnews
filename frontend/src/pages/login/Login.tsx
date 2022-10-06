@@ -32,7 +32,10 @@ const Form = () => {
     return (
         <>
             <S.DivOfLoginForm>
-                <S.LinkOfLogo to="/" onClick={() => { dispatch(clearArticleState()); }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
+                <S.LinkOfLogo to="/" onClick={() => {
+                    dispatch(clearUserState());
+                    dispatch(clearArticleState());
+                }}><S.ImgOfLogo alt="LOLNEWS" src={require('../../assets/logo.png')} /></S.LinkOfLogo>
                 <S.Form onSubmit={event => {
                     event.preventDefault();
 

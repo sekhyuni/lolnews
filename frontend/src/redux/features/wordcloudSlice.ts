@@ -16,7 +16,7 @@ const initialState: WordcloudAttributes = {
 
 export const searchListOfWordcloudAPICall = createAsyncThunk('wordcloudSlice/searchListOfWordcloudAPICall', async (paramsOfSearch: any, thunkAPI) => {
     try {
-        const response: any = await doAxiosRequest('GET', '/wordcloud', paramsOfSearch);
+        const response: any = await doAxiosRequest('GET', '/wordcloud', paramsOfSearch, true);
         return response.data;
     } catch (err: any) {
         return thunkAPI.rejectWithValue(err);

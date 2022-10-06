@@ -1,17 +1,19 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const proxy = {
-    target: 'http://172.24.24.84:31053',
-    // target: 'http://localhost:8081',
-}
 
 module.exports = app => {
-    app.use([
-        '/search/keyword',
-        '/accounts/signin',
-        '/accounts/signup',
-        '/word',
-        '/article',
-    ],
-        createProxyMiddleware(proxy)
+    app.use(
+        createProxyMiddleware([
+            '/accounts/signin',
+            '/accounts/signup',
+            '/search/keyword',
+            '/word',
+            '/article',
+        ], {
+            target: 'http://172.24.24.84:31053',
+            router: {
+                '/wordcloud': 'http://172.24.24.84:31707',
+                '/related-word': 'http://172.24.24.84:31707',
+            }
+        })
     );
 };
