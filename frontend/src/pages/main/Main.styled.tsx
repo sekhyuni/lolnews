@@ -33,10 +33,10 @@ const footerWidth = '100px';
 export const DivOfLayoutWrapper = styled.div`
     ${vertical}
     background-position: center;
-    background-image: url(${urlOfThuOfBackgroundImage});
-    background-repeat: no-repeat;
     background-size: cover;
-    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-image: url(${urlOfThuOfBackgroundImage});
 `;
 
 export const Main = styled.main`

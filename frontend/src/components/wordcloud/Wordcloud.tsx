@@ -5,6 +5,7 @@ import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import urlOfTitleBackgroundImage from '../../assets/title-background.png';
 
 const Wordcloud = () => {
     const { listOfWordcloud } = useAppSelector(state => state.wordcloud);
@@ -25,6 +26,20 @@ const Wordcloud = () => {
 
     return (
         <DivOfWordcloudWrapper>
+            <h2 css={{
+                padding: '10px 60px 10px 60px',
+                margin: '0 0 0 0',
+                fontSize: '32px',
+                color: '#000',
+                backgroundPosition: 'center',
+                backgroundSize: '400px 50px',
+                backgroundRepeat: 'no-repeat',
+                backgroundImage: `url(${urlOfTitleBackgroundImage})`,
+            }}>Today's&nbsp;
+                <strong css={{
+                    color: '#fc0d1b',
+                }}>Hot</strong>
+                &nbsp;Keywords</h2>
             <ReactWordcloud words={listOfWordcloud} options={options} size={size} />
         </DivOfWordcloudWrapper>
     );
