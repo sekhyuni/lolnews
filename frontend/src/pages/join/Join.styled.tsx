@@ -8,12 +8,12 @@ import urlOfThuOfBackgroundImage from '../../assets/background4.jpg';
 import urlOfFriOfBackgroundImage from '../../assets/background5.jpg';
 import urlOfSatOfBackgroundImage from '../../assets/background6.jpg';
 
-const getUrlOfBackgroundImage = () => {
-    const day = new Date().getDay();
-    const listOfImage = [urlOfSunOfBackgroundImage, urlOfMonOfBackgroundImage, urlOfTueOfBackgroundImage, urlOfWedOfBackgroundImage, urlOfThuOfBackgroundImage, urlOfFriOfBackgroundImage, urlOfSatOfBackgroundImage];
+// const getUrlOfBackgroundImage = () => {
+//     const day = new Date().getDay();
+//     const listOfImage = [urlOfSunOfBackgroundImage, urlOfMonOfBackgroundImage, urlOfTueOfBackgroundImage, urlOfWedOfBackgroundImage, urlOfThuOfBackgroundImage, urlOfFriOfBackgroundImage, urlOfSatOfBackgroundImage];
 
-    return listOfImage.filter((_, idx: number): boolean => day === idx);
-};
+//     return listOfImage.filter((_, idx: number): boolean => day === idx);
+// };
 
 const vertical = css`
     display: flex;
@@ -32,7 +32,7 @@ const footerWidth = '100px';
 export const DivOfLayoutWrapper = styled.div`
     ${vertical}
     background-position: center;
-    background-image: url(${getUrlOfBackgroundImage()});
+    background-image: url(${urlOfThuOfBackgroundImage});
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: scroll;
