@@ -30,7 +30,7 @@ const Wordcloud = () => {
                 padding: '10px 60px 10px 60px',
                 margin: '0 0 0 0',
                 fontSize: '32px',
-                color: '#000',
+                color: '#fff',
                 backgroundPosition: 'center',
                 backgroundSize: '400px 50px',
                 backgroundRepeat: 'no-repeat',

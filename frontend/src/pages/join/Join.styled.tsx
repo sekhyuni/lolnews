@@ -35,7 +35,7 @@ export const DivOfLayoutWrapper = styled.div`
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: scroll;
-    background-image: url(${urlOfThuOfBackgroundImage});
+    background-image: url(${urlOfMonOfBackgroundImage});
 `;
 
 export const Main = styled.main`
