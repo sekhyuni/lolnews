@@ -1,21 +1,13 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
-const NORMAL_PORT: number = 31053;
-const MODEL_PORT: number = 31707;
+const NORMAL_SERVER_PORT: number = 31053;
+const MODEL_SERVER_PORT: number = 31707;
 
-class ServerPort {
-    port: number;
+const listOfServerPort: Array<number> = [NORMAL_SERVER_PORT, MODEL_SERVER_PORT,];
 
-    constructor(port: number) {
-        this.port = port;
-    }
-}
-
-const listOfServerPort: Array<ServerPort> = [new ServerPort(NORMAL_PORT), new ServerPort(MODEL_PORT),];
-
-const [axiosInstanceForNormalAPICall, axiosInstanceForModelAPICall] = listOfServerPort.map((serverPort: ServerPort): AxiosInstance => {
+const [axiosInstanceForNormalAPICall, axiosInstanceForModelAPICall] = listOfServerPort.map((serverPort: number): AxiosInstance => {
     return axios.create({
-        baseURL: process.env.NODE_ENV === 'production' ? `http://172.24.24.84:${serverPort.port}` : ''
+        baseURL: process.env.NODE_ENV === 'production' ? `http://172.24.24.84:${serverPort}` : ''
     });
 });
 
