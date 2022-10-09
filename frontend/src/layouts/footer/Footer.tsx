@@ -11,7 +11,7 @@ const Footer = ({ layoutName }: any) => {
     const elementsOfFooterMenu = listOfFooterMenu
         .map((footerMenu: any): JSX.Element =>
             <S.FooterOfTopElement key={footerMenu.id} layoutName={layoutName}>
-                {footerMenu.link.startsWith('http') ? <S.A href={footerMenu.link} target="_blank">{footerMenu.value}</S.A> : <S.Link to={footerMenu.link} onClick={event => { event.preventDefault(); }}>{footerMenu.value}</S.Link>}
+                {footerMenu.link.startsWith('http') ? <S.A href={footerMenu.link} target="_blank" rel="noopener noreferrer">{footerMenu.value}</S.A> : <S.Link to={footerMenu.link} onClick={event => { event.preventDefault(); }}>{footerMenu.value}</S.Link>}
             </S.FooterOfTopElement>
         );
 
@@ -25,7 +25,7 @@ const Footer = ({ layoutName }: any) => {
                     Copyright ©&nbsp;
                 </S.FooterOfBottomElement>
                 <S.FooterOfBottomElement>
-                    <S.AOfCorps layoutName={layoutName} href="https://gitlab.com/5622kmj/toyproject" target="_blank">LOLNEWS Corps.</S.AOfCorps>
+                    <S.AOfCorps layoutName={layoutName} href="https://gitlab.com/5622kmj/toyproject" target="_blank" rel="noopener noreferrer">LOLNEWS Corps.</S.AOfCorps>
                 </S.FooterOfBottomElement>
                 <S.FooterOfBottomElement>
                     &nbsp;All Rights Reserved.

@@ -119,7 +119,7 @@ const SearchResultDocument = ({ type, isChangedType }: any) => {
                         pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
                     </S.DivOfModalContent>
                     <S.ImgOfModalContent src={document._source.thumbnail} />
-                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
+                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank" rel="noopener noreferrer">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
                 </S.DivOfModalWrapper>
             </ReactModal>
         </S.LiOfArticleWrapper>)
@@ -203,7 +203,7 @@ const SearchResultDocument = ({ type, isChangedType }: any) => {
                         pieceOfContent === decodeURI(search.split('query=')[1]) ? (<S.StrongOfKeyword>{pieceOfContent}</S.StrongOfKeyword>) : pieceOfContent)}
                     </S.DivOfModalContent>
                     <S.ImgOfModalContent src={document._source.thumbnail} />
-                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
+                    <S.DivOfModalPCLinkURL>출처 -&nbsp;<S.AOfPCLinkURL href={document._source.pcLinkUrl} target="_blank" rel="noopener noreferrer">{document._source.pcLinkUrl}</S.AOfPCLinkURL></S.DivOfModalPCLinkURL>
                 </S.DivOfModalWrapper>
             </ReactModal>
         </S.LiOfArticleWrapper>);
