@@ -3,7 +3,7 @@ import Main from './pages/main/Main';
 import Join from './pages/join/Join';
 import Login from './pages/login/Login';
 import Search from './pages/search/index';
-import NotFound from './pages/notfound/Notfound';
+import Notfound from './pages/notfound/Notfound';
 
 declare module 'react' {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/join" element={<Join />} />
         <Route path="/login" element={<Login />} />
         <Route path="/search/*" element={<Search />} />
-        <Route path="/*" element={<NotFound />} />
+        <Route path="/*" element={<Notfound />} />
       </Routes>
     </Router>
   );
